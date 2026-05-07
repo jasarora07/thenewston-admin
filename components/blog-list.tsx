@@ -1,11 +1,19 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Clock, User, ArrowRight } from "lucide-react"
+import { createClient } from "@supabase/supabase-js"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
+
+// Initialize Supabase Client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 interface BlogPost {
   id: string
@@ -18,60 +26,35 @@ interface BlogPost {
   imageUrl: string
 }
 
-const blogPosts: BlogPost[] = [
-  {
-    id: "1",
-    title: "The Future of AI in Financial Markets: A Deep Dive",
-    excerpt: "Exploring how artificial intelligence is reshaping trading strategies and market analysis in 2024.",
-    author: "Sarah Chen",
-    date: "May 7, 2026",
-    readTime: "8 min read",
-    category: "Technology",
-    imageUrl: "/placeholder.svg",
-  },
-  {
-    id: "2",
-    title: "Understanding Market Volatility: What Investors Need to Know",
-    excerpt: "A comprehensive guide to navigating uncertain market conditions and protecting your portfolio.",
-    author: "Michael Roberts",
-    date: "May 6, 2026",
-    readTime: "12 min read",
-    category: "Investing",
-    imageUrl: "/placeholder.svg",
-  },
-  {
-    id: "3",
-    title: "ESG Investing: Trends and Opportunities in 2026",
-    excerpt: "How environmental, social, and governance factors are driving investment decisions globally.",
-    author: "Emma Thompson",
-    date: "May 5, 2026",
-    readTime: "10 min read",
-    category: "ESG",
-    imageUrl: "/placeholder.svg",
-  },
-  {
-    id: "4",
-    title: "Central Bank Digital Currencies: The Next Frontier",
-    excerpt: "Analyzing the global race to develop CBDCs and their potential impact on traditional banking.",
-    author: "David Park",
-    date: "May 4, 2026",
-    readTime: "15 min read",
-    category: "Crypto",
-    imageUrl: "/placeholder.svg",
-  },
-  {
-    id: "5",
-    title: "Emerging Markets: Hidden Gems for Growth Investors",
-    excerpt: "Discovering undervalued opportunities in developing economies poised for explosive growth.",
-    author: "Ana Martinez",
-    date: "May 3, 2026",
-    readTime: "9 min read",
-    category: "Markets",
-    imageUrl: "/placeholder.svg",
-  },
-]
-
 export function BlogList() {
+  const [posts, setPosts] = useState<BlogPost[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        // Change 'news' to whatever your actual table name is in Supabase
+        const { data, error } = await supabase
+          .from('news') 
+          .select('*')
+          .order('date', { ascending: false })
+
+        if (error) throw error
+        if (data) setPosts(data)
+      } catch (error) {
+        console.error("Error fetching news:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPosts()
+  }, [])
+
+  if (loading) {
+    return <div className="p-8 text-center text-muted-foreground text-sm">Loading market analysis...</div>
+  }
+
   return (
     <Card className="h-full bg-card border-border">
       <CardHeader className="pb-2 sm:pb-3 px-3 sm:px-6">
@@ -86,14 +69,14 @@ export function BlogList() {
       <CardContent className="p-0">
         <ScrollArea className="h-[400px] sm:h-[calc(100vh-280px)]">
           <div className="space-y-3 sm:space-y-4 px-3 sm:px-4 pb-3 sm:pb-4">
-            {blogPosts.map((post) => (
+            {posts.map((post) => (
               <article
                 key={post.id}
                 className="group cursor-pointer rounded-lg overflow-hidden bg-secondary/30 hover:bg-secondary/50 transition-all border border-border/50"
               >
                 <div className="relative h-24 sm:h-32 w-full bg-muted">
                   <Image
-                    src={post.imageUrl}
+                    src={post.imageUrl || "/placeholder.svg"}
                     alt={post.title}
                     fill
                     className="object-cover"
@@ -120,6 +103,11 @@ export function BlogList() {
                 </div>
               </article>
             ))}
+            {posts.length === 0 && !loading && (
+              <div className="p-8 text-center text-muted-foreground text-xs italic">
+                No news articles found in database.
+              </div>
+            )}
           </div>
         </ScrollArea>
       </CardContent>
