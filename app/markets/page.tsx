@@ -4,38 +4,71 @@ import React, { useState } from "react"
 import { TickerBar } from "@/components/ticker-bar"
 import { NewsHeader } from "@/components/news-header"
 import AdvancedChart from "@/components/advanced-chart"
-import { ChevronDown, Globe, Map, Zap, LayoutList } from "lucide-react"
+import { ChevronDown, Globe, Map, Zap, Building2 } from "lucide-react"
 
-const DATA_TREE = {
+// This list only includes the "heavy hitters" for each index to keep the file light
+const MARKET_DATA = {
   "North America": {
-    marketId: "america",
-    indices: {
-      "S&P 500": "SPX500",
-      "Nasdaq 100": "NAS100",
-      "Dow 30": "DJI",
-    }
+    "S&P 500": [
+      { name: "Index Overview", s: "FOREXCOM:SPX500" },
+      { name: "Apple", s: "NASDAQ:AAPL" },
+      { name: "Microsoft", s: "NASDAQ:MSFT" },
+      { name: "NVIDIA", s: "NASDAQ:NVDA" },
+      { name: "Amazon", s: "NASDAQ:AMZN" },
+    ],
+    "Nasdaq 100": [
+      { name: "Index Overview", s: "FOREXCOM:NSXUSD" },
+      { name: "Tesla", s: "NASDAQ:TSLA" },
+      { name: "Google", s: "NASDAQ:GOOGL" },
+      { name: "Meta", s: "NASDAQ:META" },
+    ],
+    "Dow Jones": [
+      { name: "Index Overview", s: "FOREXCOM:DJI" },
+      { name: "Goldman Sachs", s: "NYSE:GS" },
+      { name: "JPMorgan", s: "NYSE:JPM" },
+      { name: "Visa", s: "NYSE:V" },
+    ]
   },
   "Europe": {
-    marketId: "europe",
-    indices: {
-      "FTSE 100 (UK)": "UK100",
-      "DAX 40 (Germany)": "GER40",
-      "CAC 40 (France)": "FRA40",
-      "Euro Stoxx 50": "EU50",
-    }
+    "FTSE 100 (UK)": [
+      { name: "Index Overview", s: "FOREXCOM:UK100" },
+      { name: "AstraZeneca", s: "LSE:AZN" },
+      { name: "Shell", s: "LSE:SHEL" },
+      { name: "HSBC", s: "LSE:HSBA" },
+    ],
+    "DAX 40 (Germany)": [
+      { name: "Index Overview", s: "FOREXCOM:GER40" },
+      { name: "SAP", s: "XETR:SAP" },
+      { name: "Siemens", s: "XETR:SIE" },
+      { name: "Allianz", s: "XETR:ALV" },
+    ],
+    "CAC 40 (France)": [
+      { name: "Index Overview", s: "FOREXCOM:FRA40" },
+      { name: "LVMH", s: "EURONEXT:MC" },
+      { name: "TotalEnergies", s: "EURONEXT:TTE" },
+      { name: "L'Oreal", s: "EURONEXT:OR" },
+    ]
   }
 }
 
 export default function MarketsPage() {
-  const [region, setRegion] = useState<keyof typeof DATA_TREE>("North America")
-  const [indexLabel, setIndexLabel] = useState("S&P 500")
-  
-  const activeMarketId = DATA_TREE[region].marketId
-  const activeIndexSymbol = DATA_TREE[region].indices[indexLabel as keyof (typeof DATA_TREE)["North America"]["indices"]]
+  const [region, setRegion] = useState<keyof typeof MARKET_DATA>("North America")
+  const [index, setIndex] = useState(Object.keys(MARKET_DATA["North America"])[0])
+  const [symbol, setSymbol] = useState(MARKET_DATA["North America"]["S&P 500"][0].s)
 
-  const handleRegionChange = (newRegion: keyof typeof DATA_TREE) => {
-    setRegion(newRegion)
-    setIndexLabel(Object.keys(DATA_TREE[newRegion].indices)[0])
+  const handleRegionChange = (val: string) => {
+    const r = val as keyof typeof MARKET_DATA
+    setRegion(r)
+    const firstIndex = Object.keys(MARKET_DATA[r])[0]
+    setIndex(firstIndex)
+    // @ts-ignore
+    setSymbol(MARKET_DATA[r][firstIndex][0].s)
+  }
+
+  const handleIndexChange = (val: string) => {
+    setIndex(val)
+    // @ts-ignore
+    setSymbol(MARKET_DATA[region][val][0].s)
   }
 
   return (
@@ -50,56 +83,66 @@ export default function MarketsPage() {
           </h1>
         </header>
 
-        {/* SELECTORS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-secondary/10 p-6 rounded-2xl border border-border/60">
+        {/* TRIPLE SELECTOR BOX */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-secondary/10 p-6 rounded-2xl border border-border/60">
+          
+          {/* 1. Region */}
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Map className="h-3 w-3" /> 1. Select Region
+              <Map className="h-3 w-3" /> Region
             </label>
-            <div className="relative">
-              <select 
-                value={region}
-                onChange={(e) => handleRegionChange(e.target.value as any)}
-                className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer"
-              >
-                {Object.keys(DATA_TREE).map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none" />
-            </div>
+            <select 
+              value={region} 
+              onChange={(e) => handleRegionChange(e.target.value)}
+              className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none"
+            >
+              {Object.keys(MARKET_DATA).map(r => <option key={r} value={r}>{r}</option>)}
+            </select>
           </div>
 
+          {/* 2. Index */}
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Zap className="h-3 w-3" /> 2. Select Index
+              <Zap className="h-3 w-3" /> Index
             </label>
-            <div className="relative">
-              <select 
-                value={indexLabel}
-                onChange={(e) => setIndexLabel(e.target.value)}
-                className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer"
-              >
-                {Object.keys(DATA_TREE[region].indices).map(i => <option key={i} value={i}>{i}</option>)}
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none" />
-            </div>
+            <select 
+              value={index} 
+              onChange={(e) => handleIndexChange(e.target.value)}
+              className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none"
+            >
+              {/* @ts-ignore */}
+              {Object.keys(MARKET_DATA[region]).map(i => <option key={i} value={i}>{i}</option>)}
+            </select>
+          </div>
+
+          {/* 3. Symbol */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+              <Building2 className="h-3 w-3" /> Symbol
+            </label>
+            <select 
+              value={symbol} 
+              onChange={(e) => setSymbol(e.target.value)}
+              className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none"
+            >
+              {/* @ts-ignore */}
+              {MARKET_DATA[region][index].map(stock => (
+                <option key={stock.s} value={stock.s}>{stock.name}</option>
+              ))}
+            </select>
           </div>
         </div>
 
-        {/* CHART */}
-        <div className="rounded-xl border border-border bg-[#131722] overflow-hidden h-[550px]">
-          <AdvancedChart key={activeIndexSymbol} symbol={`FOREXCOM:${activeIndexSymbol}`} />
+        {/* THE CHART - It will now react to all 3 dropdowns */}
+        <div className="rounded-xl border border-border bg-[#131722] overflow-hidden h-[600px] shadow-2xl relative z-10">
+          <AdvancedChart key={symbol} symbol={symbol} />
         </div>
 
-        {/* SCANNER - THE KEY IS THE VITAL PART */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2 px-1 text-primary">
-            <LayoutList className="h-4 w-4" />
-            <h2 className="text-[10px] font-black uppercase tracking-widest">
-              Live {region} Market Scanner
-            </h2>
-          </div>
-          <div className="rounded-xl border border-border bg-card overflow-hidden h-[600px] relative">
-            <MarketScanner key={`${region}-${activeMarketId}`} market={activeMarketId} />
+        {/* OPTIONAL: Keep the scanner as a broad overview only */}
+        <section className="space-y-4 pt-10">
+          <h2 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Market Momentum Scanner</h2>
+          <div className="h-[600px] rounded-xl border border-border overflow-hidden">
+             <MarketScanner key={region} market={region === "North America" ? "america" : "europe"} />
           </div>
         </section>
       </main>
@@ -109,7 +152,6 @@ export default function MarketsPage() {
 
 function MarketScanner({ market }: { market: string }) {
   const container = React.useRef<HTMLDivElement>(null)
-
   React.useEffect(() => {
     if (container.current) {
       container.current.innerHTML = ""
@@ -121,20 +163,13 @@ function MarketScanner({ market }: { market: string }) {
         "width": "100%",
         "height": "100%",
         "defaultColumn": "overview",
-        "defaultScreen": "most_capitalized",
         "market": market,
         "showToolbar": true,
         "colorTheme": "dark",
-        "locale": "en",
-        "isTransparent": false
+        "locale": "en"
       })
       container.current.appendChild(script)
     }
-    // Cleanup to ensure no duplicate scripts are left behind
-    return () => {
-      if (container.current) container.current.innerHTML = ""
-    }
   }, [market])
-
   return <div ref={container} className="h-full w-full" />
 }
