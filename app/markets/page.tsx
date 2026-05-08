@@ -35,8 +35,7 @@ export default function MarketsPage() {
 
   const handleRegionChange = (newRegion: keyof typeof DATA_TREE) => {
     setRegion(newRegion)
-    const firstIndex = Object.keys(DATA_TREE[newRegion].indices)[0]
-    setIndexLabel(firstIndex)
+    setIndexLabel(Object.keys(DATA_TREE[newRegion].indices)[0])
   }
 
   return (
@@ -45,12 +44,10 @@ export default function MarketsPage() {
       <NewsHeader />
 
       <main className="flex-1 container mx-auto px-4 py-10 space-y-8">
-        <header className="border-b border-border/40 pb-6 flex justify-between items-end">
-          <div>
-            <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3 italic">
-              WESTERN <span className="text-primary italic">TERMINAL</span>
-            </h1>
-          </div>
+        <header className="border-b border-border/40 pb-6">
+          <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3 italic">
+            WESTERN <span className="text-primary italic">TERMINAL</span>
+          </h1>
         </header>
 
         {/* SELECTORS */}
@@ -93,7 +90,7 @@ export default function MarketsPage() {
           <AdvancedChart key={activeIndexSymbol} symbol={`FOREXCOM:${activeIndexSymbol}`} />
         </div>
 
-        {/* SCANNER */}
+        {/* SCANNER - THE KEY IS THE VITAL PART */}
         <section className="space-y-4">
           <div className="flex items-center gap-2 px-1 text-primary">
             <LayoutList className="h-4 w-4" />
@@ -102,8 +99,7 @@ export default function MarketsPage() {
             </h2>
           </div>
           <div className="rounded-xl border border-border bg-card overflow-hidden h-[600px] relative">
-            {/* The key here ensures a fresh component on region change */}
-            <MarketScanner key={activeMarketId} market={activeMarketId} />
+            <MarketScanner key={`${region}-${activeMarketId}`} market={activeMarketId} />
           </div>
         </section>
       </main>
@@ -112,12 +108,10 @@ export default function MarketsPage() {
 }
 
 function MarketScanner({ market }: { market: string }) {
-  // FIXED: Added 'React.' prefix to useRef
   const container = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
     if (container.current) {
-      // Clear container and inject fresh script
       container.current.innerHTML = ""
       const script = document.createElement("script")
       script.src = "https://s3.tradingview.com/external-embedding/embed-widget-screener.js"
@@ -135,6 +129,10 @@ function MarketScanner({ market }: { market: string }) {
         "isTransparent": false
       })
       container.current.appendChild(script)
+    }
+    // Cleanup to ensure no duplicate scripts are left behind
+    return () => {
+      if (container.current) container.current.innerHTML = ""
     }
   }, [market])
 
