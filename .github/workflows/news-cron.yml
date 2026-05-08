@@ -15,16 +15,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Inspect File Structure
-        run: ls -R # This will tell us if the scripts folder exists
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
 
       - name: Install Dependencies
-        run: npm install @supabase/supabase-js
+        # Added --legacy-peer-deps to fix the React 19 conflict
+        run: npm install @supabase/supabase-js --legacy-peer-deps
 
       - name: Execute Fetcher Script
         env:
