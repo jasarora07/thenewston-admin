@@ -68,60 +68,56 @@ export function BlogList() {
       </CardHeader>
       <CardContent className="p-0">
         <ScrollArea className="h-[400px] sm:h-[calc(100vh-280px)]">
-         <div className="space-y-3 sm:space-y-4 px-3 sm:px-4 pb-3 sm:pb-4">
-            {posts.map((post) => (
-              /* 1. Wrap the article in a link tag */
-              <a 
-                key={post.id} 
-                href={post.url || "#"} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block group"
-              >
-                <article
-                  className="rounded-lg overflow-hidden bg-secondary/30 hover:bg-secondary/50 transition-all border border-border/50"
-                >
-                  <div className="relative h-24 sm:h-32 w-full bg-muted">
-                    <Image
-                      src={post.imageUrl || "https://images.unsplash.com/photo-1611974717535-7c805a0a7d3a?auto=format&fit=crop&w=800"}
-                      alt={post.title}
-                      fill
-                      className="object-cover"
-                    />
-                    <Badge className="absolute top-2 left-2 bg-primary/90 text-[10px] sm:text-xs">{post.category}</Badge>
-                  </div>
-                  <div className="p-3 sm:p-4">
-                    <h3 className="text-xs sm:text-sm font-semibold text-foreground leading-tight mb-1 group-hover:text-primary transition-colors line-clamp-2">
-                      {post.title}
-                    </h3>
+<div className="space-y-3 sm:space-y-4 px-3 sm:px-4 pb-3 sm:pb-4">
+  {posts.map((post) => (
+    <article
+      key={post.id}
+      className="group rounded-lg overflow-hidden bg-secondary/30 hover:bg-secondary/50 transition-all border border-border/50"
+    >
+      <div className="p-3 sm:p-4">
+        {/* Source Badge and Meta */}
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary px-1.5 py-0.5 rounded border border-primary/20">
+            {post.source || "News Wire"}
+          </span>
+          <span className="text-[10px] text-muted-foreground tracking-tight">
+            {post.readTime}
+          </span>
+        </div>
 
-                    /* 2. ADDED: Source Badge Line */
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary px-1.5 py-0.5 rounded border border-primary/20">
-                        {post.source || "Thenewston"}
-                      </span>
-                    </div>
+        {/* Title: Clickable to Source */}
+        <a 
+          href={post.url || "#"} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="block mb-2"
+        >
+          <h3 className="text-sm sm:text-base font-bold text-foreground leading-tight group-hover:text-primary transition-colors line-clamp-2">
+            {post.title}
+          </h3>
+        </a>
 
-                    <p className="text-[10px] sm:text-xs text-muted-foreground mb-2 sm:mb-3 line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between text-[10px] sm:text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <User className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        {post.author}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        {post.readTime}
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </a>
-            ))}
-            {posts.length === 0 && !loading && (
-              <div className="p-8 text-center text-muted-foreground text-xs italic">
-                No news articles found in database.
-              </div>
-            )}
-          </div>
+        {/* Excerpt Only */}
+        <p className="text-[11px] sm:text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
+          {post.excerpt}
+        </p>
+
+        {/* Footer: Read More Link */}
+        <div className="flex items-center justify-between pt-2 border-t border-border/40">
+          <span className="text-[10px] text-muted-foreground italic">
+            By {post.author}
+          </span>
+          <a 
+            href={post.url || "#"} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[10px] sm:text-xs font-bold text-primary flex items-center gap-1 hover:underline"
+          >
+            Full Story 
+            <ArrowRight className="h-3 w-3" />
+          </a>
+        </div>
+      </div>
+    </article>
+  ))}
+</div>
