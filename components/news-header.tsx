@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 
 export function NewsHeader() {
   return (
-    <header className="sticky top-[36px] sm:top-[44px] z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+    <header className="sticky top-[36px] sm:top-[44px] z-30 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
       <div className="container flex h-12 sm:h-14 items-center justify-between px-3 sm:px-4">
         <div className="flex items-center gap-3 sm:gap-6">
           <Link href="/" className="flex items-center gap-1.5 sm:gap-2">
