@@ -1,70 +1,52 @@
+"use client"
+
+import React from "react"
 import { TickerBar } from "@/components/ticker-bar"
 import { NewsHeader } from "@/components/news-header"
-import { BreakingNews } from "@/components/breaking-news"
-import { BlogList } from "@/components/blog-list"
-import { TopStocks } from "@/components/top-stocks"
+import { HomeMarketBar } from "@/components/home-market-bar"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Sticky Ticker Bar */}
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* 1. Global Price Tape (Smallest top bar) */}
       <TickerBar />
-
-      {/* Header */}
+      
+      {/* 2. Navigation & Branding */}
       <NewsHeader />
-
-      {/* Main Content */}
-      <main className="container px-3 sm:px-4 py-4 sm:py-6">
-        {/* Dashboard Title */}
-        <div className="mb-4 sm:mb-6">
-          <h1 className="text-lg sm:text-2xl font-heading font-bold text-foreground mb-0.5 sm:mb-1">
-            Financial Dashboard
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground">
-            Real-time market news and insights
-          </p>
+      
+      {/* 3. Live Market Pulse (The dynamic replacement) */}
+      <section className="border-b border-border/40 bg-secondary/5">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center gap-2 mb-2">
+            {/* Live Indicator Dot */}
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
+              Real-Time Terminal • Global Pulse
+            </p>
+          </div>
+          
+          {/* Your new live scrolling component */}
+          <HomeMarketBar />
         </div>
+      </section>
 
-        {/* 3-Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Column 1: Breaking News */}
-          <div className="lg:col-span-1">
-            <BreakingNews />
-          </div>
-
-          {/* Column 2: Deep-Dive Blog List */}
-          <div className="lg:col-span-1">
-            <BlogList />
-          </div>
-
-          {/* Column 3: Top 5 Stocks */}
-          <div className="lg:col-span-1">
-            <TopStocks />
-          </div>
+      {/* 4. Main News Content */}
+      <main className="flex-1 container mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+           {/* Your existing news articles and sections go here */}
+           <div className="lg:col-span-2 space-y-8">
+              <h2 className="text-2xl font-black italic tracking-tighter">FEATURED <span className="text-primary">STORIES</span></h2>
+              {/* News Cards... */}
+           </div>
+           
+           <aside className="space-y-8">
+              {/* Trending Sidebar... */}
+           </aside>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-secondary/30 mt-6 sm:mt-8">
-        <div className="container px-3 sm:px-4 py-4 sm:py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <div className="h-5 w-5 sm:h-6 sm:w-6 rounded bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xs sm:text-sm">N</span>
-              </div>
-              <span className="text-xs sm:text-sm text-muted-foreground">
-                2026 The Newston. All rights reserved.
-              </span>
-            </div>
-            <div className="flex items-center gap-4 sm:gap-6 text-[10px] sm:text-xs text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-              <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-              <a href="#" className="hover:text-foreground transition-colors">Contact</a>
-              <a href="#" className="hover:text-foreground transition-colors">API</a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }
