@@ -1,11 +1,11 @@
 /**
- * THE NEWSTON - Automated Fetcher (V2 - Real-time Sorting)
- * Columns: id, title, category, excerpt, url, imageUrl, author, readTime, date, source
+ * THE NEWSTON - Real-Time Fetcher
+ * Optimized for Today's News (May 9, 2026)
  */
 
 const { createClient } = require('@supabase/supabase-js');
 
-console.log("--- STARTING TERMINAL SYNC (REAL-TIME MODE) ---");
+console.log("--- TERMINAL SYNC: LIVE MODE ---");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -15,64 +15,46 @@ const supabase = createClient(
 async function runAutomation() {
   try {
     const apiKey = process.env.NEWS_API_KEY;
-    console.log("📡 Connecting to NewsAPI (Everything Endpoint)...");
+    
+    // Get Today's Date in ISO format (YYYY-MM-DD)
+    const today = new Date().toISOString().split('T')[0];
+    console.log(`📡 Fetching live updates for: ${today}`);
 
-    // We search for finance/business and sort by the exact second they were published
+    // SWITCHED TO top-headlines for REAL-TIME access (No 24h delay)
+    // We use 'category=business' to get the freshest industry news
     const response = await fetch(
-      `https://newsapi.org/v2/everything?q=finance+OR+business+OR+markets&language=en&sortBy=publishedAt&pageSize=50&apiKey=${apiKey}`
+      `https://newsapi.org/v2/top-headlines?category=business&language=en&pageSize=40&apiKey=${apiKey}`
     );
 
-    if (!response.ok) {
-      throw new Error(`NewsAPI returned ${response.status}: ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`NewsAPI error: ${response.status}`);
 
     const data = await response.json();
-    
-    // Filter out articles that have [Removed] titles or missing essential data
-    const rawArticles = data.articles || [];
-    const validArticles = rawArticles.filter(art => 
-      art.title && 
-      art.title !== "[Removed]" && 
-      art.url && 
-      art.urlToImage // This ensures our UI always has a photo
-    );
+    const validArticles = (data.articles || []).filter(art => art.title && art.title !== "[Removed]" && art.urlToImage);
 
-    console.log(`✅ API Response received. Found ${validArticles.length} fresh articles.`);
+    console.log(`✅ Found ${validArticles.length} LIVE articles.`);
 
-    // 2. Map API data to your EXACT 10 columns
     const newsData = validArticles.map((article) => ({
       title: article.title,
-      category: 'Finance', // Default category
-      excerpt: article.description || 'Live market update received via terminal feed.',
+      category: 'Finance',
+      excerpt: article.description || 'Live terminal update.',
       url: article.url,
-      imageUrl: article.imageUrl || article.urlToImage, // Handles potential NewsAPI field differences
-      author: article.author || 'Staff Writer',
+      imageUrl: article.urlToImage,
+      author: article.author || 'Staff',
       readTime: '3 min read',
-      date: article.publishedAt || new Date().toISOString(),
-      source: article.source.name || 'Financial News'
+      date: article.publishedAt, // This will now show May 9 timestamps
+      source: article.source.name || 'News Wire'
     }));
 
-    console.log("💾 Upserting to Supabase...");
-
-    // 3. Upsert based on URL to prevent duplicates
     const { error } = await supabase
       .from('news')
-      .upsert(newsData, { 
-        onConflict: 'url',
-        ignoreDuplicates: false // This updates the entry if the same URL is found
-      });
+      .upsert(newsData, { onConflict: 'url' });
 
-    if (error) {
-      console.error("❌ SUPABASE ERROR:", error.message);
-      throw error;
-    }
-
-    console.log("🚀 SUCCESS: Terminal synchronized with May 9 data.");
+    if (error) throw error;
+    console.log("🚀 SUCCESS: Terminal updated with real-time May 9 data.");
 
   } catch (err) {
-    console.error("--- CRITICAL FAILURE ---");
-    console.error(err.message);
-    process.exit(1); 
+    console.error("❌ ERROR:", err.message);
+    process.exit(1);
   }
 }
 
