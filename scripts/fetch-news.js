@@ -1,11 +1,6 @@
-/**
- * THE NEWSTON - Real-Time Fetcher
- * Optimized for Today's News (May 9, 2026)
- */
-
 const { createClient } = require('@supabase/supabase-js');
 
-console.log("--- TERMINAL SYNC: LIVE MODE ---");
+console.log("--- TERMINAL SYNC: DEEP FETCH ---");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -16,44 +11,55 @@ async function runAutomation() {
   try {
     const apiKey = process.env.NEWS_API_KEY;
     
-    // Get Today's Date in ISO format (YYYY-MM-DD)
-    const today = new Date().toISOString().split('T')[0];
-    console.log(`📡 Fetching live updates for: ${today}`);
-
-    // SWITCHED TO top-headlines for REAL-TIME access (No 24h delay)
-    // We use 'category=business' to get the freshest industry news
-    const response = await fetch(
-      `https://newsapi.org/v2/top-headlines?category=business&language=en&pageSize=40&apiKey=${apiKey}`
-    );
-
-    if (!response.ok) throw new Error(`NewsAPI error: ${response.status}`);
-
+    // We fetch from 'us' top-headlines for high frequency business news
+    // This is the most reliable real-time endpoint for NewsAPI
+    const url = `https://newsapi.org/v2/top-headlines?country=us&category=business&pageSize=50&apiKey=${apiKey}`;
+    
+    console.log("📡 Connecting to NewsAPI...");
+    const response = await fetch(url);
     const data = await response.json();
-    const validArticles = (data.articles || []).filter(art => art.title && art.title !== "[Removed]" && art.urlToImage);
 
-    console.log(`✅ Found ${validArticles.length} LIVE articles.`);
+    if (data.status !== 'ok') {
+      throw new Error(`NewsAPI Error: ${data.message}`);
+    }
 
-    const newsData = validArticles.map((article) => ({
-      title: article.title,
-      category: 'Finance',
-      excerpt: article.description || 'Live terminal update.',
-      url: article.url,
-      imageUrl: article.urlToImage,
-      author: article.author || 'Staff',
-      readTime: '3 min read',
-      date: article.publishedAt, // This will now show May 9 timestamps
-      source: article.source.name || 'News Wire'
-    }));
+    const articles = data.articles || [];
+    console.log(`📦 NewsAPI sent ${articles.length} total articles.`);
+
+    // Map and Clean data
+    const newsData = articles
+      .filter(art => art.title && art.title !== "[Removed]") // Keep even those without images for now to test
+      .map((article) => ({
+        title: article.title,
+        category: 'Business',
+        excerpt: article.description || 'Market summary pending...',
+        url: article.url,
+        imageUrl: article.urlToImage || 'https://images.unsplash.com/photo-1611974714851-48206138d73e',
+        author: article.author || 'Financial Desk',
+        readTime: '4 min read',
+        date: article.publishedAt || new Date().toISOString(),
+        source: article.source.name || 'News Wire'
+      }));
+
+    if (newsData.length === 0) {
+      console.log("⚠️ No valid articles found to upload.");
+      return;
+    }
+
+    console.log(`💾 Syncing ${newsData.length} articles to Supabase...`);
 
     const { error } = await supabase
       .from('news')
-      .upsert(newsData, { onConflict: 'url' });
+      .upsert(newsData, { 
+        onConflict: 'url',
+        ignoreDuplicates: false // This forces an update even if the URL exists
+      });
 
     if (error) throw error;
-    console.log("🚀 SUCCESS: Terminal updated with real-time May 9 data.");
+    console.log("🚀 TERMINAL UPDATED: May 9 Sync Complete.");
 
   } catch (err) {
-    console.error("❌ ERROR:", err.message);
+    console.error("❌ CRITICAL ERROR:", err.message);
     process.exit(1);
   }
 }
