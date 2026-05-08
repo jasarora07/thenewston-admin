@@ -6,6 +6,7 @@ import { NewsHeader } from "@/components/news-header"
 import AdvancedChart from "@/components/advanced-chart"
 import { ChevronDown, Globe, Map, Zap, LayoutList } from "lucide-react"
 
+// Data Tree: Restricted to Western Markets (North America & Europe)
 const DATA_TREE = {
   "North America": {
     marketId: "america",
@@ -16,7 +17,7 @@ const DATA_TREE = {
     }
   },
   "Europe": {
-    marketId: "europe", // Use 'europe' for a broad continental list
+    marketId: "europe",
     indices: {
       "FTSE 100 (UK)": "UK100",
       "DAX 40 (Germany)": "GER40",
@@ -33,6 +34,7 @@ export default function MarketsPage() {
   const activeMarketId = DATA_TREE[region].marketId
   const activeIndexSymbol = DATA_TREE[region].indices[indexLabel as keyof (typeof DATA_TREE)["North America"]["indices"]]
 
+  // Handle region change and reset the index to the first one in the new region
   const handleRegionChange = (newRegion: keyof typeof DATA_TREE) => {
     setRegion(newRegion)
     const firstIndex = Object.keys(DATA_TREE[newRegion].indices)[0]
@@ -40,18 +42,24 @@ export default function MarketsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <TickerBar />
       <NewsHeader />
 
-      <main className="container mx-auto px-4 py-10 space-y-8">
-        <header className="border-b border-border/40 pb-6">
-          <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3 italic">
-            WESTERN <span className="text-primary italic">TERMINAL</span>
-          </h1>
+      <main className="flex-1 container mx-auto px-4 py-10 space-y-8">
+        {/* HEADER */}
+        <header className="border-b border-border/40 pb-6 flex justify-between items-end">
+          <div>
+            <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3 italic">
+              WESTERN <span className="text-primary italic">TERMINAL</span>
+            </h1>
+            <p className="text-muted-foreground text-[10px] mt-1 uppercase tracking-[0.2em]">
+              Real-Time Global Market Analysis
+            </p>
+          </div>
         </header>
 
-        {/* REGION & INDEX SELECTORS */}
+        {/* SELECTORS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-secondary/10 p-6 rounded-2xl border border-border/60">
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
@@ -65,7 +73,7 @@ export default function MarketsPage() {
               >
                 {Object.keys(DATA_TREE).map(r => <option key={r} value={r}>{r}</option>)}
               </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none" />
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
             </div>
           </div>
 
@@ -81,17 +89,17 @@ export default function MarketsPage() {
               >
                 {Object.keys(DATA_TREE[region].indices).map(i => <option key={i} value={i}>{i}</option>)}
               </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none" />
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
             </div>
           </div>
         </div>
 
-        {/* MAIN CHART */}
-        <div className="rounded-xl border border-border bg-[#131722] overflow-hidden h-[550px] shadow-2xl">
+        {/* CHART SECTION */}
+        <div className="rounded-xl border border-border bg-[#131722] overflow-hidden h-[550px] shadow-2xl relative z-10">
           <AdvancedChart key={activeIndexSymbol} symbol={`FOREXCOM:${activeIndexSymbol}`} />
         </div>
 
-        {/* THE FULL LIST (SCANNER) */}
+        {/* FULL COMPONENT LIST (SCREENER) */}
         <section className="space-y-4">
           <div className="flex items-center gap-2 px-1 text-primary">
             <LayoutList className="h-4 w-4" />
@@ -108,14 +116,29 @@ export default function MarketsPage() {
   )
 }
 
+/**
+ * MarketScanner Component
+ * Uses a unique ID and manual DOM injection to force 
+ * TradingView to refresh the list when the market changes.
+ */
 function MarketScanner({ market }: { market: string }) {
   const container = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Generate a unique ID to prevent widget "ghosting"
+    const uniqueId = `tv-screener-${Math.random().toString(36).substr(2, 9)}`
+    
     if (container.current) {
-      // CLEAR the container completely to force the script to re-init
+      // Step 1: Wipe the container clean
       container.current.innerHTML = ""
       
+      // Step 2: Create a new anchor div
+      const widgetDiv = document.createElement("div")
+      widgetDiv.id = uniqueId
+      widgetDiv.className = "tradingview-widget-container__widget"
+      container.current.appendChild(widgetDiv)
+
+      // Step 3: Inject the script with the fresh market param and container ID
       const script = document.createElement("script")
       script.src = "https://s3.tradingview.com/external-embedding/embed-widget-screener.js"
       script.type = "text/javascript"
@@ -129,11 +152,26 @@ function MarketScanner({ market }: { market: string }) {
         "showToolbar": true,
         "colorTheme": "dark",
         "locale": "en",
+        "container_id": uniqueId,
         "isTransparent": false
       })
+      
       container.current.appendChild(script)
     }
-  }, [market]) // Triggers every time the region (market) changes
 
-  return <div ref={container} className="h-full w-full" />
+    // Cleanup on unmount or market change
+    return () => {
+      if (container.current) {
+        container.current.innerHTML = ""
+      }
+    }
+  }, [market])
+
+  return (
+    <div 
+      ref={container} 
+      className="h-full w-full bg-[#131722]" 
+      style={{ minHeight: '600px' }} 
+    />
+  )
 }
