@@ -1,122 +1,133 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { TickerBar } from "@/components/ticker-bar"
 import { NewsHeader } from "@/components/news-header"
-import MarketWidget from "@/components/market-widget"
 import AdvancedChart from "@/components/advanced-chart"
-import { ChevronDown, Globe, Map, Zap } from "lucide-react"
+import { ChevronDown, Globe, Map, Zap, Building2 } from "lucide-react"
 
-// Global Market Data Structure
-const GLOBAL_MARKETS = {
-  "US Indices": [
-    { name: "S&P 500", s: "FOREXCOM:SPX500" },
-    { name: "Nasdaq 100", s: "FOREXCOM:NSXUSD" },
-    { name: "Dow Jones 30", s: "FOREXCOM:DJI" },
-    { name: "Russell 2000", s: "FOREXCOM:RUT" },
-  ],
-  "European Indices": [
-    { name: "FTSE 100 (UK)", s: "FOREXCOM:UK100" },
-    { name: "DAX 40 (Germany)", s: "FOREXCOM:GER40" },
-    { name: "CAC 40 (France)", s: "FOREXCOM:FRA40" },
-    { name: "Euro Stoxx 50", s: "FOREXCOM:EU50" },
-  ],
-  "Asian Indices": [
-    { name: "Nikkei 225 (Japan)", s: "TSE:8035" },
-    { name: "Hang Seng (HK)", s: "HSI:HSI" },
-    { name: "Nifty 50 (India)", s: "NSE:NIFTY" },
-    { name: "ASX 200 (Australia)", s: "ASX:XJO" },
-  ],
-  "Global Commodities": [
-    { name: "Gold", s: "TVC:GOLD" },
-    { name: "Silver", s: "TVC:SILVER" },
-    { name: "Crude Oil (WTI)", s: "TVC:USOIL" },
-    { name: "Brent Oil", s: "TVC:UKOIL" },
-    { name: "Natural Gas", s: "TVC:NATGAS" },
-  ],
-  "Major Crypto": [
-    { name: "Bitcoin / USD", s: "BINANCE:BTCUSDT" },
-    { name: "Ethereum / USD", s: "BINANCE:ETHUSDT" },
-    { name: "Solana / USD", s: "BINANCE:SOLUSDT" },
-  ]
+// Complete Data Tree
+const DATA_TREE = {
+  "US Markets": {
+    "S&P 500": [
+      { name: "Index Overview", s: "FOREXCOM:SPX500" },
+      { name: "Apple", s: "NASDAQ:AAPL" },
+      { name: "Microsoft", s: "NASDAQ:MSFT" },
+      { name: "NVIDIA", s: "NASDAQ:NVDA" },
+    ],
+    "Nasdaq 100": [
+      { name: "Index Overview", s: "FOREXCOM:NSXUSD" },
+      { name: "Tesla", s: "NASDAQ:TSLA" },
+      { name: "Google", s: "NASDAQ:GOOGL" },
+    ]
+  },
+  "European Markets": {
+    "FTSE 100": [
+      { name: "Index Overview", s: "FOREXCOM:UK100" },
+      { name: "Shell", s: "LSE:SHEL" },
+      { name: "AstraZeneca", s: "LSE:AZN" },
+    ],
+    "DAX 40": [
+      { name: "Index Overview", s: "FOREXCOM:GER40" },
+      { name: "SAP", s: "XETR:SAP" },
+      { name: "Siemens", s: "XETR:SIE" },
+    ]
+  }
 }
 
-type MarketCategory = keyof typeof GLOBAL_MARKETS;
-
 export default function MarketsPage() {
-  const [activeCategory, setActiveCategory] = useState<MarketCategory>("US Indices")
-  const [activeSymbol, setActiveSymbol] = useState("FOREXCOM:SPX500")
+  // State for the three layers
+  const [region, setRegion] = useState(Object.keys(DATA_TREE)[0])
+  const [index, setIndex] = useState(Object.keys(DATA_TREE[region])[0])
+  const [symbol, setSymbol] = useState(DATA_TREE[region][index][0].s)
 
-  // Handle category change: update category and reset symbol to the first item in that group
-  const handleCategoryChange = (cat: MarketCategory) => {
-    setActiveCategory(cat)
-    setActiveSymbol(GLOBAL_MARKETS[cat][0].s)
+  // Update handlers to ensure lower levels reset when upper levels change
+  const handleRegionChange = (newRegion: string) => {
+    setRegion(newRegion)
+    const firstIndex = Object.keys(DATA_TREE[newRegion])[0]
+    setIndex(firstIndex)
+    setSymbol(DATA_TREE[newRegion][firstIndex][0].s)
+  }
+
+  const handleIndexChange = (newIndex: string) => {
+    setIndex(newIndex)
+    setSymbol(DATA_TREE[region][newIndex][0].s)
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
       <TickerBar />
       <NewsHeader />
 
-      <main className="container mx-auto px-4 py-8 space-y-10">
-        <header className="border-b border-border/50 pb-6">
-          <h1 className="text-4xl font-black tracking-tighter text-white flex items-center gap-3">
-            <Globe className="h-8 w-8 text-primary animate-pulse" />
-            GLOBAL <span className="text-primary">TERMINAL</span>
+      <main className="container mx-auto px-4 py-10 space-y-8">
+        <header className="border-b border-border/40 pb-6">
+          <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3">
+            <Globe className="h-8 w-8 text-primary" />
+            MARKET <span className="text-primary">DRILLDOWN</span>
           </h1>
         </header>
 
-        {/* DUAL SELECTOR ENGINE */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-secondary/20 p-6 rounded-2xl border border-primary/10 shadow-xl">
+        {/* TRIPLE SELECTOR GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-secondary/10 p-6 rounded-2xl border border-border/60">
           
-          {/* Dropdown 1: Region/Class */}
+          {/* Layer 1: Region */}
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Map className="h-3 w-3" /> 1. Select Region / Class
+              <Map className="h-3 w-3" /> 1. Region
             </label>
             <div className="relative">
               <select 
-                value={activeCategory}
-                onChange={(e) => handleCategoryChange(e.target.value as MarketCategory)}
-                className="w-full h-14 bg-background border border-border rounded-xl px-5 text-sm font-bold text-white appearance-none cursor-pointer focus:ring-2 focus:ring-primary/50 transition-all"
+                value={region}
+                onChange={(e) => handleRegionChange(e.target.value)}
+                className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer"
               >
-                {Object.keys(GLOBAL_MARKETS).map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
+                {Object.keys(DATA_TREE).map(r => <option key={r} value={r}>{r}</option>)}
               </select>
-              <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
             </div>
           </div>
 
-          {/* Dropdown 2: Dynamic Symbols */}
+          {/* Layer 2: Index */}
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Zap className="h-3 w-3" /> 2. Select Instrument
+              <Zap className="h-3 w-3" /> 2. Index
             </label>
             <div className="relative">
               <select 
-                value={activeSymbol}
-                onChange={(e) => setActiveSymbol(e.target.value)}
-                className="w-full h-14 bg-background border border-border rounded-xl px-5 text-sm font-bold text-white appearance-none cursor-pointer focus:ring-2 focus:ring-primary/50 transition-all"
+                value={index}
+                onChange={(e) => handleIndexChange(e.target.value)}
+                className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer"
               >
-                {GLOBAL_MARKETS[activeCategory].map((item) => (
+                {Object.keys(DATA_TREE[region]).map(i => <option key={i} value={i}>{i}</option>)}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
+            </div>
+          </div>
+
+          {/* Layer 3: Stock / Constituent */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+              <Building2 className="h-3 w-3" /> 3. Company / Symbol
+            </label>
+            <div className="relative">
+              <select 
+                value={symbol}
+                onChange={(e) => setSymbol(e.target.value)}
+                className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer"
+              >
+                {DATA_TREE[region][index].map(item => (
                   <option key={item.s} value={item.s}>{item.name}</option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
             </div>
           </div>
         </div>
 
-        {/* CHART SECTION */}
-        <div className="rounded-2xl border border-border bg-[#131722] overflow-hidden h-[600px] shadow-2xl relative z-10">
-          <AdvancedChart key={activeSymbol} symbol={activeSymbol} />
+        {/* CHART DISPLAY */}
+        <div className="rounded-xl border border-border bg-[#131722] overflow-hidden h-[600px] shadow-2xl">
+          <AdvancedChart key={symbol} symbol={symbol} />
         </div>
-
-        {/* FOOTER HEATMAP */}
-        <section className="pt-6">
-           <MarketWidget />
-        </section>
       </main>
     </div>
   )
