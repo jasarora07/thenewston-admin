@@ -27,7 +27,7 @@ interface BlogPost {
 }
 
 export function BlogList() {
-  const [posts, setPosts] = useState<BlogPost[]>([])
+  const [posts, setPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
