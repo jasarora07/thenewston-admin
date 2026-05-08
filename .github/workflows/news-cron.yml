@@ -1,0 +1,32 @@
+name: Hourly News Sync
+
+on:
+  schedule:
+    # This runs the script at the start of every hour (UTC)
+    - cron: '0 * * * *'
+  # This allows you to manually push a button to test it immediately
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Supabase Client
+        run: npm install @supabase/supabase-js
+
+      - name: Execute Fetcher Script
+        env:
+          # GitHub will pull these from your "Secrets" settings
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+        run: node scripts/fetch-news.js
