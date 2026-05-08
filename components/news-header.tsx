@@ -1,9 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { Search, Bell, User } from "lucide-react"
+import { Bell, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 
 export function NewsHeader() {
   return (
@@ -14,31 +13,33 @@ export function NewsHeader() {
             <div className="h-6 w-6 sm:h-8 sm:w-8 rounded bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm sm:text-lg">N</span>
             </div>
-            <span className="font-heading text-base sm:text-xl font-bold text-foreground">The Newston</span>
+            <span className="font-heading text-base sm:text-xl font-bold text-foreground italic uppercase tracking-tighter">
+              The Newston
+            </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-4">
-            <Link href="/markets" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <nav className="hidden md:flex items-center gap-4 uppercase font-black text-[10px] tracking-widest">
+            <Link href="/markets" className="text-muted-foreground hover:text-primary transition-colors">
               Markets
             </Link>
-            <Link href="/stocks" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/stocks" className="text-muted-foreground hover:text-primary transition-colors">
               Stocks
             </Link>
-            <Link href="/crypto" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/crypto" className="text-muted-foreground hover:text-primary transition-colors">
               Crypto
             </Link>
-            <Link href="/economy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/economy" className="text-muted-foreground hover:text-primary transition-colors">
               Economy
             </Link>
           </nav>
         </div>
+
         <div className="flex items-center gap-1.5 sm:gap-3">
-          <div className="hidden lg:flex relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-           </div>
+          {/* Notification Button - Now always visible since Search is gone */}
           <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground hover:text-foreground">
-            <Search className="h-4 w-4 sm:h-5 sm:w-5 lg:hidden" />
-            <Bell className="h-4 w-4 sm:h-5 sm:w-5 hidden lg:block" />
+            <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
+
+          {/* User Profile Button */}
           <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground hover:text-foreground">
             <User className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
