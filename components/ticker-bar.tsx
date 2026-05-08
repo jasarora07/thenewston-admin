@@ -29,7 +29,7 @@ export function TickerBar() {
   useEffect(() => {
     const interval = setInterval(() => {
       setOffset((prev) => (prev + 1) % 100)
-    }, 115)
+    }, 140)
     return () => clearInterval(interval)
   }, [])
 
