@@ -1,6 +1,7 @@
 import React from "react"
 import { TickerBar } from "@/components/ticker-bar"
 import { NewsHeader } from "@/components/news-header"
+import { MacroBar } from "@/components/macro-bar" // NEW IMPORT
 import { createClient } from "@/lib/supabase/server"
 import { Clock, ArrowUpRight, Newspaper, ChevronDown } from "lucide-react"
 import Link from "next/link"
@@ -17,21 +18,24 @@ export default async function HomePage() {
     .order('date', { ascending: false })
     .limit(15)
 
-  const featured = newsItems?.slice(0, 2) // Dual Hero
-  const businessUpdates = newsItems?.slice(2, 7) // 5 Sidebar
-  const latestNewsGrid = newsItems?.slice(7, 15) // 8 Grid
+  const featured = newsItems?.slice(0, 2) 
+  const businessUpdates = newsItems?.slice(2, 7) 
+  const latestNewsGrid = newsItems?.slice(7, 15) 
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <TickerBar />
       <NewsHeader />
 
+      {/* FULL WIDTH MACRO BAR SECTION */}
+      <MacroBar />
+
       <main className="flex-1 container mx-auto px-4 py-8 space-y-12">
         
         {/* HERO & SIDEBAR: 60/40 Split */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           
-          {/* Dual Hero Section (60% Width - split in half) */}
+          {/* Dual Hero Section (60% Width) */}
           <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4">
             {featured?.map((story) => (
               <a key={story.id} href={story.url} target="_blank" rel="noopener noreferrer" 
