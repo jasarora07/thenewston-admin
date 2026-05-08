@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useRef } from "react"
 
 export default function SymbolSearch() {
@@ -16,28 +15,22 @@ export default function SymbolSearch() {
     script.async = true
     script.innerHTML = JSON.stringify({
       "width": "100%",
-      "height": 60,
+      "height": "100%",
       "colorTheme": "dark",
       "isTransparent": false,
       "showSymbolLogo": true,
       "locale": "en",
-      "symbolsGroups": []
+      "symbolsGroups": [], // Leaving this empty allows it to search ALL global symbols
+      "color": "#1e222d"
     })
     
     container.current?.appendChild(script)
-
-    return () => {
-      if (container.current) {
-        container.current.innerHTML = ""
-      }
-    }
   }, [])
 
   return (
     <div 
-      className="tradingview-widget-container relative z-50" 
-      ref={container} 
-      style={{ height: '60px' }}
+      className="tradingview-widget-container relative z-50 w-full h-full min-h-[64px]" 
+      ref={container}
     >
       <div className="tradingview-widget-container__widget"></div>
     </div>
