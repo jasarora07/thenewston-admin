@@ -3,12 +3,11 @@ name: Hourly News Sync
 on:
   schedule:
     - cron: '0 * * * *'
-  workflow_dispatch: 
+  workflow_dispatch: # This is your "Test Now" button
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # This opts into Node 24 to clear that warning
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -16,13 +15,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Debug - List Files
+        run: ls -R # This helps us verify the 'scripts' folder exists
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # Updated to latest
+          node-version: '24'
 
       - name: Install Dependencies
-        # We add 'dotenv' just in case your script looks for it
         run: npm install @supabase/supabase-js
 
       - name: Execute Fetcher Script
