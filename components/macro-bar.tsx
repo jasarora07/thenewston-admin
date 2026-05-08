@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { TrendingUp, TrendingDown, Activity } from "lucide-react"
+import { TrendingUp, Activity } from "lucide-react"
 
 export async function MacroBar() {
   const supabase = await createClient()
@@ -8,27 +8,29 @@ export async function MacroBar() {
     .select('*')
     .order('indicator_name')
 
-  if (!indicators) return null
+  if (!indicators || indicators.length === 0) return null
 
   return (
     <div className="w-full bg-background border-b border-border py-4 px-4 overflow-x-auto no-scrollbar">
-      <div className="max-w-[1400px] mx-auto flex gap-4 min-w-max">
+      <div className="container mx-auto flex gap-4 min-w-max">
         {indicators.map((item) => (
           <div 
             key={item.symbol} 
-            className="flex flex-col p-4 bg-secondary/10 border border-border/50 rounded-lg min-w-[180px] hover:border-primary/50 transition-colors"
+            className="flex flex-col p-4 bg-secondary/10 border border-border/50 rounded-xl min-w-[190px] hover:border-primary/50 transition-colors group"
           >
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
+            <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1 group-hover:text-primary transition-colors">
               {item.indicator_name}
             </span>
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-1">
               <span className="text-xl font-black font-mono tracking-tighter">
-                {item.value}{item.symbol === 'GDPC1' ? '' : '%'}
+                {item.value}
+                {/* Logic to show % only for rates/inflation, not indices like Consumer Confidence */}
+                {item.symbol !== 'GDPC1' && item.symbol !== 'CONCONF' ? '%' : ''}
               </span>
             </div>
-            <div className="flex items-center gap-1 mt-1">
-              <Activity className="h-3 w-3 text-primary/50" />
-              <span className="text-[9px] font-mono text-muted-foreground uppercase">
+            <div className="flex items-center gap-1.5 mt-2 opacity-60">
+              <Activity className="h-2.5 w-2.5 text-primary" />
+              <span className="text-[8px] font-mono font-bold text-muted-foreground uppercase">
                 {item.date}
               </span>
             </div>
