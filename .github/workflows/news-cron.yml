@@ -15,8 +15,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Debug - List Files
-        run: ls -R # THIS WILL SHOW US IF THE FOLDERS ARE CORRECT
+      - name: Inspect File Structure
+        run: ls -R # This will tell us if the scripts folder exists
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
