@@ -12,23 +12,18 @@ export default function SymbolSearch() {
     script.async = true
     script.innerHTML = JSON.stringify({
       "width": "100%",
-      "height": "100%", // Inherits the 72px from the parent
+      "height": 48, // Absolute minimum height for a search bar
       "colorTheme": "dark",
       "isTransparent": true,
       "showSymbolLogo": true,
       "locale": "en",
-      "symbolsGroups": [
-        {
-          "name": "Trending",
-          "symbols": [{ "s": "NASDAQ:NVDA" }, { "s": "NASDAQ:AAPL" }, { "s": "BINANCE:BTCUSDT" }]
-        }
-      ]
+      "symbolsGroups": [] // Emptying this often makes the search bar focusable immediately
     })
     container.current?.appendChild(script)
   }, [])
 
   return (
-    <div className="tradingview-widget-container" ref={container}>
+    <div className="tradingview-widget-container" ref={container} style={{ height: '48px' }}>
       <div className="tradingview-widget-container__widget"></div>
     </div>
   )
