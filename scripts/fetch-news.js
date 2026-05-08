@@ -1,56 +1,47 @@
-// scripts/fetch-news.js
-console.log("--- SCRIPT STARTING ---");
+console.log("--- STARTING FETCH PROCESS ---");
 
 const { createClient } = require('@supabase/supabase-js');
 
-console.log("Checking Environment Variables...");
-if (!process.env.SUPABASE_URL) console.error("MISSING: SUPABASE_URL");
-if (!process.env.SUPABASE_SERVICE_ROLE_KEY) console.error("MISSING: SUPABASE_SERVICE_ROLE_KEY");
-if (!process.env.NEWS_API_KEY) console.error("MISSING: NEWS_API_KEY");
+// Verify environment variables are reaching the script
+if (!process.env.SUPABASE_URL) throw new Error("CRITICAL: SUPABASE_URL is missing from GitHub Secrets");
 
 const supabase = createClient(
   process.env.SUPABASE_URL, 
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-async function runAutomation() {
-  console.log("Initiating NewsAPI Fetch...");
-  
+async function run() {
   try {
-    const response = await fetch(`https://newsapi.org/v2/top-headlines?category=business&language=en&apiKey=${process.env.NEWS_API_KEY}`);
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`NewsAPI Error: ${response.status} - ${errorText}`);
-    }
+    console.log("Calling NewsAPI...");
+    const res = await fetch(`https://newsapi.org/v2/top-headlines?category=business&language=en&apiKey=${process.env.NEWS_API_KEY}`);
+    const data = await res.json();
 
-    const data = await response.json();
-    console.log(`API Success: Found ${data.articles?.length || 0} articles.`);
+    if (!data.articles) throw new Error("No articles found in API response");
 
-    // Map to your 10 columns
-    const newsData = data.articles.map(article => ({
-      title: article.title,
+    console.log(`Found ${data.articles.length} articles. Mapping to 10 columns...`);
+
+    const mappedData = data.articles.map(art => ({
+      title: art.title,
       category: 'Finance',
-      excerpt: article.description || '',
-      url: article.url,
-      imageUrl: article.urlToImage || '',
-      author: article.author || 'Staff',
-      readTime: '4 min',
-      date: article.publishedAt,
-      source: article.source.name
+      excerpt: art.description || '',
+      url: art.url,
+      imageUrl: art.urlToImage || '',
+      author: art.author || 'Staff',
+      readTime: '3 min',
+      date: art.publishedAt,
+      source: art.source.name
     }));
 
-    console.log("Attempting Supabase Upsert...");
-    const { error } = await supabase.from('news').upsert(newsData, { onConflict: 'url' });
+    console.log("Uploading to Supabase...");
+    const { error } = await supabase.from('news').upsert(mappedData, { onConflict: 'url' });
 
     if (error) throw error;
-    console.log("--- AUTOMATION COMPLETE: SUCCESS ---");
-
+    console.log("--- SUCCESS: TERMINAL UPDATED ---");
   } catch (err) {
-    console.error("--- CRITICAL ERROR ---");
+    console.error("--- ERROR DETECTED ---");
     console.error(err.message);
     process.exit(1);
   }
 }
 
-runAutomation();
+run();
