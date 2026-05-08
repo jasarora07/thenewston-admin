@@ -26,7 +26,7 @@ export default async function HomePage() {
 
       <main className="flex-1 container mx-auto px-4 py-8 space-y-12">
         
-        {/* HERO & SIDEBAR: Height Matched, Hero Width Reduced to 75% */}
+        {/* HERO & SIDEBAR: Height Matched, Hero Width Reduced to 60% */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Hero Section: lg:col-span-9 represents 75% of a 12-column grid */}
           <div className="lg:col-span-9 group flex">
@@ -56,7 +56,7 @@ export default async function HomePage() {
             ) : null}
           </div>
           
-          {/* SIDEBAR: Business Updates (25% width) */}
+          {/* SIDEBAR: Business Updates (40% width) */}
           <div className="lg:col-span-3 flex">
             <div className="w-full p-6 rounded-2xl bg-secondary/10 border border-border flex flex-col">
               <h3 className="text-[10px] font-black flex items-center gap-2 mb-6 text-primary italic tracking-widest uppercase">
