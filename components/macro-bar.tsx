@@ -8,7 +8,7 @@ export async function MacroBar() {
     .select('*')
     .order('indicator_name')
 
-  if (!indicators || indicators.length === 0) return null
+  if (!indicators || indicators.length === 0) return <div className="p-4 bg-red-500 text-white">No Macro Data Found</div>
 
   return (
     <div className="w-full bg-background border-b border-border py-4 px-4 overflow-x-auto no-scrollbar">
