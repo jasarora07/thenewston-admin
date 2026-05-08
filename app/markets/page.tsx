@@ -1,83 +1,121 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { TickerBar } from "@/components/ticker-bar"
 import { NewsHeader } from "@/components/news-header"
 import MarketWidget from "@/components/market-widget"
-import SymbolSearch from "@/components/symbol-search"
 import AdvancedChart from "@/components/advanced-chart"
-import { Search, ChevronDown, Activity, Globe } from "lucide-react"
+import { ChevronDown, Globe, Map, Zap } from "lucide-react"
 
-const POPULAR_STOCKS = [
-  { name: "Apple", symbol: "NASDAQ:AAPL" },
-  { name: "NVIDIA", symbol: "NASDAQ:NVDA" },
-  { name: "Tesla", symbol: "NASDAQ:TSLA" },
-  { name: "Gold", symbol: "TVC:GOLD" },
-  { name: "S&P 500", symbol: "FOREXCOM:SPX500" },
-  { name: "Bitcoin", symbol: "BINANCE:BTCUSDT" },
-]
+// Global Market Data Structure
+const GLOBAL_MARKETS = {
+  "US Indices": [
+    { name: "S&P 500", s: "FOREXCOM:SPX500" },
+    { name: "Nasdaq 100", s: "FOREXCOM:NSXUSD" },
+    { name: "Dow Jones 30", s: "FOREXCOM:DJI" },
+    { name: "Russell 2000", s: "FOREXCOM:RUT" },
+  ],
+  "European Indices": [
+    { name: "FTSE 100 (UK)", s: "FOREXCOM:UK100" },
+    { name: "DAX 40 (Germany)", s: "FOREXCOM:GER40" },
+    { name: "CAC 40 (France)", s: "FOREXCOM:FRA40" },
+    { name: "Euro Stoxx 50", s: "FOREXCOM:EU50" },
+  ],
+  "Asian Indices": [
+    { name: "Nikkei 225 (Japan)", s: "TSE:8035" },
+    { name: "Hang Seng (HK)", s: "HSI:HSI" },
+    { name: "Nifty 50 (India)", s: "NSE:NIFTY" },
+    { name: "ASX 200 (Australia)", s: "ASX:XJO" },
+  ],
+  "Global Commodities": [
+    { name: "Gold", s: "TVC:GOLD" },
+    { name: "Silver", s: "TVC:SILVER" },
+    { name: "Crude Oil (WTI)", s: "TVC:USOIL" },
+    { name: "Brent Oil", s: "TVC:UKOIL" },
+    { name: "Natural Gas", s: "TVC:NATGAS" },
+  ],
+  "Major Crypto": [
+    { name: "Bitcoin / USD", s: "BINANCE:BTCUSDT" },
+    { name: "Ethereum / USD", s: "BINANCE:ETHUSDT" },
+    { name: "Solana / USD", s: "BINANCE:SOLUSDT" },
+  ]
+}
+
+type MarketCategory = keyof typeof GLOBAL_MARKETS;
 
 export default function MarketsPage() {
-  const [selectedSymbol, setSelectedSymbol] = useState("NASDAQ:AAPL")
+  const [activeCategory, setActiveCategory] = useState<MarketCategory>("US Indices")
+  const [activeSymbol, setActiveSymbol] = useState("FOREXCOM:SPX500")
+
+  // Handle category change: update category and reset symbol to the first item in that group
+  const handleCategoryChange = (cat: MarketCategory) => {
+    setActiveCategory(cat)
+    setActiveSymbol(GLOBAL_MARKETS[cat][0].s)
+  }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background">
       <TickerBar />
       <NewsHeader />
 
-      <main className="flex-1 container mx-auto px-4 py-8 md:px-8 space-y-12">
-        <header className="space-y-2 border-b border-border/60 pb-8">
-          <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white uppercase italic">
-            Market <span className="text-primary">Terminal</span>
+      <main className="container mx-auto px-4 py-8 space-y-10">
+        <header className="border-b border-border/50 pb-6">
+          <h1 className="text-4xl font-black tracking-tighter text-white flex items-center gap-3">
+            <Globe className="h-8 w-8 text-primary animate-pulse" />
+            GLOBAL <span className="text-primary">TERMINAL</span>
           </h1>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* SEARCH BOX - High Z-Index to beat the header overlap */}
-          <div className="lg:col-span-2 space-y-4 relative z-50">
-            <h2 className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
-              <Search className="h-3 w-3" /> Live Terminal Search
-            </h2>
-            <div className="h-[80px] rounded-xl border border-primary/20 bg-[#131722] overflow-hidden shadow-2xl pointer-events-auto">
-              <SymbolSearch />
+        {/* DUAL SELECTOR ENGINE */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-secondary/20 p-6 rounded-2xl border border-primary/10 shadow-xl">
+          
+          {/* Dropdown 1: Region/Class */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+              <Map className="h-3 w-3" /> 1. Select Region / Class
+            </label>
+            <div className="relative">
+              <select 
+                value={activeCategory}
+                onChange={(e) => handleCategoryChange(e.target.value as MarketCategory)}
+                className="w-full h-14 bg-background border border-border rounded-xl px-5 text-sm font-bold text-white appearance-none cursor-pointer focus:ring-2 focus:ring-primary/50 transition-all"
+              >
+                {Object.keys(GLOBAL_MARKETS).map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
             </div>
           </div>
 
-          {/* QUICK SELECT */}
-          <div className="space-y-4 relative z-40">
-            <h2 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-              <Activity className="h-3 w-3" /> Quick Switch
-            </h2>
+          {/* Dropdown 2: Dynamic Symbols */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+              <Zap className="h-3 w-3" /> 2. Select Instrument
+            </label>
             <div className="relative">
               <select 
-                value={selectedSymbol}
-                onChange={(e) => setSelectedSymbol(e.target.value)}
-                className="w-full h-[80px] bg-secondary/20 border border-border rounded-xl px-6 appearance-none text-sm text-white cursor-pointer hover:bg-secondary/40 transition-colors"
+                value={activeSymbol}
+                onChange={(e) => setActiveSymbol(e.target.value)}
+                className="w-full h-14 bg-background border border-border rounded-xl px-5 text-sm font-bold text-white appearance-none cursor-pointer focus:ring-2 focus:ring-primary/50 transition-all"
               >
-                {POPULAR_STOCKS.map((stock) => (
-                  <option key={stock.symbol} value={stock.symbol} className="bg-[#131722]">
-                    {stock.name}
-                  </option>
+                {GLOBAL_MARKETS[activeCategory].map((item) => (
+                  <option key={item.s} value={item.s}>{item.name}</option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-5 w-5 pointer-events-none text-muted-foreground" />
+              <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
             </div>
           </div>
         </div>
 
-        {/* DYNAMIC CHART - The key prop forces a refresh when symbol changes */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-[10px] font-black uppercase tracking-widest text-primary">Active Analysis</h2>
-            <span className="text-xs font-mono text-muted-foreground bg-secondary px-2 py-1 rounded">{selectedSymbol}</span>
-          </div>
-          <div className="rounded-2xl border border-border bg-card overflow-hidden h-[500px] w-full">
-             <AdvancedChart key={selectedSymbol} symbol={selectedSymbol} />
-          </div>
-        </section>
+        {/* CHART SECTION */}
+        <div className="rounded-2xl border border-border bg-[#131722] overflow-hidden h-[600px] shadow-2xl relative z-10">
+          <AdvancedChart key={activeSymbol} symbol={activeSymbol} />
+        </div>
 
-        <section className="pt-10">
-          <MarketWidget />
+        {/* FOOTER HEATMAP */}
+        <section className="pt-6">
+           <MarketWidget />
         </section>
       </main>
     </div>
