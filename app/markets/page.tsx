@@ -3,31 +3,30 @@ import SymbolSearch from "@/components/symbol-search"
 
 export default function MarketsPage() {
   return (
-    /* md:ml-64 pushes the content to the right to reveal the sidebar */
-    /* pt-20 reveals the top 'Newston' header */
-    <div className="md:ml-64 pt-20 p-6 md:p-10 min-h-screen bg-transparent">
-      <div className="max-w-5xl mx-auto space-y-12">
-        
-        {/* Search Bar - Increased height slightly to ensure it's clickable */}
-        <section>
-          <h2 className="text-[10px] font-black uppercase tracking-widest text-primary mb-4">
-            Symbol Search Terminal
+    <main className="p-4 md:p-10 max-w-7xl mx-auto space-y-12">
+      {/* Search Section - Reduced to a simple bar */}
+      <section>
+        <div className="mb-4">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+            Symbol Search
           </h2>
-          <div className="h-[60px] w-full overflow-hidden rounded-lg border border-border bg-[#0a0a0a] relative z-50">
-            <SymbolSearch />
-          </div>
-        </section>
+        </div>
+        <div className="h-[60px] w-full rounded-md border border-border bg-background overflow-hidden">
+          <SymbolSearch />
+        </div>
+      </section>
 
-        {/* Heatmap Section */}
-        <section>
-          <h2 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">
-            Market Intelligence Heatmap
+      {/* Heatmap Section */}
+      <section>
+        <div className="mb-4">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+            Market Intelligence
           </h2>
-          <div className="rounded-xl border border-border bg-card overflow-hidden min-h-[500px] relative z-10">
-            <MarketWidget />
-          </div>
-        </section>
-      </div>
-    </div>
+        </div>
+        <div className="rounded-xl border border-border bg-card overflow-hidden min-h-[600px]">
+          <MarketWidget />
+        </div>
+      </section>
+    </main>
   )
 }
