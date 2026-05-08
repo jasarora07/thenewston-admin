@@ -121,3 +121,8 @@ export function BlogList() {
     </article>
   ))}
 </div>
+</ScrollArea>
+      </CardContent>
+    </Card>
+  )
+}
