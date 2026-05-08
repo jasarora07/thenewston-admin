@@ -2,23 +2,24 @@ name: Daily Macro Sync
 
 on:
   schedule:
-    # Runs at 00:00 UTC (Midnight) every day
     - cron: '0 0 * * *'
-  # This enables the "Run workflow" button in the Actions tab
   workflow_dispatch:
 
 jobs:
   macro_sync_job:
     runs-on: ubuntu-latest
+    env:
+      # This opts you into the new Node 24 runner as requested by GitHub
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # v4 is fine, but we'll use Node 24 below
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24' # Upgrade to 24 to match the new runner standards
 
       - name: Install Dependencies
         run: npm install
