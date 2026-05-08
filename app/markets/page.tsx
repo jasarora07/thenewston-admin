@@ -8,29 +8,35 @@ import { ChevronDown, Globe, Map, Zap, LayoutList } from "lucide-react"
 
 const DATA_TREE = {
   "North America": {
-    "S&P 500": "SPX500",
-    "Nasdaq 100": "NAS100",
-    "Dow 30": "DJI",
-    "Russell 2000": "RUT",
+    marketId: "america",
+    indices: {
+      "S&P 500": "SPX500",
+      "Nasdaq 100": "NAS100",
+      "Dow 30": "DJI",
+    }
   },
   "Europe": {
-    "FTSE 100 (UK)": "UK100",
-    "DAX 40 (Germany)": "GER40",
-    "CAC 40 (France)": "FRA40",
-    "Euro Stoxx 50": "EU50",
-    "IBEX 35 (Spain)": "ESP35",
+    marketId: "uk", // 'uk' or 'france' etc. 'uk' is a good global default for EU
+    indices: {
+      "FTSE 100 (UK)": "UK100",
+      "DAX 40 (Germany)": "GER40",
+      "CAC 40 (France)": "FRA40",
+      "Euro Stoxx 50": "EU50",
+    }
   }
 }
 
 export default function MarketsPage() {
   const [region, setRegion] = useState<keyof typeof DATA_TREE>("North America")
-  const [indexLabel, setIndexLabel] = useState(Object.keys(DATA_TREE["North America"])[0])
+  const [indexLabel, setIndexLabel] = useState(Object.keys(DATA_TREE["North America"].indices)[0])
   
-  const activeIndexSymbol = DATA_TREE[region][indexLabel as keyof (typeof DATA_TREE)["North America" | "Europe"]]
+  // Logic to get the correct symbol and market ID
+  const activeMarketId = DATA_TREE[region].marketId
+  const activeIndexSymbol = DATA_TREE[region].indices[indexLabel as keyof (typeof DATA_TREE)["North America"]["indices"]]
 
   const handleRegionChange = (newRegion: keyof typeof DATA_TREE) => {
     setRegion(newRegion)
-    const firstIndex = Object.keys(DATA_TREE[newRegion])[0]
+    const firstIndex = Object.keys(DATA_TREE[newRegion].indices)[0]
     setIndexLabel(firstIndex)
   }
 
@@ -46,14 +52,14 @@ export default function MarketsPage() {
               <Globe className="h-8 w-8 text-primary" />
               WESTERN <span className="text-primary">TERMINAL</span>
             </h1>
-            <p className="text-muted-foreground text-[10px] mt-1 uppercase tracking-[0.2em]">North America & Europe Real-Time</p>
+            <p className="text-muted-foreground text-[10px] mt-1 uppercase tracking-[0.2em]">Real-Time Market Intelligence</p>
           </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-secondary/10 p-6 rounded-2xl border border-border/60">
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Map className="h-3 w-3" /> 1. Select Region
+              <Map className="h-3 w-3" /> 1. Region
             </label>
             <div className="relative">
               <select 
@@ -63,13 +69,13 @@ export default function MarketsPage() {
               >
                 {Object.keys(DATA_TREE).map(r => <option key={r} value={r}>{r}</option>)}
               </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none" />
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Zap className="h-3 w-3" /> 2. Select Index
+              <Zap className="h-3 w-3" /> 2. Index
             </label>
             <div className="relative">
               <select 
@@ -77,9 +83,9 @@ export default function MarketsPage() {
                 onChange={(e) => setIndexLabel(e.target.value)}
                 className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer"
               >
-                {Object.keys(DATA_TREE[region]).map(i => <option key={i} value={i}>{i}</option>)}
+                {Object.keys(DATA_TREE[region].indices).map(i => <option key={i} value={i}>{i}</option>)}
               </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none" />
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
             </div>
           </div>
         </div>
@@ -92,11 +98,12 @@ export default function MarketsPage() {
           <div className="flex items-center gap-2 px-1 text-primary">
             <LayoutList className="h-4 w-4" />
             <h2 className="text-[10px] font-black uppercase tracking-widest">
-              Full {indexLabel} Component List
+              {indexLabel} — Full Component Scanner
             </h2>
           </div>
           <div className="rounded-xl border border-border bg-card overflow-hidden h-[600px]">
-            <MarketScanner indexSymbol={activeIndexSymbol} />
+            {/* We pass the marketId as a key to force a full widget refresh */}
+            <MarketScanner key={activeMarketId} market={activeMarketId} />
           </div>
         </section>
       </main>
@@ -104,7 +111,7 @@ export default function MarketsPage() {
   )
 }
 
-function MarketScanner({ indexSymbol }: { indexSymbol: string }) {
+function MarketScanner({ market }: { market: string }) {
   const container = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -119,14 +126,14 @@ function MarketScanner({ indexSymbol }: { indexSymbol: string }) {
         "height": "100%",
         "defaultColumn": "overview",
         "defaultScreen": "most_capitalized",
-        "market": "america",
+        "market": market, // Dynamically set based on region selection
         "showToolbar": true,
         "colorTheme": "dark",
         "locale": "en"
       })
       container.current.appendChild(script)
     }
-  }, [indexSymbol])
+  }, [market])
 
   return <div ref={container} className="h-full w-full" />
 }
