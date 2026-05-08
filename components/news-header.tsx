@@ -34,11 +34,7 @@ export function NewsHeader() {
         <div className="flex items-center gap-1.5 sm:gap-3">
           <div className="hidden lg:flex relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search news..."
-              className="pl-9 w-64 bg-secondary border-border"
-            />
-          </div>
+           </div>
           <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground hover:text-foreground">
             <Search className="h-4 w-4 sm:h-5 sm:w-5 lg:hidden" />
             <Bell className="h-4 w-4 sm:h-5 sm:w-5 hidden lg:block" />
