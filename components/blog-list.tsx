@@ -76,7 +76,7 @@ export function BlogList() {
               >
                 <div className="relative h-24 sm:h-32 w-full bg-muted">
                   <Image
-                    src={post.imageUrl || "/placeholder.svg"}
+                    src={post.imageUrl || "https://images.unsplash.com/photo-1611974717535-7c805a0a7d3a?auto=format&fit=crop&w=800"}
                     alt={post.title}
                     fill
                     className="object-cover"
