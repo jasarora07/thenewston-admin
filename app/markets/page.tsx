@@ -54,9 +54,7 @@ export default function MarketsPage() {
               </h2>
               <span className="text-[9px] text-muted-foreground italic">Powered by TradingView</span>
             </div>
-            
-            {/* Height increased to 80px to prevent the "Disabled" click bug */}
-            <div className="h-[80px] w-full rounded-xl border border-primary/20 bg-[#131722] overflow-hidden shadow-2xl shadow-primary/5 relative z-40 focus-within:border-primary transition-colors">
+            <div className="h-[80px] w-full rounded-xl border border-primary/20 bg-[#131722] overflow-hidden shadow-2xl shadow-primary/5 relative z-40">
               <SymbolSearch />
             </div>
           </section>
@@ -68,7 +66,36 @@ export default function MarketsPage() {
             </h2>
             <div className="relative group">
               <select 
+                value={selected}
                 onChange={(e) => setSelected(e.target.value)}
                 className="w-full h-[80px] bg-secondary/20 border border-border rounded-xl px-6 appearance-none text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer transition-all hover:bg-secondary/40 text-white"
               >
-                <option disabled selected
+                <option value="Quick Select..." disabled>Quick Select...</option>
+                {POPULAR_STOCKS.map((stock) => (
+                  <option key={stock.symbol} value={stock.symbol}>
+                    {stock.name} ({stock.symbol.split(':')[1]})
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-5 w-5 pointer-events-none text-muted-foreground" />
+            </div>
+          </section>
+        </div>
+
+        {/* 4. MARKET HEATMAP SECTION */}
+        <section className="space-y-6 pt-4">
+          <div className="flex items-center gap-2 px-1">
+            <TrendingUp className="h-4 w-4 text-green-500" />
+            <h2 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+              Performance Heatmap (Live)
+            </h2>
+          </div>
+          <div className="rounded-2xl border border-border bg-card/30 backdrop-blur-sm overflow-hidden min-h-[650px]">
+            <MarketWidget />
+          </div>
+        </section>
+      </main>
+      <div className="h-20" />
+    </div>
+  )
+}
