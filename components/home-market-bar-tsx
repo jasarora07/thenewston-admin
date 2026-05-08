@@ -1,0 +1,38 @@
+"use client"
+import React, { useEffect, useRef } from "react"
+
+export function HomeMarketBar() {
+  const container = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (container.current) {
+      container.current.innerHTML = ""
+      const script = document.createElement("script")
+      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+      script.type = "text/javascript"
+      script.async = true
+      script.innerHTML = JSON.stringify({
+        "symbols": [
+          { "description": "S&P 500", "proName": "FOREXCOM:SPX500" },
+          { "description": "Nasdaq 100", "proName": "FOREXCOM:NSXUSD" },
+          { "description": "Bitcoin", "proName": "BINANCE:BTCUSDT" },
+          { "description": "Gold", "proName": "TVC:GOLD" },
+          { "description": "Crude Oil", "proName": "TVC:USOIL" },
+          { "description": "NVDA", "proName": "NASDAQ:NVDA" }
+        ],
+        "showSymbolLogo": true,
+        "colorTheme": "dark",
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "locale": "en"
+      })
+      container.current.appendChild(script)
+    }
+  }, [])
+
+  return (
+    <div className="w-full py-4 bg-secondary/20 border-y border-border overflow-hidden" ref={container}>
+      <div className="tradingview-widget-container__widget"></div>
+    </div>
+  )
+}
