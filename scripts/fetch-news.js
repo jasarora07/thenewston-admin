@@ -1,47 +1,52 @@
-console.log("--- STARTING FETCH PROCESS ---");
+console.log("--- TERMINAL BOOT SEQUENCE STARTING ---");
 
 const { createClient } = require('@supabase/supabase-js');
 
-// Verify environment variables are reaching the script
-if (!process.env.SUPABASE_URL) throw new Error("CRITICAL: SUPABASE_URL is missing from GitHub Secrets");
+// 1. Check Secrets immediately
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  console.error("❌ ERROR: Supabase credentials missing from GitHub Secrets.");
+  process.exit(1);
+}
 
 const supabase = createClient(
   process.env.SUPABASE_URL, 
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-async function run() {
+async function runAutomation() {
   try {
-    console.log("Calling NewsAPI...");
-    const res = await fetch(`https://newsapi.org/v2/top-headlines?category=business&language=en&apiKey=${process.env.NEWS_API_KEY}`);
-    const data = await res.json();
+    console.log("📡 Connecting to NewsAPI...");
+    const response = await fetch(`https://newsapi.org/v2/top-headlines?category=business&language=en&apiKey=${process.env.NEWS_API_KEY}`);
+    
+    if (!response.ok) {
+      throw new Error(`NewsAPI returned status ${response.status}`);
+    }
 
-    if (!data.articles) throw new Error("No articles found in API response");
+    const data = await response.json();
+    console.log(`✅ API Success: Found ${data.articles?.length || 0} articles.`);
 
-    console.log(`Found ${data.articles.length} articles. Mapping to 10 columns...`);
-
-    const mappedData = data.articles.map(art => ({
-      title: art.title,
+    const mappedData = data.articles.map(article => ({
+      title: article.title,
       category: 'Finance',
-      excerpt: art.description || '',
-      url: art.url,
-      imageUrl: art.urlToImage || '',
-      author: art.author || 'Staff',
+      excerpt: article.description || '',
+      url: article.url,
+      imageUrl: article.urlToImage || '',
+      author: article.author || 'Staff',
       readTime: '3 min',
-      date: art.publishedAt,
-      source: art.source.name
+      date: article.publishedAt,
+      source: article.source.name
     }));
 
-    console.log("Uploading to Supabase...");
+    console.log("💾 Writing to Supabase...");
     const { error } = await supabase.from('news').upsert(mappedData, { onConflict: 'url' });
 
     if (error) throw error;
-    console.log("--- SUCCESS: TERMINAL UPDATED ---");
+    console.log("🚀 SUCCESS: Database updated.");
+
   } catch (err) {
-    console.error("--- ERROR DETECTED ---");
-    console.error(err.message);
+    console.error("❌ CRITICAL ERROR:", err.message);
     process.exit(1);
   }
 }
 
-run();
+runAutomation();
