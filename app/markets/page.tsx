@@ -57,7 +57,7 @@ export default function MarketsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-secondary/10 p-6 rounded-2xl border border-border/60">
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Map className="h-3 w-3" /> 1. Region
+              <Map className="h-3 w-3" /> 1. Select Region
             </label>
             <div className="relative">
               <select 
@@ -73,7 +73,7 @@ export default function MarketsPage() {
 
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Zap className="h-3 w-3" /> 2. Index
+              <Zap className="h-3 w-3" /> 2. Select Index
             </label>
             <div className="relative">
               <select 
@@ -93,7 +93,7 @@ export default function MarketsPage() {
           <AdvancedChart key={activeIndexSymbol} symbol={`FOREXCOM:${activeIndexSymbol}`} />
         </div>
 
-        {/* SCANNER: The key={activeMarketId} forces a hard refresh on region change */}
+        {/* SCANNER */}
         <section className="space-y-4">
           <div className="flex items-center gap-2 px-1 text-primary">
             <LayoutList className="h-4 w-4" />
@@ -102,6 +102,7 @@ export default function MarketsPage() {
             </h2>
           </div>
           <div className="rounded-xl border border-border bg-card overflow-hidden h-[600px] relative">
+            {/* The key here ensures a fresh component on region change */}
             <MarketScanner key={activeMarketId} market={activeMarketId} />
           </div>
         </section>
@@ -111,10 +112,12 @@ export default function MarketsPage() {
 }
 
 function MarketScanner({ market }: { market: string }) {
-  const container = useRef<HTMLDivElement>(null)
+  // FIXED: Added 'React.' prefix to useRef
+  const container = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {
     if (container.current) {
+      // Clear container and inject fresh script
       container.current.innerHTML = ""
       const script = document.createElement("script")
       script.src = "https://s3.tradingview.com/external-embedding/embed-widget-screener.js"
