@@ -3,13 +3,14 @@ import { NewsGrid } from "@/components/news-grid"
 import { TickerBar } from "@/components/ticker-bar"
 import { NewsHeader } from "@/components/news-header"
 import { MacroBar } from "@/components/macro-bar"
+import Link from "next/link"
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   const supabase = await createClient()
 
-  // We fetch 15: 2 for Hero, 5 for Sidebar, 8 for Grid
+  // Fetch 15 items: 2 for Hero, 5 for Sidebar, 8 for Grid
   const { data: newsItems } = await supabase
     .from('news')
     .select('*')
@@ -21,39 +22,54 @@ export default async function HomePage() {
   const initialGridNews = newsItems?.slice(7, 15) || []
 
   return (
-    <div className="min-h-screen bg-black text-zinc-400 font-sans">
+    <div className="min-h-screen bg-black text-zinc-400 font-sans flex flex-col">
       <TickerBar />
       <NewsHeader />
       <MacroBar />
 
-      <main className="container mx-auto px-4 py-8 space-y-16">
-        {/* HERO & SIDEBAR SECTION */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <main className="flex-1 container mx-auto px-4 py-8 space-y-16">
+        
+        {/* TOP SECTION: HERO & SIDEBAR */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Hero Section: Two stacked 16:9 cards */}
-          <div className="lg:col-span-8 space-y-6">
-            {featured.map((item) => (
-              <a key={item.id} href={item.url} target="_blank" className="group block relative aspect-video overflow-hidden rounded-xl border border-white/10 bg-zinc-900">
-                <img src={item.imageUrl} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                <div className="absolute bottom-0 p-6 space-y-2">
-                   <p className="text-[10px] font-black text-primary uppercase tracking-widest">{item.source}</p>
-                   <h2 className="text-xl font-bold text-white uppercase leading-tight tracking-tighter">{item.title}</h2>
-                </div>
-              </a>
-            ))}
+          {/* HERO: Two Posts Side by Side */}
+          <div className="lg:col-span-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+              {featured.map((item) => (
+                <a key={item.id} href={item.url} target="_blank" className="group relative overflow-hidden rounded-lg border border-white/10 bg-zinc-900 aspect-[4/5] md:aspect-auto">
+                  <img 
+                    src={item.imageUrl || "/api/placeholder/400/600"} 
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" 
+                    alt="Hero"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 p-5 space-y-2">
+                    <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{item.source}</span>
+                    <h2 className="text-sm md:text-base font-bold text-white uppercase leading-tight tracking-tighter line-clamp-3">
+                      {item.title}
+                    </h2>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Business Update: Height-matched to Hero */}
-          <div className="lg:col-span-4 flex flex-col">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-4 px-1">Business Updates</h4>
-            <div className="flex-1 space-y-5">
+          {/* BUSINESS UPDATES: Dark Theme Fixed */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+              <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500">Business Updates</h4>
+            </div>
+            <div className="space-y-5">
               {businessUpdates.map((item) => (
-                <a key={item.id} href={item.url} target="_blank" className="flex gap-4 group items-center">
-                  <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-white/5 bg-zinc-900">
-                    <img src={item.imageUrl} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+                <a key={item.id} href={item.url} target="_blank" className="flex gap-4 group items-start">
+                  <div className="w-14 h-14 shrink-0 rounded border border-white/10 bg-zinc-900 overflow-hidden">
+                    <img 
+                      src={item.imageUrl || "/api/placeholder/100/100"} 
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" 
+                    />
                   </div>
-                  <h5 className="font-bold text-[11px] leading-snug group-hover:text-primary transition-colors text-zinc-300 line-clamp-2 uppercase">
+                  <h5 className="font-bold text-[11px] leading-snug text-zinc-300 group-hover:text-primary transition-colors uppercase">
                     {item.title}
                   </h5>
                 </a>
@@ -62,16 +78,65 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* NEWS GRID SECTION */}
+        {/* LATEST NEWS GRID */}
         <section className="space-y-8">
           <div className="flex items-center gap-4">
-             <h2 className="text-lg font-black italic tracking-tighter uppercase whitespace-nowrap text-white">Latest <span className="text-primary">Intelligence</span></h2>
-             <div className="h-px bg-white/10 flex-1" />
+            <h2 className="text-lg font-black italic tracking-tighter uppercase text-white">Latest <span className="text-primary">Intelligence</span></h2>
+            <div className="h-px bg-white/10 flex-1" />
           </div>
-          {/* Passing the next 8 items to avoid duplication */}
           <NewsGrid initialItems={initialGridNews} totalCountBeforeGrid={7} />
         </section>
       </main>
+
+      {/* FOOTER RESTORED */}
+      <footer className="bg-zinc-950 border-t border-white/5 py-12 mt-20">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <div className="h-6 w-6 rounded bg-primary flex items-center justify-center font-black text-black italic text-xs">N</div>
+                <span className="font-black italic uppercase text-white tracking-tighter">The Newston</span>
+              </div>
+              <p className="text-[10px] leading-relaxed text-zinc-500 uppercase tracking-wider font-medium">
+                Institutional grade financial intelligence. Real-time data and market analysis for the modern era.
+              </p>
+            </div>
+            
+            <div className="space-y-4">
+              <h5 className="text-[10px] font-black uppercase tracking-widest text-white">Terminals</h5>
+              <nav className="flex flex-col gap-2">
+                <Link href="/markets" className="text-[10px] font-bold text-zinc-500 hover:text-primary transition-colors uppercase">Markets</Link>
+                <Link href="/crypto" className="text-[10px] font-bold text-zinc-500 hover:text-primary transition-colors uppercase">Crypto Assets</Link>
+              </nav>
+            </div>
+
+            <div className="space-y-4">
+              <h5 className="text-[10px] font-black uppercase tracking-widest text-white">Connect</h5>
+              <nav className="flex flex-col gap-2 font-mono text-[10px]">
+                <span className="text-zinc-600 tracking-tighter uppercase">Twitter: @THENEWSTON</span>
+                <span className="text-zinc-600 tracking-tighter uppercase">Terminal: 8.8.8.8</span>
+              </nav>
+            </div>
+
+            <div className="space-y-4">
+              <h5 className="text-[10px] font-black uppercase tracking-widest text-white">Status</h5>
+              <div className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Systems Nominal</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4">
+            <p className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">© 2026 THE NEWSTON INTELLIGENCE UNIT</p>
+            <div className="flex gap-6 text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">
+              <span className="hover:text-white cursor-pointer">Privacy</span>
+              <span className="hover:text-white cursor-pointer">Terms</span>
+              <span className="hover:text-white cursor-pointer">API</span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
