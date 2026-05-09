@@ -21,8 +21,29 @@ export default async function HomePage() {
   const businessUpdates = newsItems?.slice(2, 7) || []
   const initialGridNews = newsItems?.slice(7, 15) || []
 
+  // Organization Schema for SEO
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "The Newston",
+    "url": "https://thenewston.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://thenewston.com/logo.png"
+    },
+    "sameAs": [
+      "https://twitter.com/thenewston"
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-black text-zinc-400 font-sans flex flex-col">
+      {/* Injecting Schema Markup */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+
       <TickerBar />
       <NewsHeader />
       <MacroBar />
