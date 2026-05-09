@@ -1,8 +1,13 @@
 const { createClient } = require('@supabase/supabase-js');
 
+// DEBUG: This will show in GitHub logs if the variables are landing
+console.log("Checking Environment Variables...");
+console.log("URL Present:", !!process.env.SUPABASE_URL);
+console.log("Key Present:", !!process.env.SUPABASE_SERVICE_ROLE_KEY);
+
 const supabase = createClient(
-  process.env.SUPABASE_URL, 
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_URL || "", 
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
 );
 
 const STOCKS_TO_SYNC = [
@@ -18,8 +23,8 @@ const STOCKS_TO_SYNC = [
 async function syncStocks() {
   const apiKey = process.env.ALPHA_VANTAGE_KEY;
   
-  if (!apiKey || !process.env.SUPABASE_URL) {
-    console.error("❌ ERROR: Missing environment variables.");
+  if (!apiKey) {
+    console.error("❌ ERROR: ALPHA_VANTAGE_KEY is missing.");
     process.exit(1);
   }
 
@@ -28,13 +33,19 @@ async function syncStocks() {
       const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock.symbol}&apikey=${apiKey}`;
       const response = await fetch(url);
       const data = await response.json();
-      const quote = data['Global Quote'] || {}; // Fallback to empty object
+      
+      // Handle the "Information" or "Note" fields Alpha Vantage sends when rate limited
+      if (data.Note || data.Information) {
+        console.log(`⚠️ API Limit Reached: ${data.Note || data.Information}`);
+        break; 
+      }
 
-      // Safe Parsing: If values are missing, use 0 or "N/A"
+      const quote = data['Global Quote'] || {};
+      
+      // Fallback values to prevent "image-style" blank crashes
       const price = parseFloat(quote['05. price']) || 0;
       const changeRaw = quote['10. change percent'] || "0%";
       const changePercent = parseFloat(changeRaw.replace('%', '')) || 0;
-      const volume = quote['06. volume'] || "0";
 
       const { error } = await supabase
         .from('stocks')
@@ -43,7 +54,7 @@ async function syncStocks() {
           name: stock.name || 'N/A',
           price: price,
           change_percent: changePercent,
-          volume: volume,
+          volume: quote['06. volume'] || "0",
           index_group: stock.group,
           last_updated: new Date().toISOString()
         }, { onConflict: 'symbol' });
@@ -51,11 +62,11 @@ async function syncStocks() {
       if (error) throw error;
       console.log(`✅ Synced ${stock.symbol}`);
 
-      // Rate limit protection
+      // Wait 15s to respect Alpha Vantage free tier (5 calls/min)
       await new Promise(resolve => setTimeout(resolve, 15000));
 
     } catch (err) {
-      console.error(`❌ Error ${stock.symbol}:`, err.message);
+      console.error(`❌ Error syncing ${stock.symbol}:`, err.message);
     }
   }
 }
