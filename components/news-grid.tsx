@@ -6,9 +6,10 @@ import { ChevronDown, Loader2 } from "lucide-react"
 
 interface NewsGridProps {
   initialItems: any[]
+  totalCountBeforeGrid: number
 }
 
-export function NewsGrid({ initialItems }: NewsGridProps) {
+export function NewsGrid({ initialItems, totalCountBeforeGrid }: NewsGridProps) {
   const [items, setItems] = useState(initialItems)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
@@ -18,9 +19,9 @@ export function NewsGrid({ initialItems }: NewsGridProps) {
     if (loading) return
     setLoading(true)
 
-    // Calculate the range based on current items count
-    const from = items.length
-    const to = from + 7 // Fetch 8 more
+    // START OFFSET: Existing items in grid + 7 (Hero/Sidebar items)
+    const from = items.length + totalCountBeforeGrid
+    const to = from + 7
 
     const { data, error } = await supabase
       .from('news')
@@ -28,51 +29,29 @@ export function NewsGrid({ initialItems }: NewsGridProps) {
       .order('date', { ascending: false })
       .range(from, to)
 
-    if (error) {
-      console.error("Fetch error:", error)
-      setLoading(false)
-      return
-    }
-
     if (data && data.length > 0) {
       setItems(prev => [...prev, ...data])
-      // If we got fewer than 8, there are no more articles left
       if (data.length < 8) setHasMore(false)
     } else {
       setHasMore(false)
     }
-    
     setLoading(false)
   }
 
   return (
     <div className="space-y-12">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.map((item) => (
-          <a 
-            key={item.id} 
-            href={item.url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="group block space-y-3"
-          >
+          <a key={item.id} href={item.url} target="_blank" className="group block space-y-3">
             <div className="aspect-video rounded-xl overflow-hidden border border-white/5 bg-zinc-900 shadow-xl">
-              <img 
-                src={item.imageUrl || "/placeholder.jpg"} 
-                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" 
-                alt={item.title} 
-              />
+              <img src={item.imageUrl} className="object-cover w-full h-full group-hover:scale-105 transition-all duration-500 opacity-90 group-hover:opacity-100" />
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] px-2 py-0.5 bg-primary/10 rounded">
-                  {item.source}
-                </span>
-                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">
-                  {new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                </span>
+            <div className="space-y-1">
+              <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-zinc-500">
+                <span className="text-primary">{item.source}</span>
+                <span>{new Date(item.date).toLocaleDateString()}</span>
               </div>
-              <h3 className="font-bold text-[13px] leading-snug group-hover:text-primary transition-colors line-clamp-3 text-zinc-200 tracking-tight">
+              <h3 className="font-bold text-[12px] leading-tight group-hover:text-primary transition-colors text-zinc-300 line-clamp-3">
                 {item.title}
               </h3>
             </div>
@@ -81,20 +60,13 @@ export function NewsGrid({ initialItems }: NewsGridProps) {
       </div>
 
       {hasMore && (
-        <div className="flex justify-center pt-4 pb-12">
+        <div className="flex justify-center pb-12">
           <button 
             onClick={loadMore}
             disabled={loading}
-            className="min-w-[240px] group px-8 py-4 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xl"
+            className="px-12 py-4 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center gap-3 disabled:opacity-20"
           >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-primary" />
-            ) : (
-              <>
-                Load More Articles 
-                <ChevronDown className="h-4 w-4 group-hover:translate-y-1 transition-transform" />
-              </>
-            )}
+            {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : "Fetch More Data"}
           </button>
         </div>
       )}
