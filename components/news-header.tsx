@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 export function NewsHeader() {
   const pathname = usePathname();
 
-  // "Economy" has been removed from this list
   const navLinks = [
     { name: "Home", href: "/", icon: <House className="h-3 w-3" /> },
     { name: "Markets", href: "/markets" },
@@ -17,20 +16,20 @@ export function NewsHeader() {
   ];
 
   return (
-    <header className="sticky top-[42px] sm:top-[44px] z-30 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border shadow-sm">
+    /* CHANGE: Removed fixed top positioning and made it sticky to the top of its own container */
+    <header className="sticky top-0 z-30 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border shadow-sm">
       <div className="container flex h-12 sm:h-14 items-center justify-between px-3 sm:px-4">
         
         <div className="flex items-center gap-4 sm:gap-8 overflow-hidden flex-1">
+          {/* Logo Section */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <div className="h-6 w-6 sm:h-7 sm:w-7 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-primary-foreground font-black text-xs sm:text-sm italic">N</span>
             </div>
-            <span className="hidden sm:inline font-black text-lg text-foreground italic uppercase tracking-tighter">
-              The Newston
-            </span>
           </Link>
 
-          <nav className="flex items-center gap-5 sm:gap-6 overflow-x-auto no-scrollbar py-1 scroll-smooth">
+          {/* NAVIGATION: Now uses sticky top-0 logic to sit under ticker naturally */}
+          <nav className="flex items-center gap-6 sm:gap-8 overflow-x-auto no-scrollbar py-1 scroll-smooth">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -51,11 +50,12 @@ export function NewsHeader() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-4">
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-foreground">
+        {/* Action Icons */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-2">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500">
             <Bell className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-foreground">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500">
             <User className="h-4 w-4" />
           </Button>
         </div>
