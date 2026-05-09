@@ -1,0 +1,34 @@
+name: Crypto Market Sync
+
+on:
+  schedule:
+    # Runs every 30 minutes (e.g., 12:00, 12:30, 1:00...)
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Allows you to trigger it manually with a button
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Future-proofing for 2026 GitHub Runner standards
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        # Uses legacy-peer-deps to ignore React 19/Day-Picker conflicts
+        run: npm install --legacy-peer-deps
+
+      - name: Run Crypto Sync Script
+        env:
+          # Ensure these secret names match your GitHub Settings perfectly
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/fetch-crypto.js
