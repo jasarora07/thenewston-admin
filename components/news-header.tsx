@@ -32,13 +32,10 @@ export function NewsHeader() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Stocks Removed */}
           <nav className="hidden md:flex items-center gap-4 uppercase font-black text-[10px] tracking-widest">
             <Link href="/markets" className="text-muted-foreground hover:text-primary transition-colors">
               Markets
-            </Link>
-            <Link href="/stocks" className="text-muted-foreground hover:text-primary transition-colors">
-              Stocks
             </Link>
             <Link href="/crypto" className="text-muted-foreground hover:text-primary transition-colors">
               Crypto
@@ -59,7 +56,7 @@ export function NewsHeader() {
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Dropdown Menu - Stocks Removed */}
       {isMenuOpen && (
         <div className="md:hidden border-t border-border bg-background px-4 py-6 space-y-4 shadow-xl">
           <nav className="flex flex-col gap-4 uppercase font-black text-xs tracking-widest">
