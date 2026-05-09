@@ -15,6 +15,18 @@ export function NewsGrid({ initialItems, totalCountBeforeGrid }: NewsGridProps) 
   const [hasMore, setHasMore] = useState(true)
   const supabase = createClient()
 
+  // ItemList Schema for Google Search Console / SEO
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "url": item.url,
+      "name": item.title
+    }))
+  };
+
   const loadMore = async () => {
     if (loading) return
     setLoading(true)
@@ -48,13 +60,20 @@ export function NewsGrid({ initialItems, totalCountBeforeGrid }: NewsGridProps) 
 
   return (
     <div className="space-y-12">
+      {/* Injecting ItemList Schema Markup */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.map((item) => (
-          <a key={item.id} href={item.url} target="_blank" className="group block space-y-3">
+          <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="group block space-y-3">
             <div className="aspect-video rounded-xl overflow-hidden border border-white/5 bg-zinc-900 shadow-xl">
               <img 
                 src={item.imageUrl || "/api/placeholder/400/225"} 
                 className="object-cover w-full h-full group-hover:scale-105 transition-all duration-500 opacity-80 group-hover:opacity-100" 
+                alt={item.title}
               />
             </div>
             <div className="space-y-1">
