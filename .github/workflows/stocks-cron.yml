@@ -2,15 +2,13 @@ name: Hourly Stock Market Sync
 
 on:
   schedule:
-    # Runs at the start of every hour, Monday-Friday (Market Days)
     - cron: '0 * * * 1-5'
-  workflow_dispatch: # Allows manual "Play" button testing
+  workflow_dispatch: 
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Future-proofing against GitHub Node warnings
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
@@ -23,13 +21,12 @@ jobs:
           node-version: '24'
 
       - name: Install dependencies
-        # Bypasses React 19 / react-day-picker conflicts
         run: npm install --legacy-peer-deps
 
       - name: Run Stock Sync Script
         env:
-          # Maps your GitHub Secrets to the Node.js environment
-          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          # This maps WHATEVER you named your secret to the exact name the script needs
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           ALPHA_VANTAGE_KEY: ${{ secrets.ALPHA_VANTAGE_KEY }}
         run: node scripts/fetch-stocks.js
