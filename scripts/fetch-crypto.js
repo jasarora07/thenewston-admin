@@ -6,17 +6,21 @@ const supabase = createClient(
 );
 
 async function syncCrypto() {
-  console.log("🚀 Terminal: Starting Seamless Crypto Sync...");
+  console.log("📡 Terminal: Initiating Seamless Crypto Sync...");
 
   try {
+    // 1. Fetch Top 20 Coins from CoinGecko
     const response = await fetch(
       "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false"
     );
     const coins = await response.json();
 
-    if (!Array.isArray(coins)) throw new Error("Invalid API response");
+    if (!Array.isArray(coins)) {
+      console.log("⚠️ API Response:", coins);
+      throw new Error("Rate limit hit or invalid response from CoinGecko.");
+    }
 
-    // 1. Prepare data for UPSERT
+    // 2. Prepare Data & Capture current symbols for cleanup
     const currentSymbols = coins.map(c => c.symbol.toUpperCase());
     const formattedAssets = coins.map((coin) => ({
       rank: coin.market_cap_rank,
@@ -24,29 +28,28 @@ async function syncCrypto() {
       name: coin.name,
       price: coin.current_price,
       change_24h: coin.price_change_percentage_24h || 0,
-      market_cap: coin.market_cap,
-      volume_24h: coin.total_volume,
+      market_cap: Math.round(coin.market_cap),
+      volume_24h: Math.round(coin.total_volume),
       last_updated: new Date().toISOString()
     }));
 
-    // 2. SEAMLESS UPSERT: Update existing rows or add new ones
-    // This ensures data is always present for the frontend
+    // 3. SEAMLESS UPSERT: Update prices in place
     const { error: upsertError } = await supabase
       .from('crypto_assets')
       .upsert(formattedAssets, { onConflict: 'symbol' });
 
     if (upsertError) throw upsertError;
-    console.log("📡 Data Upserted: UI remains populated.");
+    console.log("✅ Live Data Upserted.");
 
-    // 3. CLEANUP: Delete only the rows that are NOT in the new Top 20
+    // 4. CLEANUP: Remove any "ghost" assets not in the current Top 20
     const { error: deleteError } = await supabase
       .from('crypto_assets')
       .delete()
       .not('symbol', 'in', `(${currentSymbols.join(',')})`);
 
-    if (deleteError) console.error("⚠️ Cleanup failed, but data is fresh.");
+    if (deleteError) console.log("⚠️ Cleanup warning:", deleteError.message);
     
-    console.log("🏁 Sync Complete.");
+    console.log("🏁 Sync Cycle Complete.");
 
   } catch (err) {
     console.error("❌ Sync Failed:", err.message);
