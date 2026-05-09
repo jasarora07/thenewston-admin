@@ -18,20 +18,30 @@ export function NewsGrid({ initialItems }: NewsGridProps) {
     if (loading) return
     setLoading(true)
 
-    // Fetch next 8 items starting from where we left off
+    // Calculate the range based on current items count
+    const from = items.length
+    const to = from + 7 // Fetch 8 more
+
     const { data, error } = await supabase
       .from('news')
       .select('*')
       .order('date', { ascending: false })
-      .range(items.length, items.length + 7)
+      .range(from, to)
 
-    if (error || !data || data.length < 8) {
+    if (error) {
+      console.error("Fetch error:", error)
+      setLoading(false)
+      return
+    }
+
+    if (data && data.length > 0) {
+      setItems(prev => [...prev, ...data])
+      // If we got fewer than 8, there are no more articles left
+      if (data.length < 8) setHasMore(false)
+    } else {
       setHasMore(false)
     }
-
-    if (data) {
-      setItems([...items, ...data])
-    }
+    
     setLoading(false)
   }
 
@@ -39,20 +49,30 @@ export function NewsGrid({ initialItems }: NewsGridProps) {
     <div className="space-y-12">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
         {items.map((item) => (
-          <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="space-y-3 group">
-            <div className="aspect-video rounded-xl overflow-hidden border border-white/5 bg-zinc-900">
+          <a 
+            key={item.id} 
+            href={item.url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="group block space-y-3"
+          >
+            <div className="aspect-video rounded-xl overflow-hidden border border-white/5 bg-zinc-900 shadow-xl">
               <img 
-                src={item.imageUrl} 
+                src={item.imageUrl || "/placeholder.jpg"} 
                 className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" 
                 alt={item.title} 
               />
             </div>
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <p className="text-[8px] font-black text-primary uppercase tracking-widest">{item.source}</p>
-                <p className="text-[8px] font-bold text-zinc-500">{item.date?.split('T')[0]}</p>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] px-2 py-0.5 bg-primary/10 rounded">
+                  {item.source}
+                </span>
+                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">
+                  {new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                </span>
               </div>
-              <h3 className="font-bold text-xs leading-snug group-hover:text-primary transition-colors line-clamp-3 text-zinc-200">
+              <h3 className="font-bold text-[13px] leading-snug group-hover:text-primary transition-colors line-clamp-3 text-zinc-200 tracking-tight">
                 {item.title}
               </h3>
             </div>
@@ -61,18 +81,18 @@ export function NewsGrid({ initialItems }: NewsGridProps) {
       </div>
 
       {hasMore && (
-        <div className="flex justify-center pt-8">
+        <div className="flex justify-center pt-4 pb-12">
           <button 
             onClick={loadMore}
             disabled={loading}
-            className="group px-10 py-3 border border-white/10 rounded-full text-[9px] font-black uppercase tracking-[0.2em] hover:bg-primary hover:text-primary-foreground transition-all flex items-center gap-2 disabled:opacity-50"
+            className="min-w-[240px] group px-8 py-4 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:cursor-not-allowed shadow-2xl"
           >
             {loading ? (
-              <Loader2 className="h-3 w-3 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin text-primary" />
             ) : (
               <>
                 Load More Articles 
-                <ChevronDown className="h-3 w-3 group-hover:translate-y-1 transition-transform" />
+                <ChevronDown className="h-4 w-4 group-hover:translate-y-1 transition-transform" />
               </>
             )}
           </button>
