@@ -16,34 +16,38 @@ export function NewsHeader() {
   ];
 
   return (
-    /* FIX: Instead of guessing the top offset (e.g. top-[42px]), 
-      we use 'relative' so it sits naturally below the ticker in the flow, 
-      then we use 'sticky top-0' so it sticks ONLY once it hits the top.
+    /* STACKING FIX: 
+      We use 'relative' on the outer div so it stays in the document flow.
+      We use 'sticky top-0' on the header so it sticks ONLY when it reaches the top.
+      If it is STILL overlapping, we must ensure the TickerBar is NOT 'fixed'.
     */
     <div className="relative w-full z-30">
-      <header className="sticky top-0 w-full bg-black/90 backdrop-blur-md border-b border-white/10 shadow-2xl">
-        <div className="container flex h-14 items-center justify-between px-4">
+      <header className="sticky top-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl">
+        <div className="container flex h-12 sm:h-14 items-center justify-between px-3 sm:px-4">
           
-          <div className="flex items-center gap-6 overflow-hidden flex-1">
-            {/* Logo Icon Only on Mobile for Space */}
-            <Link href="/" className="flex items-center shrink-0">
-              <div className="h-7 w-7 rounded bg-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                <span className="text-black font-black text-xs italic">N</span>
+          <div className="flex items-center gap-3 sm:gap-8 overflow-hidden flex-1">
+            {/* Logo Section - "The Newston" Added Back */}
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <div className="h-6 w-6 sm:h-7 sm:w-7 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                <span className="text-primary-foreground font-black text-xs sm:text-sm italic">N</span>
               </div>
+              <span className="font-black text-sm sm:text-lg text-foreground italic uppercase tracking-tighter shrink-0">
+                The Newston
+              </span>
             </Link>
 
-            {/* NAV LINKS: Horizontal scroll with no overlap */}
-            <nav className="flex items-center gap-6 overflow-x-auto no-scrollbar py-1">
+            {/* NAVIGATION: Horizontal Scroll with custom gap for readability */}
+            <nav className="flex items-center gap-6 sm:gap-8 overflow-x-auto no-scrollbar py-1 scroll-smooth">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <Link 
                     key={link.name}
                     href={link.href} 
-                    className={`flex items-center gap-2 whitespace-nowrap uppercase font-bold text-[10px] tracking-[0.25em] transition-all ${
+                    className={`flex items-center gap-1.5 whitespace-nowrap uppercase font-black text-[10px] tracking-[0.2em] transition-all duration-200 ${
                       isActive 
-                        ? "text-emerald-400 border-b-2 border-emerald-400 pb-1" 
-                        : "text-zinc-500 hover:text-white"
+                        ? "text-primary border-b-2 border-primary pb-1" 
+                        : "text-zinc-500 hover:text-foreground"
                     }`}
                   >
                     {link.icon && link.icon}
@@ -54,12 +58,12 @@ export function NewsHeader() {
             </nav>
           </div>
 
-          {/* User Actions */}
-          <div className="flex items-center gap-1 shrink-0 ml-4">
-            <Button variant="ghost" size="icon" className="h-9 w-9 text-zinc-400 hover:text-white">
+          {/* Action Icons */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-2 sm:ml-4">
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-foreground">
               <Bell className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-9 w-9 text-zinc-400 hover:text-white">
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-foreground">
               <User className="h-4 w-4" />
             </Button>
           </div>
