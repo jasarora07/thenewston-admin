@@ -71,13 +71,6 @@ export function NewsHeader() {
               Markets
             </Link>
             <Link 
-              href="/stocks" 
-              className="text-muted-foreground hover:text-primary py-2 border-b border-border/50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Stocks
-            </Link>
-            <Link 
               href="/crypto" 
               className="text-muted-foreground hover:text-primary py-2 border-b border-border/50"
               onClick={() => setIsMenuOpen(false)}
