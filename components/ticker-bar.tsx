@@ -1,12 +1,13 @@
 "use client"
+
 import React, { useEffect, useRef } from "react"
 
 export function TickerBar() {
   const container = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (container.current) {
-      container.current.innerHTML = ""
+    // Only run if the container exists and has no children yet
+    if (container.current && container.current.children.length === 0) {
       const script = document.createElement("script")
       script.src = "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
       script.type = "text/javascript"
@@ -30,8 +31,11 @@ export function TickerBar() {
   }, [])
 
   return (
-    <div className="h-[44px] bg-[#131722] border-b border-border overflow-hidden" ref={container}>
-      <div className="tradingview-widget-container__widget"></div>
+    /* Added 'relative' and 'z-50' to ensure it stays on top of the stack 
+       but occupies real space in the layout so the header doesn't overlap it.
+    */
+    <div className="relative z-50 h-[44px] bg-[#131722] border-b border-white/5 overflow-hidden">
+      <div ref={container} className="tradingview-widget-container__widget"></div>
     </div>
   )
 }
