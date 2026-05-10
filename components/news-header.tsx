@@ -1,13 +1,14 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, User, House } from "lucide-react"
+import { Bell, User, House, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function NewsHeader() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
     { name: "Home", href: "/", icon: <House className="h-3 w-3" /> },
@@ -15,49 +16,69 @@ export function NewsHeader() {
     { name: "Crypto", href: "/crypto" },
   ];
 
+  const activeLink = navLinks.find(link => link.href === pathname) || navLinks[0];
+
   return (
-    /* STACKING LOGIC:
-      1. We use 'sticky' with 'top-[44px]' so it sits exactly under the TradingView ticker.
-      2. z-40 ensures it stays above the content but below the ticker (z-50).
-    */
-    <header className="sticky top-[44px] w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-40 transition-all duration-300">
-      <div className="container flex h-12 sm:h-14 items-center justify-between px-3 sm:px-4 mx-auto">
+    <header className="sticky top-[44px] w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-50">
+      <div className="container flex h-14 items-center justify-between px-4 mx-auto">
         
-        <div className="flex items-center gap-3 sm:gap-8 overflow-hidden flex-1">
+        <div className="flex items-center gap-6 flex-1">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <div className="h-6 w-6 sm:h-7 sm:w-7 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
-              <span className="text-black font-black text-xs sm:text-sm italic">N</span>
+            <div className="h-7 w-7 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+              <span className="text-black font-black text-sm italic">N</span>
             </div>
-            <span className="font-black text-sm sm:text-lg text-white italic uppercase tracking-tighter shrink-0">
+            <span className="font-black text-lg text-white italic uppercase tracking-tighter hidden sm:inline-block">
               The Newston
             </span>
           </Link>
 
-          {/* NAVIGATION: Ribbon Layout */}
-          <nav className="flex items-center gap-6 sm:gap-8 overflow-x-auto no-scrollbar py-1 scroll-smooth">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link 
-                  key={link.name}
-                  href={link.href} 
-                  className={`flex items-center gap-1.5 whitespace-nowrap uppercase font-black text-[10px] tracking-[0.2em] transition-all duration-200 border-b-2 py-1 ${
-                    isActive 
-                      ? "text-primary border-primary" 
-                      : "text-zinc-500 border-transparent hover:text-foreground"
-                  }`}
-                >
-                  {link.icon && link.icon}
-                  {link.name}
-                </Link>
-              )
-            })}
+          {/* MOBILE DROPDOWN */}
+          <div className="relative sm:hidden">
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-md text-[10px] font-black uppercase tracking-widest text-primary"
+            >
+              {activeLink.name}
+              <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isOpen && (
+              <div className="absolute top-full left-0 mt-2 w-40 bg-zinc-900 border border-white/10 rounded-lg shadow-2xl py-2 z-[60]">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block px-4 py-2 text-[10px] font-black uppercase tracking-widest ${
+                      pathname === link.href ? "text-primary bg-white/5" : "text-zinc-400 hover:text-white"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* DESKTOP NAVIGATION */}
+          <nav className="hidden sm:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <Link 
+                key={link.name}
+                href={link.href} 
+                className={`flex items-center gap-1.5 uppercase font-black text-[10px] tracking-[0.2em] transition-all border-b-2 py-1 ${
+                  pathname === link.href ? "text-primary border-primary" : "text-zinc-500 border-transparent hover:text-white"
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
           </nav>
         </div>
 
         {/* Action Icons */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-2 sm:ml-4">
+        <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white">
             <Bell className="h-4 w-4" />
           </Button>
@@ -66,11 +87,6 @@ export function NewsHeader() {
           </Button>
         </div>
       </div>
-
-      <style jsx global>{`
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
     </header>
   )
 }
