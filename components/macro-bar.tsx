@@ -7,52 +7,61 @@ export async function MacroBar() {
   if (!indicators || indicators.length === 0) return null
 
   return (
-    <div className="w-full bg-black border-b border-white/5 py-8 px-4">
-      {/* Centered container for the cards */}
-      <div className="container mx-auto flex flex-wrap justify-center gap-6">
-        {indicators.map((item) => {
-          let displayValue = "";
-          if (item.symbol === 'GDPC1') {
-            displayValue = `$${(item.value / 1000).toFixed(1)}T`;
-          } else {
-            displayValue = `${item.value}%`;
-          }
+    /* STACKING FIX: 
+       top-[100px] (Ticker 44px + Header 56px). 
+       z-30 puts it behind the header but above the news.
+       We changed py-8 to py-2 to make it a slim bar.
+    */
+    <div className="sticky top-[100px] z-30 w-full bg-black/90 backdrop-blur-md border-b border-white/5 py-2 overflow-hidden">
+      <div className="container mx-auto px-4">
+        {/* Changed from 'flex-wrap justify-center' to 'flex overflow-x-auto' */}
+        <div className="flex items-center gap-8 overflow-x-auto no-scrollbar whitespace-nowrap">
+          {indicators.map((item, i) => {
+            let displayValue = "";
+            if (item.symbol === 'GDPC1') {
+              displayValue = `$${(item.value / 1000).toFixed(1)}T`;
+            } else {
+              displayValue = `${item.value}%`;
+            }
 
-          return (
-            <div 
-              key={item.symbol} 
-              className="group relative flex flex-col items-center text-center p-6 bg-[#0D0D0D] border border-white/5 rounded-xl min-w-[220px] shadow-2xl overflow-hidden hover:border-white/20 transition-all duration-300"
-            >
-              {/* SUBTLE WATERMARK BACKGROUND */}
-              <div className="absolute -right-4 -bottom-4 opacity-[0.02] grayscale group-hover:opacity-[0.05] transition-opacity pointer-events-none">
-                <img src="https://flagcdn.com/w320/us.png" alt="" className="w-28 h-auto" />
-              </div>
+            return (
+              <div 
+                key={item.symbol} 
+                className="flex items-center gap-3 shrink-0 group"
+              >
+                {/* Compact Terminal Style Item */}
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-1.5">
+                    <img src="https://flagcdn.com/w20/us.png" alt="US" className="w-2.5 h-auto opacity-30 grayscale" />
+                    <span className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-500 group-hover:text-zinc-300 transition-colors">
+                      {item.indicator_name}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm font-black text-white italic font-mono uppercase tracking-tighter">
+                      {displayValue}
+                    </span>
+                    <span className="text-[7px] font-bold text-zinc-600 uppercase tracking-widest">
+                      {item.date}
+                    </span>
+                  </div>
+                </div>
 
-              {/* HEADER WITH FLAG */}
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <img src="https://flagcdn.com/w20/us.png" alt="US" className="w-3 h-2 opacity-50" />
-                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.2em]">
-                  {item.indicator_name}
-                </span>
+                {/* Vertical Divider between items */}
+                {i !== indicators.length - 1 && (
+                  <div className="h-4 w-px bg-white/10 ml-4 self-center" />
+                )}
               </div>
-              
-              {/* REDUCED FONT SIZE (2xl instead of 5xl) */}
-              <div className="flex items-baseline justify-center w-full mb-3 relative z-10">
-                <span className="text-2xl font-black text-white tracking-tighter italic font-mono uppercase">
-                  {displayValue}
-                </span>
-              </div>
-
-              {/* FOOTER: DUMMY TREND REMOVED, DATE ONLY */}
-              <div className="relative z-10">
-                <span className="text-[9px] text-zinc-600 font-mono font-bold uppercase tracking-widest opacity-80">
-                  AS OF {item.date}
-                </span>
-              </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
+
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
   )
 }
