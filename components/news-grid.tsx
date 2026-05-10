@@ -17,14 +17,14 @@ export function NewsGrid({ initialItems, totalCountBeforeGrid }: NewsGridProps) 
 
   // 1. SHARE LOGIC: Uses native mobile share or clipboard fallback
   const shareArticle = (e: React.MouseEvent, title: string, url: string) => {
-    e.preventDefault(); // Prevents the <a> tag from opening the link
-    e.stopPropagation(); // Prevents event bubbling
+    e.preventDefault(); 
+    e.stopPropagation(); 
     
     if (navigator.share) {
       navigator.share({ title, url }).catch(console.error);
     } else {
       navigator.clipboard.writeText(url);
-      alert("Intelligence Link Copied to Clipboard");
+      alert("News Link Copied to Clipboard");
     }
   };
 
@@ -81,14 +81,13 @@ export function NewsGrid({ initialItems, totalCountBeforeGrid }: NewsGridProps) 
             </div>
             
             <div className="space-y-1">
-              {/* 2. UPDATED UI: Source name + Share Button */}
-              <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-zinc-500">
+              <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-zinc-400">
                 <div className="flex items-center gap-3">
                   <span className="text-primary">{item.source}</span>
                   <button 
                     onClick={(e) => shareArticle(e, item.title, item.url)}
                     className="p-1 hover:text-white transition-colors bg-white/5 rounded"
-                    title="Share Intelligence"
+                    title="Share News"
                   >
                     <Share2 className="h-2.5 w-2.5" />
                   </button>
@@ -96,7 +95,8 @@ export function NewsGrid({ initialItems, totalCountBeforeGrid }: NewsGridProps) 
                 <span>{item.date ? new Date(item.date).toLocaleDateString() : ""}</span>
               </div>
               
-              <h3 className="font-bold text-[12px] leading-tight group-hover:text-primary transition-colors text-zinc-300 line-clamp-3 uppercase">
+              {/* Change: Switched text-zinc-300 to text-white for high contrast */}
+              <h3 className="font-bold text-[12px] leading-tight group-hover:text-primary transition-colors text-white line-clamp-3 uppercase">
                 {item.title}
               </h3>
             </div>
@@ -109,9 +109,10 @@ export function NewsGrid({ initialItems, totalCountBeforeGrid }: NewsGridProps) 
           <button 
             onClick={loadMore}
             disabled={loading}
-            className="min-w-[200px] px-8 py-3 border border-white/10 rounded-full text-[9px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3 disabled:opacity-20"
+            /* Change: border-primary/50 for neon glow, Fetch More News text */
+            className="min-w-[200px] px-8 py-3 border border-primary/50 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white hover:bg-primary hover:text-black transition-all flex items-center justify-center gap-3 disabled:opacity-20"
           >
-            {loading ? <Loader2 className="h-3 w-3 animate-spin text-primary" /> : "Fetch More Intelligence"}
+            {loading ? <Loader2 className="h-3 w-3 animate-spin text-primary" /> : "Fetch More News"}
           </button>
         </div>
       )}
