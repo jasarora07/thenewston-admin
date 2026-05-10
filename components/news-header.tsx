@@ -22,13 +22,13 @@ export function NewsHeader() {
     <header className="sticky top-[44px] w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-50">
       <div className="container flex h-14 items-center justify-between px-4 mx-auto">
         
-        <div className="flex items-center gap-6 flex-1">
-          {/* Logo Section */}
+        <div className="flex items-center gap-4 sm:gap-6 flex-1">
+          {/* Logo Section - Restored text for mobile and desktop */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <div className="h-7 w-7 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-black font-black text-sm italic">N</span>
             </div>
-            <span className="font-black text-lg text-white italic uppercase tracking-tighter hidden sm:inline-block">
+            <span className="font-black text-sm sm:text-lg text-white italic uppercase tracking-tighter">
               The Newston
             </span>
           </Link>
@@ -37,7 +37,7 @@ export function NewsHeader() {
           <div className="relative sm:hidden">
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-md text-[10px] font-black uppercase tracking-widest text-primary"
+              className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-md text-[9px] font-black uppercase tracking-widest text-primary"
             >
               {activeLink.name}
               <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -62,7 +62,7 @@ export function NewsHeader() {
           </div>
 
           {/* DESKTOP NAVIGATION */}
-          <nav className="hidden sm:flex items-center gap-8">
+          <nav className="hidden sm:flex items-center gap-8 ml-4">
             {navLinks.map((link) => (
               <Link 
                 key={link.name}
