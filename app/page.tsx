@@ -1,7 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
 import { NewsGrid } from "@/components/news-grid"
-import { TickerBar } from "@/components/ticker-bar"
-import { NewsHeader } from "@/components/news-header"
 import { MacroBar } from "@/components/macro-bar"
 import Link from "next/link"
 import { ArrowRight, ShieldCheck, Home, Banknote } from "lucide-react"
@@ -11,18 +9,16 @@ export const dynamic = 'force-dynamic'
 export default async function HomePage() {
   const supabase = await createClient()
 
-  // Fetch 15 items
+  // Fetch 15 items: 2 for Hero, 5 for Sidebar, 8 for Grid
   const { data: newsItems } = await supabase
     .from('news')
     .select('*')
     .order('date', { ascending: false })
     .limit(15)
 
-  // Distribution
-  const topStory = newsItems?.slice(0, 1) || []
-  const secondStory = newsItems?.slice(1, 2) || []
-  const businessUpdates = newsItems?.slice(2, 5) || [] // Taking top 3 for the sub-hero row
-  const initialGridNews = newsItems?.slice(5, 15) || []
+  const featured = newsItems?.slice(0, 2) || []
+  const businessUpdates = newsItems?.slice(2, 7) || []
+  const initialGridNews = newsItems?.slice(7, 15) || []
 
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -43,115 +39,106 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
 
-      <TickerBar />
-      <NewsHeader />
+      {/* MacroBar remains as it is page-specific content */}
       <MacroBar />
 
-      <main className="flex-1 container mx-auto px-4 py-8 space-y-12">
+      <main className="flex-1 container mx-auto px-4 py-8">
         
-        {/* --- SPLIT HERO SECTION --- */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* --- MAIN HERO SECTION (8/4 Split) --- */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           
-          {/* LEFT: PRIMARY TOP STORY */}
-          <div className="lg:col-span-6">
-            {topStory.map((item) => (
-              <a key={item.id} href={item.url} target="_blank" className="group relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 flex flex-col h-[450px] lg:h-full">
-                <div className="relative flex-1 overflow-hidden">
-                  <img 
-                    src={item.imageUrl || "/api/placeholder/600/800"} 
-                    className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" 
-                    alt="Top News"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                </div>
-                <div className="absolute bottom-0 p-8 space-y-3 w-full">
-                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em] bg-primary/10 px-2 py-1 rounded">Flash // Top Story</span>
-                  <h2 className="text-2xl md:text-4xl font-black text-white uppercase leading-tight tracking-tighter">
-                    {item.title}
-                  </h2>
-                </div>
-              </a>
-            ))}
-          </div>
-
-          {/* RIGHT: INTELLIGENCE TERMINAL (CONVERSION) */}
-          <div className="lg:col-span-6 relative overflow-hidden bg-zinc-950 border-2 border-primary/20 rounded-2xl flex flex-col items-center justify-center p-8 md:p-12 text-center group hover:border-primary/50 transition-all shadow-[0_0_50px_-12px_rgba(22,163,74,0.2)]">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
-
-            <div className="relative z-10 space-y-6 w-full max-w-md">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30">
-                <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Institutional Access // Free Tool</span>
-              </div>
-
-              <h2 className="text-3xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-[0.95]">
-                Analyze Your <span className="text-primary group-hover:text-white transition-colors">Mortgage Saving</span> Potential
-              </h2>
-
-              <div className="grid grid-cols-1 gap-3 text-left">
-                <div className="p-4 bg-white/5 border border-white/5 rounded-xl flex items-center gap-4">
-                  <Home className="h-5 w-5 text-zinc-500 shrink-0" />
-                  <p className="text-[10px] text-zinc-400 font-bold uppercase leading-relaxed">
-                    Project break-even and interest savings on <span className="text-white">New 2026 Rates</span>.
-                  </p>
-                </div>
-                <div className="p-4 bg-white/5 border border-white/5 rounded-xl flex items-center gap-4">
-                  <Banknote className="h-5 w-5 text-zinc-500 shrink-0" />
-                  <p className="text-[10px] text-zinc-400 font-bold uppercase leading-relaxed">
-                    Modeling tax-advantaged accounts. <span className="text-primary animate-pulse">100% Free Analysis</span>.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <Link href="/calculate-financials" className="flex-1 bg-primary text-black font-black px-6 py-4 rounded-lg uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 hover:bg-white transition-all shadow-lg shadow-primary/20">
-                  Access Calculators <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link href="/auth/gate?mode=signup" className="flex-1 bg-black border border-white/20 text-white font-black px-6 py-4 rounded-lg uppercase tracking-widest text-[11px] hover:bg-white/10 transition-all text-center">
-                  Initialize ID
-                </Link>
-              </div>
+          {/* LEFT: PRIMARY NEWS FEED (8 Columns) */}
+          <div className="lg:col-span-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+              {featured.map((item) => (
+                <a key={item.id} href={item.url} target="_blank" className="group relative overflow-hidden rounded-lg border border-white/10 bg-zinc-900 aspect-[4/5] md:aspect-auto flex flex-col min-h-[400px]">
+                  <div className="relative flex-1 overflow-hidden">
+                    <img 
+                      src={item.imageUrl || "/api/placeholder/400/600"} 
+                      className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" 
+                      alt="Hero"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                  </div>
+                  <div className="absolute bottom-0 p-5 space-y-2 w-full">
+                    <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{item.source}</span>
+                    <h2 className="text-sm md:text-base font-bold text-white uppercase leading-tight tracking-tighter line-clamp-3">
+                      {item.title}
+                    </h2>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
-        </section>
 
-        {/* --- SECONDARY NEWS ROW (Replaces Sidebar) --- */}
-        <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Second major story */}
-          <div className="md:col-span-2">
-            {secondStory.map((item) => (
-              <a key={item.id} href={item.url} target="_blank" className="group flex gap-6 p-4 rounded-xl bg-zinc-900/50 border border-white/5 hover:border-primary/20 transition-all h-full">
-                <div className="w-32 h-32 shrink-0 rounded-lg overflow-hidden border border-white/10">
-                  <img src={item.imageUrl} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+          {/* RIGHT: COMPACT SIDEBAR (4 Columns) */}
+          <aside className="lg:col-span-4 space-y-8">
+            
+            {/* COMPACT FREE ANALYSIS WIDGET (Reduced size by 50%) */}
+            <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all shadow-lg shadow-primary/5">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+              
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-4">
+                  <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Intelligence Tool</span>
                 </div>
-                <div className="flex flex-col justify-center space-y-2">
-                  <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest">{item.source}</span>
-                  <h3 className="text-sm font-bold text-white uppercase leading-tight group-hover:text-primary transition-colors">{item.title}</h3>
+                
+                <h3 className="text-sm font-black text-white italic uppercase tracking-tighter mb-2 leading-none">
+                  Free 2026 <span className="text-primary group-hover:text-white transition-colors">Mortgage Analysis</span>
+                </h3>
+                
+                <p className="text-[10px] text-zinc-500 font-bold uppercase mb-6 leading-relaxed">
+                  Project savings on new fiscal rates. <span className="text-white underline decoration-primary/40 underline-offset-2 tracking-tight italic">100% Free Analysis.</span>
+                </p>
+
+                <div className="flex gap-2 pt-2">
+                  <Link href="/calculate-financials" className="flex-[2] bg-primary text-black text-[10px] font-black py-3 rounded-md uppercase tracking-widest text-center hover:bg-white transition-all shadow-md shadow-primary/10">
+                    Access
+                  </Link>
+                  <Link href="/auth/gate?mode=signup" className="flex-1 border border-white/10 text-white text-[10px] font-black py-3 rounded-md uppercase tracking-widest text-center hover:bg-white/5 transition-all">
+                    Join
+                  </Link>
                 </div>
-              </a>
-            ))}
-          </div>
-          
-          {/* Top 2 Business Updates */}
-          {businessUpdates.slice(0, 2).map((item) => (
-            <a key={item.id} href={item.url} target="_blank" className="group p-4 rounded-xl bg-zinc-900/30 border border-white/5 hover:border-white/10 flex flex-col justify-between">
-              <span className="text-[8px] font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-                <div className="h-1 w-1 rounded-full bg-primary" /> Market Update
-              </span>
-              <h3 className="text-[11px] font-bold text-zinc-300 uppercase leading-snug group-hover:text-white transition-colors">{item.title}</h3>
-            </a>
-          ))}
+              </div>
+            </div>
+
+            {/* RESTORED BUSINESS UPDATES */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 border-b border-white/20 pb-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white">
+                  Business <span className="text-primary font-black">Updates</span>
+                </h4>
+              </div>
+              <div className="space-y-5">
+                {businessUpdates.map((item) => (
+                  <a key={item.id} href={item.url} target="_blank" className="flex gap-4 group items-start">
+                    <div className="w-12 h-12 shrink-0 rounded border border-white/10 bg-zinc-900 overflow-hidden">
+                      <img 
+                        src={item.imageUrl || "/api/placeholder/100/100"} 
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" 
+                      />
+                    </div>
+                    <h5 className="font-bold text-[10px] leading-snug text-zinc-400 group-hover:text-white transition-colors uppercase">
+                      {item.title}
+                    </h5>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </aside>
         </section>
 
         {/* --- LATEST NEWS GRID --- */}
-        <section className="space-y-8 pt-8">
+        <section className="space-y-8">
           <div className="flex items-center gap-4">
             <h2 className="text-lg font-black italic tracking-tighter uppercase text-white">
               Latest <span className="text-primary">News</span>
             </h2>
             <div className="h-px bg-white/20 flex-1" />
           </div>
-          <NewsGrid initialItems={initialGridNews} totalCountBeforeGrid={5} />
+          <NewsGrid initialItems={initialGridNews} totalCountBeforeGrid={7} />
         </section>
       </main>
 
@@ -172,7 +159,7 @@ export default async function HomePage() {
             <div className="space-y-4">
               <h5 className="font-black uppercase tracking-widest text-white">Terminals</h5>
               <nav className="flex flex-col gap-2 font-bold uppercase text-zinc-500">
-                <Link href="/calculate-financials" className="hover:text-primary transition-colors">Free Calculators</Link>
+                <Link href="/calculate-financials" className="hover:text-primary transition-colors">Free Analysis</Link>
                 <Link href="/markets" className="hover:text-primary transition-colors">Markets</Link>
                 <Link href="/crypto" className="hover:text-primary transition-colors">Crypto Assets</Link>
               </nav>
@@ -180,14 +167,14 @@ export default async function HomePage() {
 
             <div className="space-y-4">
               <h5 className="font-black uppercase tracking-widest text-white">Contact</h5>
-              <p className="font-mono text-zinc-400 uppercase">info@thenewston.com</p>
+              <p className="font-mono text-zinc-400 uppercase tracking-tight text-[9px]">info@thenewston.com</p>
             </div>
 
             <div className="space-y-4 text-right md:text-left">
               <h5 className="font-black uppercase tracking-widest text-white">Status</h5>
               <div className="flex items-center gap-2 justify-end md:justify-start">
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-black text-emerald-500 uppercase tracking-widest">Terminal Online</span>
+                <span className="font-black text-emerald-500 uppercase tracking-widest">Systems Nominal</span>
               </div>
             </div>
           </div>
