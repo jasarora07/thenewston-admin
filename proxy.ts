@@ -1,7 +1,7 @@
 import { createServerClient, type NextRequest } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -34,7 +34,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Ensure both the tool and the password reset page are covered
   matcher: [
     '/calculate-financials/:path*',
     '/auth/update-password/:path*'
