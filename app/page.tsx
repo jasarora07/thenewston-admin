@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { NewsGrid } from "@/components/news-grid"
 import { MacroBar } from "@/components/macro-bar"
 import Link from "next/link"
-import { ArrowRight, ShieldCheck, Home, Banknote } from "lucide-center"
+import { ArrowRight, ShieldCheck, Home, Banknote } from "lucide-react" // FIXED IMPORT HERE
 
 export const dynamic = 'force-dynamic'
 
@@ -39,8 +39,8 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
 
-      {/* --- RE-POSITIONED & STICKY MACROBAR --- */}
-      {/* 'top-14' matches the height of your NewsHeader 'h-14' */}
+      {/* --- STICKY MACROBAR FIX --- */}
+      {/* Positioned exactly below the h-14 Header */}
       <div className="sticky top-14 z-40 w-full border-b border-white/5 bg-black/90 backdrop-blur-md">
         <MacroBar />
       </div>
@@ -106,7 +106,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* RESTORED BUSINESS UPDATES */}
+            {/* BUSINESS UPDATES */}
             <div className="space-y-6">
               <div className="flex items-center gap-2 border-b border-white/20 pb-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
@@ -145,9 +145,8 @@ export default async function HomePage() {
         </section>
       </main>
 
-      {/* FOOTER */}
       <footer className="bg-zinc-950 border-t border-white/5 py-12 mt-20 text-[10px]">
-        {/* ... (Footer content remains same) ... */}
+        {/* ... Footer content remains the same ... */}
       </footer>
     </div>
   )
