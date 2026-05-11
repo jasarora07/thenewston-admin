@@ -21,8 +21,12 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // If user tries to access /calculate-financials without being logged in
-  if (!user && request.nextUrl.pathname.startsWith('/calculate-financials')) {
+  // --- PROTECTED ROUTES LOGIC ---
+  const isProtectedRoute = 
+    request.nextUrl.pathname.startsWith('/calculate-financials') ||
+    request.nextUrl.pathname.startsWith('/auth/update-password');
+
+  if (!user && isProtectedRoute) {
     return NextResponse.redirect(new URL('/auth/gate', request.url))
   }
 
@@ -30,5 +34,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/calculate-financials/:path*'],
+  // Ensure both the tool and the password reset page are covered
+  matcher: [
+    '/calculate-financials/:path*',
+    '/auth/update-password/:path*'
+  ],
 }
