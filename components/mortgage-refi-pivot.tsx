@@ -82,6 +82,7 @@ export default function MortgageRefiPivot() {
             <span className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.3em]">User Manual Inputs</span>
           </div>
 
+          {/* LOAN AMOUNT */}
           <div className="group space-y-2">
             <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
               Loan Principal Remaining
@@ -93,16 +94,17 @@ export default function MortgageRefiPivot() {
                 type="number" 
                 value={loanAmount} 
                 onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded-md py-3 pl-8 pr-4 text-white font-mono font-bold text-base focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all"
+                className="w-full bg-black border border-white/10 rounded-md py-3 pl-8 pr-4 text-white font-mono font-bold text-base focus:border-primary outline-none transition-all"
               />
             </div>
           </div>
 
+          {/* RATES GRID */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
                 Current Rate (%)
-                <InfoTooltip text="The interest rate you are currently paying. Found on your current mortgage statement." />
+                <InfoTooltip text="Your current interest rate. Usually found on the first page of your mortgage statement." />
               </label>
               <input 
                 type="number" 
@@ -114,7 +116,7 @@ export default function MortgageRefiPivot() {
             <div className="space-y-2">
               <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
                 New Target Rate (%)
-                <InfoTooltip text="The interest rate offered in your new bank proposal or 'Initial Loan Estimate'." />
+                <InfoTooltip text="The interest rate offered in your new bank proposal or 'Initial Loan Estimate' document." />
               </label>
               <input 
                 type="number" 
@@ -125,10 +127,11 @@ export default function MortgageRefiPivot() {
             </div>
           </div>
 
+          {/* CLOSING COSTS */}
           <div className="space-y-2">
             <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 text-primary">
               Est. Closing Costs ($)
-              <InfoTooltip text="Total fees (Bank, Title, Appraisal). Typically 2-5% of loan. See 'Total Closing Costs' on your Loan Estimate." />
+              <InfoTooltip text="Total fees (Bank, Title, Appraisal). Look for 'Total Closing Costs' in Section J of your Loan Estimate." />
             </label>
             <input 
               type="number" 
@@ -152,7 +155,7 @@ export default function MortgageRefiPivot() {
             <Zap className="h-6 w-6 text-primary mb-4 opacity-50" />
             <span className="flex items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500 mb-2">
               Pivot Point Reached In
-              <InfoTooltip text="Calculated as (Total Costs / Monthly Savings). This is the month where your savings finally cover your initial fees." />
+              <InfoTooltip text="The exact month your accumulated monthly savings equal your initial closing costs." />
             </span>
             <div className="text-6xl font-black italic tracking-tighter text-white mb-2">
               {pivotMonths} <span className="text-sm not-italic text-zinc-500 uppercase tracking-widest ml-1 font-sans">Months</span>
@@ -163,18 +166,19 @@ export default function MortgageRefiPivot() {
             </p>
           </div>
 
+          {/* SAVINGS SUMMARY */}
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
               <span className="flex items-center text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
                 Monthly Surplus
-                <InfoTooltip text="BENEFIT: This represents the extra cash remaining in your pocket every month compared to your current loan." />
+                <InfoTooltip text="BENEFIT: The pure cash profit remaining in your budget each month after switching loans." />
               </span>
               <span className="text-lg font-mono font-black text-emerald-500">+${monthlySavings.toFixed(0)}</span>
             </div>
             <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
               <span className="flex items-center justify-end text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
                 Efficiency Score
-                <InfoTooltip text="HIGH: Break-even under 2 years. MID: 2-4 years. LOW: Over 4 years. Based on speed to profit." />
+                <InfoTooltip text="HIGH: Break-even under 2 years. MID: 2-4 years. LOW: Over 4 years. Influences long-term ROI." />
               </span>
               <span className={`text-lg font-mono font-black ${pivotMonths < 24 ? 'text-emerald-500' : 'text-yellow-500'}`}>
                 {pivotMonths < 24 ? 'HIGH' : 'MID'}
