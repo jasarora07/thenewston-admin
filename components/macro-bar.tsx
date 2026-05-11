@@ -2,18 +2,23 @@ import { createClient } from "@/lib/supabase/server"
 
 export async function MacroBar() {
   const supabase = await createClient()
-  const { data: indicators } = await supabase.from('macro_data').select('*')
+  const { data: indicators, error } = await supabase.from('macro_data').select('*')
 
-  if (!indicators || indicators.length === 0) return null
+  // LOG FOR DEBUGGING - Check your Vercel logs/Terminal
+  console.log("Macro Data Indicators:", indicators)
+  if (error) console.error("Supabase Error:", error)
+
+  // TEST DATA: If database fails, show this so we can see the layout
+  const displayData = (indicators && indicators.length > 0) ? indicators : [
+    { symbol: 'TEST', indicator_name: 'SYSTEM CHECK', value: 1.0, date: 'LIVE' },
+    { symbol: 'GDPC1', indicator_name: 'US GDP', value: 27000, date: '2026' }
+  ];
 
   return (
-    /* Removed sticky and top classes. 
-       Added 'relative' to ensure it sits correctly in the stack.
-    */
     <div className="relative w-full bg-black border-b border-white/10 py-3 z-30">
       <div className="container mx-auto px-4">
         <div className="flex items-center sm:justify-center gap-10 overflow-x-auto whitespace-nowrap no-scrollbar">
-          {indicators.map((item, i) => {
+          {displayData.map((item, i) => {
             let displayValue = "";
             if (item.symbol === 'GDPC1') {
               displayValue = `$${(item.value / 1000).toFixed(1)}T`;
@@ -43,7 +48,7 @@ export async function MacroBar() {
                     </span>
                   </div>
                 </div>
-                {i !== indicators.length - 1 && (
+                {i !== displayData.length - 1 && (
                   <div className="h-6 w-px bg-white/20 ml-4 self-center" />
                 )}
               </div>
