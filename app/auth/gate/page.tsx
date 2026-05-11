@@ -1,13 +1,27 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { ShieldCheck, Lock, ChevronRight } from "lucide-react"
+import { ShieldCheck, ChevronRight } from "lucide-react"
 import { login, signup } from "../actions"
 
-export default function AuthGate({ searchParams }: { searchParams: { error?: string } }) {
-  const [mode, setMode] = useState<'login' | 'signup'>('signup')
+export default function AuthGate({ 
+  searchParams 
+}: { 
+  searchParams: { error?: string; mode?: string } 
+}) {
+  // Check the URL for ?mode=signup. If present, default to signup mode.
+  const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [agreed, setAgreed] = useState(false)
+
+  // Sync mode with URL parameters on mount
+  useEffect(() => {
+    if (searchParams.mode === 'signup') {
+      setMode('signup')
+    } else {
+      setMode('login')
+    }
+  }, [searchParams.mode])
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4">
@@ -22,13 +36,17 @@ export default function AuthGate({ searchParams }: { searchParams: { error?: str
             {mode === 'signup' ? 'Create Intelligence ID' : 'Access Terminal'}
           </h2>
           {searchParams.error && (
-            <p className="text-red-500 text-[10px] font-bold uppercase mt-2">{searchParams.error}</p>
+            <p className="text-red-500 text-[10px] font-bold uppercase mt-2">
+              {searchParams.error}
+            </p>
           )}
         </div>
 
         <form className="space-y-4">
           <div>
-            <label className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-1">Work Email</label>
+            <label className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-1">
+              Work Email
+            </label>
             <input 
               name="email" type="email" required 
               className="w-full bg-black border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-all text-sm"
@@ -36,13 +54,16 @@ export default function AuthGate({ searchParams }: { searchParams: { error?: str
             />
           </div>
           <div>
-            <label className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-1">Security Key (Password)</label>
+            <label className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-1">
+              Security Key (Password)
+            </label>
             <input 
               name="password" type="password" required 
               className="w-full bg-black border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-all text-sm"
               placeholder="••••••••"
             />
-            {/* Added: Forgot Password Link */}
+            
+            {/* Reset Key Link - Only show in login mode */}
             {mode === 'login' && (
               <Link 
                 href="/auth/forgot-password" 
@@ -69,12 +90,12 @@ export default function AuthGate({ searchParams }: { searchParams: { error?: str
             </div>
           </div>
 
-          {/* Submit Buttons */}
+          {/* Submit Button */}
           <div className={`pt-4 transition-all ${!agreed ? 'opacity-30' : 'opacity-100'}`}>
             <button 
               formAction={mode === 'signup' ? signup : login}
               disabled={!agreed}
-              className="w-full bg-primary text-black font-black py-4 rounded-lg uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"
+              className="w-full bg-primary text-black font-black py-4 rounded-lg uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all disabled:cursor-not-allowed"
             >
               {mode === 'signup' ? 'Initialize Account' : 'Decrypt & Enter'}
               <ChevronRight className="h-4 w-4" />
@@ -82,7 +103,7 @@ export default function AuthGate({ searchParams }: { searchParams: { error?: str
           </div>
         </form>
 
-        {/* Switch Mode */}
+        {/* Switch Mode Toggle */}
         <button 
           type="button"
           onClick={() => setMode(mode === 'signup' ? 'login' : 'signup')}
