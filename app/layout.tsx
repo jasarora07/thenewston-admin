@@ -5,8 +5,9 @@ import { Inter, Montserrat } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 import { PageTransition } from "@/components/page-transition"
-import { NewsHeader } from "@/components/news-header" // IMPORTED
-import { TickerBar } from "@/components/ticker-bar"   // IMPORTED
+import { NewsHeader } from "@/components/news-header" 
+import { TickerBar } from "@/components/ticker-bar"  
+import { ComplianceBanner } from "@/components/compliance-banner" // IMPORTED COMPLIANCE
 
 import "@/app/globals.css"
 import { Suspense } from "react"
@@ -46,7 +47,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <div className="relative flex min-h-screen flex-col">
-            {/* Nav and Ticker stay outside PageTransition to avoid flickering */}
+            {/* GLOBAL TERMINAL ELEMENTS */}
             <TickerBar />
             <NewsHeader /> 
             
@@ -55,6 +56,11 @@ export default function RootLayout({
                 <div className="flex-1">{children}</div>
               </PageTransition>
             </Suspense>
+
+            {/* COMPLIANCE LAYER 
+                Placed at the bottom to ensure correct z-index overlay 
+            */}
+            <ComplianceBanner />
           </div>
         </ThemeProvider>
       </body>
