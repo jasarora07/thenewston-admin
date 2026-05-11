@@ -42,6 +42,15 @@ export default function AuthGate({ searchParams }: { searchParams: { error?: str
               className="w-full bg-black border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-all text-sm"
               placeholder="••••••••"
             />
+            {/* Added: Forgot Password Link */}
+            {mode === 'login' && (
+              <Link 
+                href="/auth/forgot-password" 
+                className="block text-[9px] font-bold text-zinc-600 uppercase tracking-widest mt-2 hover:text-primary transition-colors text-right"
+              >
+                Lost Access? Reset Key
+              </Link>
+            )}
           </div>
 
           {/* Legal Compliance Checkbox */}
@@ -75,6 +84,7 @@ export default function AuthGate({ searchParams }: { searchParams: { error?: str
 
         {/* Switch Mode */}
         <button 
+          type="button"
           onClick={() => setMode(mode === 'signup' ? 'login' : 'signup')}
           className="w-full mt-6 text-[10px] font-black text-zinc-500 uppercase tracking-widest hover:text-white transition-colors"
         >
