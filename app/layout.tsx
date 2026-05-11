@@ -7,6 +7,7 @@ import { PageTransition } from "@/components/page-transition"
 import { NewsHeader } from "@/components/news-header" 
 import { TickerBar } from "@/components/ticker-bar"  
 import { ComplianceBanner } from "@/components/compliance-banner" 
+import { StructuredData } from "@/components/structured-data" // IMPORTED SCHEMA
 
 import "@/app/globals.css"
 import { Suspense } from "react"
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://yourdomain.com",
     siteName: "The Newston",
-    images: [{ url: "/og-image-calculators.png" }], // Design a high-contrast terminal screenshot
+    images: [{ url: "/og-image-calculators.png" }], 
   },
   twitter: {
     card: "summary_large_image",
@@ -63,13 +64,18 @@ export default function RootLayout({
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <div className="relative flex min-h-screen flex-col">
+            {/* SEO & COMPLIANCE INJECTION */}
+            <StructuredData /> 
+            
             <TickerBar />
             <NewsHeader /> 
+            
             <Suspense>
               <PageTransition>
                 <div className="flex-1">{children}</div>
               </PageTransition>
             </Suspense>
+
             <ComplianceBanner />
           </div>
         </ThemeProvider>
