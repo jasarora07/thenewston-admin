@@ -2,58 +2,84 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ShieldCheck, Lock, FileText } from "lucide-react"
+import { ShieldCheck, Lock, ChevronRight } from "lucide-react"
+import { login, signup } from "../actions"
 
-export default function AuthGate() {
+export default function AuthGate({ searchParams }: { searchParams: { error?: string } }) {
+  const [mode, setMode] = useState<'login' | 'signup'>('signup')
   const [agreed, setAgreed] = useState(false)
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4">
       <div className="max-w-md w-full bg-zinc-900 border border-white/10 p-8 rounded-2xl shadow-2xl">
-        <div className="flex justify-center mb-6">
-          <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+        
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex h-12 w-12 rounded-xl bg-primary items-center justify-center mb-4">
             <ShieldCheck className="text-black h-7 w-7" />
           </div>
+          <h2 className="text-2xl font-black text-white italic uppercase tracking-tighter">
+            {mode === 'signup' ? 'Create Intelligence ID' : 'Access Terminal'}
+          </h2>
+          {searchParams.error && (
+            <p className="text-red-500 text-[10px] font-bold uppercase mt-2">{searchParams.error}</p>
+          )}
         </div>
-        
-        <h2 className="text-2xl font-black text-white italic uppercase tracking-tighter text-center mb-2">
-          The Intelligence Suite
-        </h2>
-        <p className="text-zinc-500 text-xs text-center mb-8 uppercase tracking-widest font-bold">
-          Unlock Institutional Grade Calculators
-        </p>
 
-        {/* COMPLIANCE SECTION */}
-        <div className="space-y-4 mb-8">
-          <div className="flex items-start gap-3 p-3 bg-white/5 rounded-lg border border-white/5">
+        <form className="space-y-4">
+          <div>
+            <label className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-1">Work Email</label>
             <input 
-              type="checkbox" 
-              checked={agreed} 
-              onChange={() => setAgreed(!agreed)}
-              className="mt-1 accent-primary" 
-              id="terms"
+              name="email" type="email" required 
+              className="w-full bg-black border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-all text-sm"
+              placeholder="name@company.com"
             />
-            <label htmlFor="terms" className="text-[10px] text-zinc-400 leading-relaxed uppercase font-bold">
-              I agree to the <Link href="/terms" className="text-primary underline">Terms of Service</Link> and <Link href="/privacy" className="text-primary underline">Privacy Policy</Link>. 
-              I understand my inputs are stored securely for my personal history.
-            </label>
           </div>
-        </div>
+          <div>
+            <label className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em] ml-1">Security Key (Password)</label>
+            <input 
+              name="password" type="password" required 
+              className="w-full bg-black border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-all text-sm"
+              placeholder="••••••••"
+            />
+          </div>
 
-        {/* AUTH ACTIONS */}
-        <div className={`space-y-3 ${!agreed ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
-          <button className="w-full bg-white text-black font-black py-3 rounded-lg uppercase tracking-widest text-xs hover:bg-primary transition-colors">
-            Create Intelligence Account
-          </button>
-          <button className="w-full bg-transparent border border-white/20 text-white font-black py-3 rounded-lg uppercase tracking-widest text-xs hover:bg-white/10 transition-colors">
-            Sign In
-          </button>
-        </div>
-        
-        <div className="mt-6 flex justify-center gap-4 text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
-          <span className="flex items-center gap-1"><Lock className="h-3 w-3"/> AES-256 Encrypted</span>
-          <span className="flex items-center gap-1"><FileText className="h-3 w-3"/> GDPR Compliant</span>
-        </div>
+          {/* Legal Compliance Checkbox */}
+          <div className="pt-2">
+            <div className="flex items-start gap-3 p-3 bg-white/5 rounded-lg border border-white/5 transition-all hover:bg-white/10">
+              <input 
+                type="checkbox" 
+                checked={agreed} 
+                onChange={() => setAgreed(!agreed)}
+                className="mt-1 accent-primary h-4 w-4 cursor-pointer" 
+              />
+              <p className="text-[10px] text-zinc-400 leading-relaxed font-bold uppercase">
+                I accept the <Link href="/terms" className="text-primary hover:underline">Terms</Link> & <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>.
+                Calculations are for educational use only.
+              </p>
+            </div>
+          </div>
+
+          {/* Submit Buttons */}
+          <div className={`pt-4 transition-all ${!agreed ? 'opacity-30' : 'opacity-100'}`}>
+            <button 
+              formAction={mode === 'signup' ? signup : login}
+              disabled={!agreed}
+              className="w-full bg-primary text-black font-black py-4 rounded-lg uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"
+            >
+              {mode === 'signup' ? 'Initialize Account' : 'Decrypt & Enter'}
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </form>
+
+        {/* Switch Mode */}
+        <button 
+          onClick={() => setMode(mode === 'signup' ? 'login' : 'signup')}
+          className="w-full mt-6 text-[10px] font-black text-zinc-500 uppercase tracking-widest hover:text-white transition-colors"
+        >
+          {mode === 'signup' ? 'Already have an ID? Sign In' : 'Need an ID? Create Account'}
+        </button>
       </div>
     </div>
   )
