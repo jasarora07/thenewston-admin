@@ -5,8 +5,8 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  // 'next' is where we want to send them after login
-  const next = searchParams.get('next') ?? '/'
+  // Force the landing page to the suite
+  const next = searchParams.get('next') ?? '/calculate-financials'
 
   if (code) {
     const cookieStore = await cookies()
@@ -17,21 +17,27 @@ export async function GET(request: Request) {
         cookies: {
           getAll() { return cookieStore.getAll() },
           setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
+            try {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              )
+            } catch (error) {
+              // This can be ignored if the middleware is also handling cookies
+            }
           },
         },
       }
     )
-    
-    // This exchanges the "code" from the email for a real user session
+
     const { error } = await supabase.auth.exchangeCodeForSession(code)
+    
     if (!error) {
+      // SUCCESS: The session is established.
+      // We use origin + next to ensure the redirect stays on your domain.
       return NextResponse.redirect(`${origin}${next}`)
     }
   }
 
-  // Return the user to an error page with some instructions if it fails
-  return NextResponse.redirect(`${origin}/auth/gate?error=Could not verify email`)
+  // FAIL: If code is missing or exchange fails, go to gate with error
+  return NextResponse.redirect(`${origin}/auth/gate?error=Verification Handshake Failed`)
 }
