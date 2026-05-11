@@ -4,6 +4,7 @@ import { TickerBar } from "@/components/ticker-bar"
 import { NewsHeader } from "@/components/news-header"
 import { MacroBar } from "@/components/macro-bar"
 import Link from "next/link"
+import { ArrowRight, Calculator, ShieldCheck, TrendingUp, Home } from "lucide-react"
 
 export const dynamic = 'force-dynamic'
 
@@ -21,7 +22,6 @@ export default async function HomePage() {
   const businessUpdates = newsItems?.slice(2, 7) || []
   const initialGridNews = newsItems?.slice(7, 15) || []
 
-  // Organization Schema for SEO
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "NewsMediaOrganization",
@@ -31,14 +31,11 @@ export default async function HomePage() {
       "@type": "ImageObject",
       "url": "https://thenewston.com/logo.png"
     },
-    "sameAs": [
-      "https://twitter.com/thenewston"
-    ]
+    "sameAs": ["https://twitter.com/thenewston"]
   };
 
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
-      {/* Injecting Schema Markup */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
@@ -48,12 +45,10 @@ export default async function HomePage() {
       <NewsHeader />
       <MacroBar />
 
-      <main className="flex-1 container mx-auto px-4 py-8 space-y-16">
+      <main className="flex-1 container mx-auto px-4 py-8">
         
         {/* TOP SECTION: HERO & SIDEBAR */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* HERO: Two Posts Side by Side */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           <div className="lg:col-span-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
               {featured.map((item) => (
@@ -77,7 +72,6 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* BUSINESS UPDATES: Color Corrected with Neon Green */}
           <div className="lg:col-span-4 space-y-6">
             <div className="flex items-center gap-2 border-b border-white/20 pb-2">
               <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
@@ -99,6 +93,31 @@ export default async function HomePage() {
                   </h5>
                 </a>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* --- INTELLIGENCE TERMINAL CTA --- */}
+        <section className="bg-zinc-900 border border-white/5 rounded-3xl py-16 px-8 mb-20 relative overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 mb-6">
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Institutional Access</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter mb-6">
+              The <span className="text-primary">Intelligence</span> Terminal
+            </h2>
+            <p className="text-zinc-500 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-10 max-w-2xl mx-auto leading-relaxed">
+              Analyze mortgage pivot points and tax-exempt growth with encrypted 2026 fiscal modeling.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/calculate-financials" className="bg-primary text-black font-black px-10 py-4 rounded-lg uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 hover:bg-white transition-all group">
+                Access Calculators <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link href="/auth/gate" className="bg-black border border-white/10 text-white font-black px-10 py-4 rounded-lg uppercase tracking-widest text-[11px] hover:bg-white/5 transition-all">
+                Initialize ID
+              </Link>
             </div>
           </div>
         </section>
@@ -132,6 +151,7 @@ export default async function HomePage() {
             <div className="space-y-4">
               <h5 className="text-[10px] font-black uppercase tracking-widest text-white">Terminals</h5>
               <nav className="flex flex-col gap-2 text-[10px] font-bold uppercase text-zinc-500">
+                <Link href="/calculate-financials" className="hover:text-primary transition-colors">Calculators</Link>
                 <Link href="/markets" className="hover:text-primary transition-colors">Markets</Link>
                 <Link href="/crypto" className="hover:text-primary transition-colors">Crypto Assets</Link>
               </nav>
@@ -139,7 +159,7 @@ export default async function HomePage() {
 
             <div className="space-y-4">
               <h5 className="text-[10px] font-black uppercase tracking-widest text-white">Contact</h5>
-              <p className="text-[10px] font-mono text-zinc-400 uppercase">terminal@thenewston.com</p>
+              <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-tight">info@thenewston.com</p>
             </div>
 
             <div className="space-y-4 text-right md:text-left">
@@ -155,8 +175,8 @@ export default async function HomePage() {
             <p className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">© 2026 THE NEWSTON INTELLIGENCE UNIT</p>
             <div className="flex gap-6 text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">
               <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-              <span className="hover:text-white cursor-pointer transition-colors">Terms</span>
-              <span className="hover:text-white cursor-pointer transition-colors">API</span>
+              <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+              <span className="hover:text-white cursor-pointer transition-colors">API [V1]</span>
             </div>
           </div>
         </div>
