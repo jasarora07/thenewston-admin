@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { TickerBar } from "@/components/ticker-bar"
-import { NewsHeader } from "@/components/news-header"
+// REMOVED TickerBar and NewsHeader imports as they are global now
 import { TrendingUp, TrendingDown, Bitcoin, ArrowUpDown } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -35,17 +34,14 @@ export default async function CryptoPage({ searchParams }: Props) {
     return val.toLocaleString();
   }
 
-  // Helper to toggle sort order
   const getSortLink = (column: string) => {
     const newOrder = sort === column && order === 'desc' ? 'asc' : 'desc'
     return `?sort=${column}&order=${newOrder}`
   }
 
   return (
+    // REMOVED <TickerBar /> and <NewsHeader /> from here
     <main className="min-h-screen bg-black">
-      <TickerBar />
-      <NewsHeader />
-      
       <div className="container max-w-6xl px-4 py-8">
         <div className="flex items-center gap-4 mb-8">
           <Bitcoin className="h-8 w-8 text-primary" />
@@ -59,7 +55,6 @@ export default async function CryptoPage({ searchParams }: Props) {
             <Table>
               <TableHeader className="bg-white/[0.03]">
                 <TableRow className="border-white/10 hover:bg-transparent">
-                  {/* SORTABLE HEADERS */}
                   <TableHead className="py-4 pl-6">
                     <Link href={getSortLink('rank')} className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-[11px] font-bold uppercase tracking-wider">
                       # <ArrowUpDown className="h-3 w-3" />
