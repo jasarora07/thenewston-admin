@@ -2,48 +2,51 @@
 
 import React, { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { Info, Zap, Settings2 } from "lucide-react"
+import { Info, Zap, Settings2, Landmark } from "lucide-react"
 
-const InfoTooltip = ({ text }: { text: string }) => (
-  <span className="group relative ml-1.5 inline-block cursor-help">
-    <Info className="h-3 w-3 text-zinc-600 hover:text-primary transition-colors" />
-    <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 w-56 -translate-x-1/2 rounded-md bg-zinc-900 border border-white/10 p-2.5 text-[9px] font-bold uppercase leading-relaxed text-zinc-300 opacity-0 shadow-2xl transition-opacity group-hover:opacity-100 z-50">
-      <span className="text-primary block mb-1 font-black">Terminal Guidance:</span>
-      {text}
+// Standardized Tooltip: Triggers on the entire label group
+const InfoTooltip = ({ label, tip }: { label: string, tip: string }) => (
+  <div className="group relative flex items-center gap-1.5 cursor-help w-fit">
+    <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest group-hover:text-white transition-colors">
+      {label}
     </span>
-  </span>
+    <Info className="h-3 w-3 text-zinc-600 group-hover:text-primary transition-colors" />
+    <span className="pointer-events-none absolute bottom-full left-0 mb-2 w-56 rounded-md bg-zinc-900 border border-white/10 p-2.5 text-[9px] font-bold uppercase leading-relaxed text-zinc-300 opacity-0 shadow-2xl transition-opacity group-hover:opacity-100 z-50">
+      <span className="text-primary block mb-1 font-black">Terminal Guidance:</span>
+      {tip}
+    </span>
+  </div>
 );
 
 export default function MortgageRefiPivot() {
-  const [indicators, setIndicators] = useState<any[]>([])
   const [loanAmount, setLoanAmount] = useState(400000)
   const [currentRate, setCurrentRate] = useState(7.5)
+  const [currentRemainingYears, setCurrentRemainingYears] = useState(22)
   const [newRate, setNewRate] = useState(6.0)
+  const [newTermYears, setNewTermYears] = useState(30)
   const [closingCosts, setClosingCosts] = useState(5000)
-  const supabase = createClient()
+  const [frequency, setFrequency] = useState(12) 
 
-  useEffect(() => {
-    const fetchRates = async () => {
-      const { data } = await supabase.from('macro_data').select('*')
-      if (data) setIndicators(data)
+  const calculateTotalCost = (principal: number, rate: number, years: number, freq: number) => {
+    const periodicRate = (rate / 100) / freq
+    const totalPayments = years * freq
+    const periodicPayment = (principal * periodicRate) / (1 - Math.pow(1 + periodicRate, -totalPayments))
+    const totalCost = periodicPayment * totalPayments
+    return {
+      installment: periodicPayment,
+      totalInterest: totalCost - principal,
+      totalCost: totalCost
     }
-    fetchRates()
-  }, [supabase])
-
-  const fedRate = indicators.find(i => i.symbol === 'FEDFUNDS')?.value || "3.64"
-
-  const calculateMonthly = (amount: number, rate: number) => {
-    const monthlyRate = (rate / 100) / 12
-    return (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -360))
   }
 
-  const currentPayment = calculateMonthly(loanAmount, currentRate)
-  const newPayment = calculateMonthly(loanAmount, newRate)
-  const monthlySavings = currentPayment - newPayment
-  const pivotMonths = monthlySavings > 0 ? Math.ceil(closingCosts / monthlySavings) : 0
+  const currentData = calculateTotalCost(loanAmount, currentRate, currentRemainingYears, frequency)
+  const newData = calculateTotalCost(loanAmount, newRate, newTermYears, frequency)
+  
+  const netBenefit = currentData.totalInterest - (newData.totalInterest + closingCosts)
+  const monthlySavings = (currentData.installment * (frequency/12)) - (newData.installment * (frequency/12))
 
   return (
-    <div className="space-y-8 bg-zinc-950 p-8 rounded-xl border border-white/10 font-sans shadow-2xl">
+    <div className="space-y-8 bg-zinc-950 p-8 rounded-xl border border-white/10 font-sans shadow-2xl text-left">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -52,101 +55,80 @@ export default function MortgageRefiPivot() {
               Mortgage <span className="text-white">Refi Pivot</span>
             </h2>
           </div>
-          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-            Adjust your <span className="text-white">Manual Inputs</span> to calculate the break-even threshold.
+          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest leading-tight">
+            Comparing <span className="text-white">Total Debt Cost</span>: Lifecycle Interest vs. Structural Cost.
           </p>
         </div>
-        <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 flex items-center gap-4">
-          <div className="flex flex-col">
-            <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em]">Live Market Rate</span>
-            <span className="text-lg font-mono font-black text-white italic">{fedRate}%</span>
-          </div>
-          <div className="h-8 w-px bg-primary/20" />
-          <div className="flex items-center gap-2 text-primary">
-            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-[9px] font-black uppercase tracking-widest">Fetched: Fed Funds</span>
-          </div>
+        
+        <div className="flex bg-black border border-white/10 rounded p-1">
+          <button onClick={() => setFrequency(12)} className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded ${frequency === 12 ? 'bg-primary text-black' : 'text-zinc-500'}`}>Monthly</button>
+          <button onClick={() => setFrequency(26)} className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded ${frequency === 26 ? 'bg-primary text-black' : 'text-zinc-500'}`}>Bi-Weekly</button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="space-y-6">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="h-px w-4 bg-zinc-700" />
-            <span className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.3em]">User Manual Inputs</span>
-          </div>
-          <div className="group space-y-2">
-            <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
-              Loan Principal Remaining
-              <InfoTooltip text="Check your 'Remaining Balance' on your last monthly mortgage statement." />
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-mono text-sm">$</span>
-              <input type="number" value={loanAmount} onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded-md py-3 pl-8 pr-4 text-white font-mono font-bold text-base focus:border-primary outline-none transition-all" />
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <span className="text-[9px] font-black text-zinc-600 uppercase tracking-[0.2em] flex items-center gap-2"><Landmark className="h-3 w-3" /> Current Loan</span>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <InfoTooltip label="Principal ($)" tip="Your current outstanding balance. Do not include your original loan amount, only what is left to pay." />
+                  <input type="number" value={loanAmount} onChange={(e) => setLoanAmount(Number(e.target.value))} className="w-full bg-black border border-white/10 rounded-md p-2 text-white font-mono text-sm outline-none focus:border-primary" />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Rate (%)</span>
+                  <input type="number" value={currentRate} onChange={(e) => setCurrentRate(Number(e.target.value))} className="w-full bg-black border border-white/10 rounded-md p-2 text-white font-mono text-sm outline-none" />
+                </div>
+                <div className="space-y-1">
+                  <InfoTooltip label="Remaining Yrs" tip="How many years are actually left on your current mortgage? (e.g., if you are 8 years into a 30yr loan, enter 22)." />
+                  <input type="number" value={currentRemainingYears} onChange={(e) => setCurrentRemainingYears(Number(e.target.value))} className="w-full bg-black border border-white/10 rounded-md p-2 text-white font-mono text-sm outline-none" />
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
-                Current Rate (%)
-                <InfoTooltip text="Your current interest rate. Usually found on the first page of your mortgage statement." />
-              </label>
-              <input type="number" value={currentRate} onChange={(e) => setCurrentRate(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
+
+            <div className="space-y-4">
+              <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] flex items-center gap-2"><Zap className="h-3 w-3" /> New Proposal</span>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <InfoTooltip label="Closing Costs ($)" tip="Total fees to execute the new loan. Found in Section J of your Loan Estimate." />
+                  <input type="number" value={closingCosts} onChange={(e) => setClosingCosts(Number(e.target.value))} className="w-full bg-black border border-primary/20 rounded-md p-2 text-white font-mono text-sm outline-none focus:border-primary" />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">New Rate (%)</span>
+                  <input type="number" value={newRate} onChange={(e) => setNewRate(Number(e.target.value))} className="w-full bg-black border border-white/10 rounded-md p-2 text-white font-mono text-sm outline-none" />
+                </div>
+                <div className="space-y-1">
+                  <InfoTooltip label="New Term (Yrs)" tip="Duration of the new loan. WARNING: Resetting to 30 years often increases total interest cost." />
+                  <input type="number" value={newTermYears} onChange={(e) => setNewTermYears(Number(e.target.value))} className="w-full bg-black border border-white/10 rounded-md p-2 text-white font-mono text-sm outline-none" />
+                </div>
+              </div>
             </div>
-            <div className="space-y-2">
-              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
-                New Target Rate (%)
-                <InfoTooltip text="The interest rate offered in your new bank proposal or 'Initial Loan Estimate' document." />
-              </label>
-              <input type="number" value={newRate} onChange={(e) => setNewRate(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 text-primary">
-              Est. Closing Costs ($)
-              <InfoTooltip text="Total fees (Bank, Title, Appraisal). Look for 'Total Closing Costs' in Section J of your Loan Estimate." />
-            </label>
-            <input type="number" value={closingCosts} onChange={(e) => setClosingCosts(Number(e.target.value))}
-              className="w-full bg-black border border-primary/30 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
           </div>
         </div>
 
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="h-px w-4 bg-primary/50" />
-            <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Terminal Intelligence</span>
-          </div>
           <div className="flex-1 bg-zinc-900/30 border border-white/5 rounded-xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
-            <Zap className="h-6 w-6 text-primary mb-4 opacity-50" />
-            <span className="flex items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500 mb-2">
-              Pivot Point Reached In
-              <InfoTooltip text="The exact month your accumulated monthly savings equal your initial closing costs." />
-            </span>
-            <div className="text-6xl font-black italic tracking-tighter text-white mb-2">
-              {pivotMonths} <span className="text-sm not-italic text-zinc-500 uppercase tracking-widest ml-1 font-sans">Months</span>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+            <InfoTooltip label="Net Life-of-Loan Benefit" tip="Total Interest of Current Loan MINUS (Total Interest of New Loan + Closing Costs)." />
+            <div className={`text-5xl font-black italic tracking-tighter mb-2 ${netBenefit > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+              {netBenefit > 0 ? '+' : ''}${netBenefit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
             </div>
-            <p className="text-[11px] font-bold text-zinc-400 uppercase leading-relaxed max-w-[240px]">
-              At <span className="text-white">${monthlySavings.toFixed(0)}/mo</span> savings, you recoup your costs in <span className="text-primary italic">{ (pivotMonths / 12).toFixed(1) } years</span>.
+            <p className="text-[11px] font-bold text-zinc-400 uppercase leading-relaxed max-w-[280px]">
+              {netBenefit > 0 ? `Refinancing saves you $${netBenefit.toLocaleString()} in interest.` : `This move costs you $${Math.abs(netBenefit).toLocaleString()} more in long-term interest.`}
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
-              <span className="flex items-center text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
-                Monthly Surplus
-                <InfoTooltip text="BENEFIT: The pure cash profit remaining in your budget each month after switching loans." />
+              <InfoTooltip label="Installment Change" tip="The difference in your individual payment. Affects monthly cash flow." />
+              <span className={`text-lg font-mono font-black block ${monthlySavings > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                {monthlySavings > 0 ? '-' : '+'}${Math.abs(currentData.installment - newData.installment).toFixed(0)}
               </span>
-              <span className="text-lg font-mono font-black text-emerald-500">+${monthlySavings.toFixed(0)}</span>
             </div>
-            <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
-              <span className="flex items-center justify-end text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
-                Efficiency Score
-                <InfoTooltip text="HIGH: Break-even under 2 years. MID: 2-4 years. LOW: Over 4 years." />
-              </span>
-              <span className={`text-lg font-mono font-black ${pivotMonths < 24 ? 'text-emerald-500' : 'text-yellow-500'}`}>
-                {pivotMonths < 24 ? 'HIGH' : 'MID'}
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right flex flex-col items-end">
+              <InfoTooltip label="Gross Interest Saved" tip="Total interest avoided over the timeline. Does NOT subtract closing costs." />
+              <span className="text-lg font-mono font-black text-white italic">
+                ${Math.max(0, currentData.totalInterest - newData.totalInterest).toLocaleString(undefined, {maximumFractionDigits: 0})}
               </span>
             </div>
           </div>
