@@ -42,6 +42,8 @@ export default function CalculateFinancialsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Mortgage Module */}
               <div className="bg-zinc-950 border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
                 <div className="bg-white/5 p-3 border-b border-white/5 flex items-center gap-2 text-[9px] font-black text-zinc-400 uppercase tracking-widest">
                   <TrendingUp className="h-3 w-3 text-primary" /> Mortgage Pivot
@@ -49,6 +51,7 @@ export default function CalculateFinancialsPage() {
                 <div className="p-1"><MortgageRefi /></div>
               </div>
 
+              {/* Tax Growth Module */}
               <div className="bg-zinc-950 border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
                 <div className="bg-white/5 p-3 border-b border-white/5 flex items-center gap-2 text-[9px] font-black text-zinc-400 uppercase tracking-widest">
                   <ShieldCheck className="h-3 w-3 text-primary" /> Tax Growth
@@ -57,7 +60,7 @@ export default function CalculateFinancialsPage() {
               </div>
             </div>
 
-            {/* FIXED LINE 75: UPCOMING SLOT */}
+            {/* UPCOMING SLOT */}
             <div className="relative group overflow-hidden bg-zinc-900/20 border border-white/5 rounded-2xl p-10 flex flex-col items-center justify-center text-center">
               <div className="absolute inset-0 bg-primary/5 opacity-50" />
               <Calculator className="h-10 w-10 text-zinc-800 mb-4 group-hover:text-primary/20 transition-all" />
@@ -66,6 +69,7 @@ export default function CalculateFinancialsPage() {
             </div>
           </div>
 
+          {/* SIDEBAR */}
           <aside className="lg:col-span-4 space-y-6">
             <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-6">
               <h4 className="text-white font-black uppercase text-[10px] tracking-[0.2em] mb-6 flex items-center gap-3 italic">
