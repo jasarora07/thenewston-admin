@@ -4,6 +4,17 @@ import React, { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { ShieldCheck, Info, Zap, Settings2 } from "lucide-react"
 
+// Helper Component for Guidance Tips
+const InfoTooltip = ({ text }: { text: string }) => (
+  <span className="group relative ml-1.5 inline-block cursor-help">
+    <Info className="h-3 w-3 text-zinc-600 hover:text-primary transition-colors" />
+    <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 w-56 -translate-x-1/2 rounded-md bg-zinc-900 border border-white/10 p-2.5 text-[9px] font-bold uppercase leading-relaxed text-zinc-300 opacity-0 shadow-2xl transition-opacity group-hover:opacity-100 z-50">
+      <span className="text-primary block mb-1 font-black">Terminal Guidance:</span>
+      {text}
+    </span>
+  </span>
+);
+
 export default function MortgageRefiPivot() {
   const [indicators, setIndicators] = useState<any[]>([])
   const [loanAmount, setLoanAmount] = useState(400000)
@@ -22,7 +33,6 @@ export default function MortgageRefiPivot() {
 
   const fedRate = indicators.find(i => i.symbol === 'FEDFUNDS')?.value || "3.64"
 
-  // Calculation Logic
   const calculateMonthly = (amount: number, rate: number) => {
     const monthlyRate = (rate / 100) / 12
     return (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -360))
@@ -50,7 +60,6 @@ export default function MortgageRefiPivot() {
           </p>
         </div>
         
-        {/* LIVE INTELLIGENCE BADGE */}
         <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 flex items-center gap-4">
           <div className="flex flex-col">
             <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em]">Live Market Rate</span>
@@ -73,13 +82,12 @@ export default function MortgageRefiPivot() {
             <span className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.3em]">User Manual Inputs</span>
           </div>
 
-          {/* LOAN AMOUNT */}
           <div className="group space-y-2">
             <div className="flex justify-between items-center">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
                 Loan Principal Remaining
+                <InfoTooltip text="Check your 'Remaining Balance' on your last monthly mortgage statement." />
               </label>
-              <Info className="h-3 w-3 text-zinc-700 hover:text-primary cursor-help" />
             </div>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-mono text-sm">$</span>
@@ -92,10 +100,12 @@ export default function MortgageRefiPivot() {
             </div>
           </div>
 
-          {/* RATES GRID */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Current Rate (%)</label>
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                Current Rate (%)
+                <InfoTooltip text="The interest rate you are currently paying. Found on your current mortgage statement." />
+              </label>
               <input 
                 type="number" 
                 value={currentRate} 
@@ -104,64 +114,6 @@ export default function MortgageRefiPivot() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">New Target Rate (%)</label>
-              <input 
-                type="number" 
-                value={newRate} 
-                onChange={(e) => setNewRate(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none"
-              />
-            </div>
-          </div>
-
-          {/* CLOSING COSTS */}
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-primary">Est. Closing Costs ($)</label>
-            <input 
-              type="number" 
-              value={closingCosts} 
-              onChange={(e) => setClosingCosts(Number(e.target.value))}
-              className="w-full bg-black border border-primary/30 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none shadow-[0_0_15px_-5px_rgba(34,197,94,0.1)]"
-            />
-          </div>
-        </div>
-
-        {/* RIGHT: ANALYTICAL ENGINE */}
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="h-px w-4 bg-primary/50" />
-            <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Terminal Intelligence</span>
-          </div>
-
-          <div className="flex-1 bg-zinc-900/30 border border-white/5 rounded-xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
-            
-            <Zap className="h-6 w-6 text-primary mb-4 opacity-50" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500 mb-2">Pivot Point Reached In</span>
-            <div className="text-6xl font-black italic tracking-tighter text-white mb-2">
-              {pivotMonths} <span className="text-sm not-italic text-zinc-500 uppercase tracking-widest ml-1 font-sans">Months</span>
-            </div>
-            
-            <p className="text-[11px] font-bold text-zinc-400 uppercase leading-relaxed max-w-[240px]">
-              At <span className="text-white">${monthlySavings.toFixed(0)}/mo</span> savings, you recoup your costs in <span className="text-primary italic">{ (pivotMonths / 12).toFixed(1) } years</span>.
-            </p>
-          </div>
-
-          {/* SAVINGS SUMMARY */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
-              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Monthly Surplus</span>
-              <span className="text-lg font-mono font-black text-emerald-500">+${monthlySavings.toFixed(0)}</span>
-            </div>
-            <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
-              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Efficiency Score</span>
-              <span className={`text-lg font-mono font-black ${pivotMonths < 24 ? 'text-emerald-500' : 'text-yellow-500'}`}>
-                {pivotMonths < 24 ? 'HIGH' : 'MID'}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                New Target Rate (%)
+                <InfoTooltip text
