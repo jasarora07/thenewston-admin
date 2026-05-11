@@ -39,8 +39,11 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
 
-      {/* MacroBar remains as it is page-specific content */}
-      <MacroBar />
+      {/* --- CENTRALIZED MACROBAR --- */}
+      {/* Positioned between the NewsHeader (Layout) and the Main Hero content */}
+      <div className="border-b border-white/5 bg-zinc-950/50">
+        <MacroBar />
+      </div>
 
       <main className="flex-1 container mx-auto px-4 py-8">
         
@@ -74,7 +77,7 @@ export default async function HomePage() {
           {/* RIGHT: COMPACT SIDEBAR (4 Columns) */}
           <aside className="lg:col-span-4 space-y-8">
             
-            {/* COMPACT FREE ANALYSIS WIDGET (Reduced size by 50%) */}
+            {/* COMPACT FREE ANALYSIS WIDGET */}
             <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all shadow-lg shadow-primary/5">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
               
