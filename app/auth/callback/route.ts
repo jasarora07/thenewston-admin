@@ -1,27 +1,37 @@
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  
-  // This "next" parameter is key! 
-  // It tells the route where to send the user after they are verified.
-  // For password resets, it will be "/auth/update-password"
+  // 'next' is where we want to send them after login
   const next = searchParams.get('next') ?? '/'
 
   if (code) {
-    const supabase = await createClient()
+    const cookieStore = await cookies()
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() { return cookieStore.getAll() },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
     
-    // Exchange the temporary code for a permanent session
+    // This exchanges the "code" from the email for a real user session
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    
     if (!error) {
-      // Success! Send them to the intended page
       return NextResponse.redirect(`${origin}${next}`)
     }
   }
 
-  // If something goes wrong, send them to an error page
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+  // Return the user to an error page with some instructions if it fails
+  return NextResponse.redirect(`${origin}/auth/gate?error=Could not verify email`)
 }
