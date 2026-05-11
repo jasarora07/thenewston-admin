@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic'
 export default async function HomePage() {
   const supabase = await createClient()
 
+  // Fetch 15 items
   const { data: newsItems } = await supabase
     .from('news')
     .select('*')
@@ -22,9 +23,9 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
       
-      {/* --- THE FIX: PUSH MACROBAR BELOW STICKY HEADER --- */}
-      {/* mt-14 (56px) ensures it starts exactly where the sticky header ends. 
-          Since it is not 'sticky' itself, it will scroll away naturally. */}
+      {/* --- MACROBAR POSITIONING --- */}
+      {/* mt-14 matches the sticky header height to prevent overlap. 
+          It stays at the top of the content and scrolls away. */}
       <div className="w-full border-b border-white/10 mt-14 bg-black">
         <MacroBar />
       </div>
@@ -59,7 +60,7 @@ export default async function HomePage() {
 
           <aside className="lg:col-span-4 space-y-8">
             {/* Analysis Widget */}
-            <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all">
+            <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all shadow-lg shadow-primary/5">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-4">
@@ -73,7 +74,7 @@ export default async function HomePage() {
                   Project savings on new fiscal rates. <span className="text-white underline decoration-primary/40 underline-offset-2 tracking-tight italic">100% Free Analysis.</span>
                 </p>
                 <div className="flex gap-2 pt-2">
-                  <Link href="/calculate-financials" className="flex-[2] bg-primary text-black text-[10px] font-black py-3 rounded-md uppercase tracking-widest text-center hover:bg-white transition-all shadow-md shadow-primary/10">
+                  <Link href="/calculate-financials" className="flex-[2] bg-primary text-black text-[10px] font-black py-3 rounded-md uppercase tracking-widest text-center hover:bg-white transition-all">
                     Access
                   </Link>
                   <Link href="/auth/gate?mode=signup" className="flex-1 border border-white/10 text-white text-[10px] font-black py-3 rounded-md uppercase tracking-widest text-center hover:bg-white/5 transition-all">
@@ -101,9 +102,10 @@ export default async function HomePage() {
                         alt="thumb"
                       />
                     </div>
+                    {/* FIXED: Mismatched tag was here (h5 was closed with h2) */}
                     <h5 className="font-bold text-[10px] leading-snug text-zinc-400 group-hover:text-white transition-colors uppercase">
                       {item.title}
-                    </h2>
+                    </h5>
                   </a>
                 ))}
               </div>
