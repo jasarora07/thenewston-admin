@@ -1,17 +1,38 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, User, House, ChevronDown } from "lucide-react"
+import { Bell, User, House, ChevronDown, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { createClient } from "@/lib/supabase/client" // Use the CLIENT client
+import { signout } from "@/app/auth/actions"
 
 export function NewsHeader() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const supabase = createClient();
+
+  // Check for user session on mount
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+
+    // Listen for auth changes (login/logout) to update UI instantly
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   const navLinks = [
     { name: "Home", href: "/", icon: <House className="h-3 w-3" /> },
+    { name: "Calculators", href: "/calculate-financials" }, // Added Calculators
     { name: "Markets", href: "/markets" },
     { name: "Crypto", href: "/crypto" },
   ];
@@ -23,7 +44,7 @@ export function NewsHeader() {
       <div className="container flex h-14 items-center justify-between px-4 mx-auto">
         
         <div className="flex items-center gap-4 sm:gap-6 flex-1">
-          {/* Logo Section - Restored text for mobile and desktop */}
+          {/* Logo Section */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <div className="h-7 w-7 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-black font-black text-sm italic">N</span>
@@ -77,14 +98,37 @@ export function NewsHeader() {
           </nav>
         </div>
 
-        {/* Action Icons */}
+        {/* Action Icons & Auth */}
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white">
             <Bell className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white">
-            <User className="h-4 w-4" />
-          </Button>
+
+          {user ? (
+            /* Logged In: Show Sign Out */
+            <div className="flex items-center gap-3 ml-2 border-l border-white/10 pl-3">
+              <span className="hidden md:block text-[9px] font-black text-primary uppercase tracking-tighter">
+                ID: {user.email?.split('@')[0]}
+              </span>
+              <form action={signout}>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  type="submit"
+                  className="h-8 w-8 text-zinc-500 hover:text-red-500 hover:bg-red-500/10"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </form>
+            </div>
+          ) : (
+            /* Logged Out: Show Sign In */
+            <Link href="/auth/gate">
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-primary">
+                <User className="h-4 w-4" />
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
