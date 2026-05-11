@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export default async function HomePage() {
   const supabase = await createClient()
 
-  // Fetch 15 items: 2 for Hero, 5 for Sidebar, 8 for Grid
+  // Fetch 15 items
   const { data: newsItems } = await supabase
     .from('news')
     .select('*')
@@ -20,34 +20,18 @@ export default async function HomePage() {
   const businessUpdates = newsItems?.slice(2, 7) || []
   const initialGridNews = newsItems?.slice(7, 15) || []
 
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "NewsMediaOrganization",
-    "name": "The Newston",
-    "url": "https://thenewston.com",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://thenewston.com/logo.png"
-    },
-    "sameAs": ["https://twitter.com/thenewston"]
-  };
-
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-
-      {/* --- MACROBAR: CENTRALIZED ABOVE CONTENT --- */}
+      {/* 1. MACROBAR: Sits at the top of the page flow, scrolls away naturally */}
       <MacroBar />
 
+      {/* 2. MAIN CONTENT: The padding/container starts here */}
       <main className="flex-1 container mx-auto px-4 py-8">
         
-        {/* --- MAIN HERO SECTION (8/4 Split) --- */}
+        {/* --- HERO SECTION --- */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           
-          {/* LEFT: PRIMARY NEWS FEED (8 Columns) */}
+          {/* LEFT: HERO (8 Cols) */}
           <div className="lg:col-span-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
               {featured.map((item) => (
@@ -71,27 +55,21 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* RIGHT: COMPACT SIDEBAR (4 Columns) */}
+          {/* RIGHT: SIDEBAR (4 Cols) */}
           <aside className="lg:col-span-4 space-y-8">
-            
-            {/* COMPACT FREE ANALYSIS WIDGET */}
             <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all shadow-lg shadow-primary/5">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
-              
               <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-4">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
                   <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Intelligence Tool</span>
                 </div>
-                
                 <h3 className="text-sm font-black text-white italic uppercase tracking-tighter mb-2 leading-none">
                   Free 2026 <span className="text-primary group-hover:text-white transition-colors">Mortgage Analysis</span>
                 </h3>
-                
                 <p className="text-[10px] text-zinc-500 font-bold uppercase mb-6 leading-relaxed">
                   Project savings on new fiscal rates. <span className="text-white underline decoration-primary/40 underline-offset-2 tracking-tight italic">100% Free Analysis.</span>
                 </p>
-
                 <div className="flex gap-2 pt-2">
                   <Link href="/calculate-financials" className="flex-[2] bg-primary text-black text-[10px] font-black py-3 rounded-md uppercase tracking-widest text-center hover:bg-white transition-all shadow-md shadow-primary/10">
                     Access
@@ -103,7 +81,6 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* BUSINESS UPDATES */}
             <div className="space-y-6">
               <div className="flex items-center gap-2 border-b border-white/20 pb-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
@@ -130,7 +107,7 @@ export default async function HomePage() {
           </aside>
         </section>
 
-        {/* --- LATEST NEWS GRID --- */}
+        {/* --- LATEST NEWS --- */}
         <section className="space-y-8">
           <div className="flex items-center gap-4">
             <h2 className="text-lg font-black italic tracking-tighter uppercase text-white">
@@ -141,11 +118,6 @@ export default async function HomePage() {
           <NewsGrid initialItems={initialGridNews} totalCountBeforeGrid={7} />
         </section>
       </main>
-
-      {/* FOOTER */}
-      <footer className="bg-zinc-950 border-t border-white/5 py-12 mt-20 text-[10px]">
-         {/* ... (footer remains same) ... */}
-      </footer>
     </div>
   )
 }
