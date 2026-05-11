@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, User, House, ChevronDown, LogOut } from "lucide-react"
+import { Bell, House, ChevronDown, LogOut, Terminal, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client" 
 import { signout } from "@/app/auth/actions"
@@ -15,14 +15,21 @@ export function NewsHeader() {
   const supabase = createClient();
 
   useEffect(() => {
+    // 1. Initial check for existing session
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
     };
     getUser();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    // 2. Real-time auth listener (Fixes the "refresh to see ID" bug)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+        setUser(session?.user ?? null);
+      }
+      if (event === 'SIGNED_OUT') {
+        setUser(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -30,7 +37,7 @@ export function NewsHeader() {
 
   const navLinks = [
     { name: "Home", href: "/", icon: <House className="h-3 w-3" /> },
-    { name: "Free Analysis", href: "/calculate-financials" }, // Language matched to Hero
+    { name: "Free Analysis", href: "/calculate-financials" },
     { name: "Markets", href: "/markets" },
     { name: "Crypto", href: "/crypto" },
   ];
@@ -38,16 +45,16 @@ export function NewsHeader() {
   const activeLink = navLinks.find(link => link.href === pathname) || navLinks[0];
 
   return (
-    <header className="sticky top-[44px] w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-50">
-      <div className="container flex h-14 items-center justify-between px-4 mx-auto">
+    <header className="sticky top-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-50">
+      <div className="container flex h-16 items-center justify-between px-4 mx-auto">
         
-        <div className="flex items-center gap-4 sm:gap-6 flex-1">
+        <div className="flex items-center gap-4 sm:gap-8 flex-1">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-2 shrink-0 group">
-            <div className="h-7 w-7 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
-              <span className="text-black font-black text-sm italic">N</span>
+            <div className="h-8 w-8 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
+              <Terminal className="h-5 w-5 text-black" />
             </div>
-            <span className="font-black text-sm sm:text-lg text-white italic uppercase tracking-tighter">
+            <span className="font-black text-sm sm:text-xl text-white italic uppercase tracking-tighter">
               The Newston
             </span>
           </Link>
@@ -56,21 +63,21 @@ export function NewsHeader() {
           <div className="relative sm:hidden">
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-md text-[9px] font-black uppercase tracking-widest text-primary"
+              className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-md text-[9px] font-black uppercase tracking-widest text-primary"
             >
               {activeLink.name}
               <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isOpen && (
-              <div className="absolute top-full left-0 mt-2 w-40 bg-zinc-900 border border-white/10 rounded-lg shadow-2xl py-2 z-[60]">
+              <div className="absolute top-full left-0 mt-2 w-48 bg-zinc-950 border border-white/10 rounded-lg shadow-2xl py-2 z-[60]">
                 {navLinks.map((link) => (
                   <Link
                     key={link.name}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`block px-4 py-2 text-[10px] font-black uppercase tracking-widest ${
-                      pathname === link.href ? "text-primary bg-white/5" : "text-zinc-400 hover:text-white"
+                    className={`block px-4 py-3 text-[10px] font-black uppercase tracking-widest ${
+                      pathname === link.href ? "text-primary bg-primary/5" : "text-zinc-400 hover:text-white"
                     }`}
                   >
                     {link.name}
@@ -81,12 +88,12 @@ export function NewsHeader() {
           </div>
 
           {/* DESKTOP NAVIGATION */}
-          <nav className="hidden sm:flex items-center gap-8 ml-4">
+          <nav className="hidden sm:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link 
                 key={link.name}
                 href={link.href} 
-                className={`flex items-center gap-1.5 uppercase font-black text-[10px] tracking-[0.2em] transition-all border-b-2 py-1 ${
+                className={`flex items-center gap-1.5 uppercase font-black text-[10px] tracking-[0.2em] transition-all py-1 border-b-2 ${
                   pathname === link.href ? "text-primary border-primary" : "text-zinc-500 border-transparent hover:text-white"
                 }`}
               >
@@ -96,32 +103,40 @@ export function NewsHeader() {
           </nav>
         </div>
 
-        {/* Action Icons & Auth */}
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white">
+        {/* AUTH & SESSION ACTIONS */}
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-zinc-500 hover:text-white hidden xs:flex">
             <Bell className="h-4 w-4" />
           </Button>
 
           {user ? (
-            <div className="flex items-center gap-3 ml-2 border-l border-white/10 pl-3">
-              <span className="hidden md:block text-[9px] font-black text-primary uppercase tracking-tighter">
-                ID: {user.email?.split('@')[0]}
-              </span>
+            <div className="flex items-center gap-4 ml-2 border-l border-white/10 pl-4">
+              <div className="hidden lg:flex flex-col items-end">
+                <div className="flex items-center gap-1">
+                  <ShieldCheck className="h-2.5 w-2.5 text-primary" />
+                  <span className="text-[8px] font-black text-primary uppercase tracking-widest leading-none">ID: Active</span>
+                </div>
+                <span className="text-[10px] text-white font-bold truncate max-w-[120px] uppercase tracking-tighter">
+                  {user.email?.split('@')[0]}
+                </span>
+              </div>
+              
               <form action={signout}>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <button 
                   type="submit"
-                  className="h-8 w-8 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 rounded bg-red-500/10 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all text-red-500 group"
                 >
-                  <LogOut className="h-4 w-4" />
-                </Button>
+                  <span className="text-[9px] font-black uppercase tracking-widest hidden sm:block">Terminate ID</span>
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
               </form>
             </div>
           ) : (
             <Link href="/auth/gate?mode=login">
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-primary transition-colors">
-                <User className="h-4 w-4" />
+              <Button 
+                className="bg-primary text-black font-black text-[10px] uppercase tracking-widest px-4 py-2 hover:bg-white transition-colors"
+              >
+                Initialize ID
               </Button>
             </Link>
           )}
