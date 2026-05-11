@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/button" // Adjust to your UI lib
-import { ShieldCheck, TrendingDown, AlertTriangle, CheckCircle2 } from "lucide-react"
+import { ShieldCheck, Info, Zap, Settings2 } from "lucide-react"
 
 export default function MortgageRefiPivot() {
   const [indicators, setIndicators] = useState<any[]>([])
@@ -13,7 +12,6 @@ export default function MortgageRefiPivot() {
   const [closingCosts, setClosingCosts] = useState(5000)
   const supabase = createClient()
 
-  // 1. Fetch live market rates to guide the user
   useEffect(() => {
     const fetchRates = async () => {
       const { data } = await supabase.from('macro_data').select('*')
@@ -22,9 +20,9 @@ export default function MortgageRefiPivot() {
     fetchRates()
   }, [])
 
-  const fedRate = indicators.find(i => i.symbol === 'FEDFUNDS')?.value || "3.6"
+  const fedRate = indicators.find(i => i.symbol === 'FEDFUNDS')?.value || "3.64"
 
-  // 2. The Layman's Math
+  // Calculation Logic
   const calculateMonthly = (amount: number, rate: number) => {
     const monthlyRate = (rate / 100) / 12
     return (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -360))
@@ -35,98 +33,130 @@ export default function MortgageRefiPivot() {
   const monthlySavings = currentPayment - newPayment
   const pivotMonths = monthlySavings > 0 ? Math.ceil(closingCosts / monthlySavings) : 0
 
-  // 3. The "Intelligence" Verdict
-  const getVerdict = () => {
-    if (monthlySavings <= 0) return { label: "NO SAVINGS", color: "text-zinc-500", icon: <AlertTriangle /> }
-    if (pivotMonths <= 24) return { label: "STRATEGIC EXECUTE", color: "text-emerald-500", icon: <CheckCircle2 /> }
-    if (pivotMonths <= 48) return { label: "MARGINAL GAIN", color: "text-yellow-500", icon: <TrendingDown /> }
-    return { label: "CAPITAL DRAG", color: "text-red-500", icon: <AlertTriangle /> }
-  }
-
-  const verdict = getVerdict()
-
   return (
-    <div className="space-y-6 bg-zinc-950 p-6 rounded-xl border border-white/5 font-sans">
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+    <div className="space-y-8 bg-zinc-950 p-8 rounded-xl border border-white/10 font-sans shadow-2xl">
+      
+      {/* 1. GUIDANCE HEADER */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-6">
         <div>
-          <h2 className="text-xl font-black italic uppercase tracking-tighter text-white">
-            Mortgage <span className="text-primary">Refi Pivot</span>
-          </h2>
-          <div className="flex items-center gap-2 mt-1">
-            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-              Live Fed Funds: {fedRate}%
-            </span>
+          <div className="flex items-center gap-2 mb-1">
+            <Settings2 className="h-4 w-4 text-primary" />
+            <h2 className="text-xl font-black uppercase tracking-tighter text-white italic">
+              Mortgage <span className="text-primary">Refi Pivot</span>
+            </h2>
           </div>
+          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+            Adjust your <span className="text-white">Manual Inputs</span> to calculate the break-even threshold.
+          </p>
         </div>
-        <div className={`flex items-center gap-2 px-3 py-1 rounded bg-white/5 border border-white/10 ${verdict.color}`}>
-          {verdict.icon}
-          <span className="text-[10px] font-black uppercase tracking-widest">{verdict.label}</span>
+        
+        {/* LIVE INTELLIGENCE BADGE */}
+        <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 flex items-center gap-4">
+          <div className="flex flex-col">
+            <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em]">Live Market Rate</span>
+            <span className="text-lg font-mono font-black text-white italic">{fedRate}%</span>
+          </div>
+          <div className="h-8 w-px bg-primary/20" />
+          <div className="flex items-center gap-2 text-primary">
+            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            <span className="text-[9px] font-black uppercase tracking-widest">Fetched: Fed Funds</span>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* INPUTS */}
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Loan Balance</label>
-            <input 
-              type="number" 
-              value={loanAmount} 
-              onChange={(e) => setLoanAmount(Number(e.target.value))}
-              className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white focus:border-primary outline-none"
-            />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        {/* LEFT: MANUAL CONTROLS */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-px w-4 bg-zinc-700" />
+            <span className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.3em]">User Manual Inputs</span>
           </div>
+
+          {/* LOAN AMOUNT */}
+          <div className="group space-y-2">
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
+                Loan Principal Remaining
+              </label>
+              <Info className="h-3 w-3 text-zinc-700 hover:text-primary cursor-help" />
+            </div>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-mono text-sm">$</span>
+              <input 
+                type="number" 
+                value={loanAmount} 
+                onChange={(e) => setLoanAmount(Number(e.target.value))}
+                className="w-full bg-black border border-white/10 rounded-md py-3 pl-8 pr-4 text-white font-mono font-bold text-base focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          {/* RATES GRID */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Current Rate %</label>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Current Rate (%)</label>
               <input 
                 type="number" 
                 value={currentRate} 
                 onChange={(e) => setCurrentRate(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white"
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none"
               />
             </div>
-            <div className="space-y-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">New Rate %</label>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">New Target Rate (%)</label>
               <input 
                 type="number" 
                 value={newRate} 
                 onChange={(e) => setNewRate(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white"
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none"
               />
             </div>
           </div>
-          <div className="space-y-1">
-            <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Estimated Closing Costs ($)</label>
+
+          {/* CLOSING COSTS */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-primary">Est. Closing Costs ($)</label>
             <input 
               type="number" 
               value={closingCosts} 
               onChange={(e) => setClosingCosts(Number(e.target.value))}
-              className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white"
+              className="w-full bg-black border border-primary/30 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none shadow-[0_0_15px_-5px_rgba(34,197,94,0.1)]"
             />
           </div>
         </div>
 
-        {/* ANALYTICS BOX */}
-        <div className="bg-black/50 border border-white/5 rounded-lg p-6 flex flex-col justify-center items-center text-center">
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-2">Pivot Point</span>
-          <div className="text-5xl font-black italic tracking-tighter text-white mb-1">
-            {pivotMonths} <span className="text-sm not-italic text-zinc-500">Months</span>
+        {/* RIGHT: ANALYTICAL ENGINE */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-px w-4 bg-primary/50" />
+            <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Terminal Intelligence</span>
           </div>
-          <p className="text-[10px] font-bold text-zinc-400 uppercase leading-relaxed max-w-[200px]">
-            It will take <span className="text-white">{pivotMonths} months</span> of savings to pay back your <span className="text-white">${closingCosts}</span> in fees.
-          </p>
-          
-          <div className="mt-6 pt-6 border-t border-white/5 w-full">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase">Monthly Savings</span>
-              <span className="text-sm font-mono font-black text-emerald-500">+${monthlySavings.toFixed(2)}</span>
+
+          <div className="flex-1 bg-zinc-900/30 border border-white/5 rounded-xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+            
+            <Zap className="h-6 w-6 text-primary mb-4 opacity-50" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500 mb-2">Pivot Point Reached In</span>
+            <div className="text-6xl font-black italic tracking-tighter text-white mb-2">
+              {pivotMonths} <span className="text-sm not-italic text-zinc-500 uppercase tracking-widest ml-1 font-sans">Months</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase">Year 1 Net ROI</span>
-              <span className="text-sm font-mono font-black text-white">
-                {monthlySavings * 12 > closingCosts ? "POSITIVE" : `-$${(closingCosts - (monthlySavings * 12)).toFixed(0)}`}
+            
+            <p className="text-[11px] font-bold text-zinc-400 uppercase leading-relaxed max-w-[240px]">
+              At <span className="text-white">${monthlySavings.toFixed(0)}/mo</span> savings, you recoup your costs in <span className="text-primary italic">{ (pivotMonths / 12).toFixed(1) } years</span>.
+            </p>
+          </div>
+
+          {/* SAVINGS SUMMARY */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
+              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Monthly Surplus</span>
+              <span className="text-lg font-mono font-black text-emerald-500">+${monthlySavings.toFixed(0)}</span>
+            </div>
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
+              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Efficiency Score</span>
+              <span className={`text-lg font-mono font-black ${pivotMonths < 24 ? 'text-emerald-500' : 'text-yellow-500'}`}>
+                {pivotMonths < 24 ? 'HIGH' : 'MID'}
               </span>
             </div>
           </div>
