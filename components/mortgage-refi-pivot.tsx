@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { ShieldCheck, Info, Zap, Settings2 } from "lucide-react"
+import { Info, Zap, Settings2 } from "lucide-react"
 
 // Helper Component for Guidance Tips
 const InfoTooltip = ({ text }: { text: string }) => (
@@ -29,7 +29,7 @@ export default function MortgageRefiPivot() {
       if (data) setIndicators(data)
     }
     fetchRates()
-  }, [])
+  }, [supabase])
 
   const fedRate = indicators.find(i => i.symbol === 'FEDFUNDS')?.value || "3.64"
 
@@ -83,12 +83,10 @@ export default function MortgageRefiPivot() {
           </div>
 
           <div className="group space-y-2">
-            <div className="flex justify-between items-center">
-              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
-                Loan Principal Remaining
-                <InfoTooltip text="Check your 'Remaining Balance' on your last monthly mortgage statement." />
-              </label>
-            </div>
+            <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
+              Loan Principal Remaining
+              <InfoTooltip text="Check your 'Remaining Balance' on your last monthly mortgage statement." />
+            </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-mono text-sm">$</span>
               <input 
@@ -116,4 +114,75 @@ export default function MortgageRefiPivot() {
             <div className="space-y-2">
               <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
                 New Target Rate (%)
-                <InfoTooltip text
+                <InfoTooltip text="The interest rate offered in your new bank proposal or 'Initial Loan Estimate'." />
+              </label>
+              <input 
+                type="number" 
+                value={newRate} 
+                onChange={(e) => setNewRate(Number(e.target.value))}
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 text-primary">
+              Est. Closing Costs ($)
+              <InfoTooltip text="Total fees (Bank, Title, Appraisal). Typically 2-5% of loan. See 'Total Closing Costs' on your Loan Estimate." />
+            </label>
+            <input 
+              type="number" 
+              value={closingCosts} 
+              onChange={(e) => setClosingCosts(Number(e.target.value))}
+              className="w-full bg-black border border-primary/30 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none shadow-[0_0_15px_-5px_rgba(34,197,94,0.1)]"
+            />
+          </div>
+        </div>
+
+        {/* RIGHT: ANALYTICAL ENGINE */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-px w-4 bg-primary/50" />
+            <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Terminal Intelligence</span>
+          </div>
+
+          <div className="flex-1 bg-zinc-900/30 border border-white/5 rounded-xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+            
+            <Zap className="h-6 w-6 text-primary mb-4 opacity-50" />
+            <span className="flex items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500 mb-2">
+              Pivot Point Reached In
+              <InfoTooltip text="Calculated as (Total Costs / Monthly Savings). This is the month where your savings finally cover your initial fees." />
+            </span>
+            <div className="text-6xl font-black italic tracking-tighter text-white mb-2">
+              {pivotMonths} <span className="text-sm not-italic text-zinc-500 uppercase tracking-widest ml-1 font-sans">Months</span>
+            </div>
+            
+            <p className="text-[11px] font-bold text-zinc-400 uppercase leading-relaxed max-w-[240px]">
+              At <span className="text-white">${monthlySavings.toFixed(0)}/mo</span> savings, you recoup your costs in <span className="text-primary italic">{ (pivotMonths / 12).toFixed(1) } years</span>.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
+              <span className="flex items-center text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
+                Monthly Surplus
+                <InfoTooltip text="BENEFIT: This represents the extra cash remaining in your pocket every month compared to your current loan." />
+              </span>
+              <span className="text-lg font-mono font-black text-emerald-500">+${monthlySavings.toFixed(0)}</span>
+            </div>
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
+              <span className="flex items-center justify-end text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
+                Efficiency Score
+                <InfoTooltip text="HIGH: Break-even under 2 years. MID: 2-4 years. LOW: Over 4 years. Based on speed to profit." />
+              </span>
+              <span className={`text-lg font-mono font-black ${pivotMonths < 24 ? 'text-emerald-500' : 'text-yellow-500'}`}>
+                {pivotMonths < 24 ? 'HIGH' : 'MID'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
