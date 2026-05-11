@@ -2,14 +2,13 @@ import { createClient } from "@/lib/supabase/server"
 import { NewsGrid } from "@/components/news-grid"
 import { MacroBar } from "@/components/macro-bar"
 import Link from "next/link"
-import { ArrowRight, ShieldCheck, Home, Banknote } from "lucide-react"
+import { ShieldCheck } from "lucide-react"
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   const supabase = await createClient()
 
-  // Fetch 15 items
   const { data: newsItems } = await supabase
     .from('news')
     .select('*')
@@ -22,20 +21,23 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
-      {/* 1. MACROBAR: Sits at the top of the page flow, scrolls away naturally */}
-      <MacroBar />
+      
+      {/* --- THE FIX: PUSH MACROBAR BELOW STICKY HEADER --- */}
+      {/* mt-14 (56px) ensures it starts exactly where the sticky header ends. 
+          Since it is not 'sticky' itself, it will scroll away naturally. */}
+      <div className="w-full border-b border-white/10 mt-14 bg-black">
+        <MacroBar />
+      </div>
 
-      {/* 2. MAIN CONTENT: The padding/container starts here */}
       <main className="flex-1 container mx-auto px-4 py-8">
         
         {/* --- HERO SECTION --- */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           
-          {/* LEFT: HERO (8 Cols) */}
           <div className="lg:col-span-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
               {featured.map((item) => (
-                <a key={item.id} href={item.url} target="_blank" className="group relative overflow-hidden rounded-lg border border-white/10 bg-zinc-900 aspect-[4/5] md:aspect-auto flex flex-col min-h-[400px]">
+                <a key={item.id} href={item.url} target="_blank" className="group relative overflow-hidden rounded-lg border border-white/10 bg-zinc-900 flex flex-col min-h-[400px]">
                   <div className="relative flex-1 overflow-hidden">
                     <img 
                       src={item.imageUrl || "/api/placeholder/400/600"} 
@@ -55,9 +57,9 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* RIGHT: SIDEBAR (4 Cols) */}
           <aside className="lg:col-span-4 space-y-8">
-            <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all shadow-lg shadow-primary/5">
+            {/* Analysis Widget */}
+            <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-4">
@@ -81,6 +83,7 @@ export default async function HomePage() {
               </div>
             </div>
 
+            {/* Business Updates */}
             <div className="space-y-6">
               <div className="flex items-center gap-2 border-b border-white/20 pb-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
@@ -95,11 +98,12 @@ export default async function HomePage() {
                       <img 
                         src={item.imageUrl || "/api/placeholder/100/100"} 
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" 
+                        alt="thumb"
                       />
                     </div>
                     <h5 className="font-bold text-[10px] leading-snug text-zinc-400 group-hover:text-white transition-colors uppercase">
                       {item.title}
-                    </h5>
+                    </h2>
                   </a>
                 ))}
               </div>
