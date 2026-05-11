@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { Info, Zap, Settings2 } from "lucide-react"
 
-// Helper Component for Guidance Tips
 const InfoTooltip = ({ text }: { text: string }) => (
   <span className="group relative ml-1.5 inline-block cursor-help">
     <Info className="h-3 w-3 text-zinc-600 hover:text-primary transition-colors" />
@@ -45,8 +44,6 @@ export default function MortgageRefiPivot() {
 
   return (
     <div className="space-y-8 bg-zinc-950 p-8 rounded-xl border border-white/10 font-sans shadow-2xl">
-      
-      {/* 1. GUIDANCE HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -54,17 +51,11 @@ export default function MortgageRefiPivot() {
             <h2 className="text-xl font-black uppercase tracking-tighter text-white italic">
               Mortgage <span className="text-white">Refi Pivot</span>
             </h2>
-            <div className="ml-4 px-2 py-0.5 border border-red-500/30 bg-red-500/5 rounded">
-              <span className="text-[8px] font-black text-red-500 uppercase tracking-widest">
-                Simulation Only: Not Advice
-              </span>
-            </div>
           </div>
           <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
             Adjust your <span className="text-white">Manual Inputs</span> to calculate the break-even threshold.
           </p>
         </div>
-        
         <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 flex items-center gap-4">
           <div className="flex flex-col">
             <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em]">Live Market Rate</span>
@@ -79,15 +70,11 @@ export default function MortgageRefiPivot() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        
-        {/* LEFT: MANUAL CONTROLS */}
         <div className="space-y-6">
           <div className="flex items-center gap-2 mb-2">
             <div className="h-px w-4 bg-zinc-700" />
             <span className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.3em]">User Manual Inputs</span>
           </div>
-
-          {/* LOAN AMOUNT */}
           <div className="group space-y-2">
             <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
               Loan Principal Remaining
@@ -95,20 +82,76 @@ export default function MortgageRefiPivot() {
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-mono text-sm">$</span>
-              <input 
-                type="number" 
-                value={loanAmount} 
-                onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded-md py-3 pl-8 pr-4 text-white font-mono font-bold text-base focus:border-primary outline-none transition-all"
-              />
+              <input type="number" value={loanAmount} onChange={(e) => setLoanAmount(Number(e.target.value))}
+                className="w-full bg-black border border-white/10 rounded-md py-3 pl-8 pr-4 text-white font-mono font-bold text-base focus:border-primary outline-none transition-all" />
             </div>
           </div>
-
-          {/* RATES GRID */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
                 Current Rate (%)
                 <InfoTooltip text="Your current interest rate. Usually found on the first page of your mortgage statement." />
               </label>
-              <input
+              <input type="number" value={currentRate} onChange={(e) => setCurrentRate(Number(e.target.value))}
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
+            </div>
+            <div className="space-y-2">
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                New Target Rate (%)
+                <InfoTooltip text="The interest rate offered in your new bank proposal or 'Initial Loan Estimate' document." />
+              </label>
+              <input type="number" value={newRate} onChange={(e) => setNewRate(Number(e.target.value))}
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 text-primary">
+              Est. Closing Costs ($)
+              <InfoTooltip text="Total fees (Bank, Title, Appraisal). Look for 'Total Closing Costs' in Section J of your Loan Estimate." />
+            </label>
+            <input type="number" value={closingCosts} onChange={(e) => setClosingCosts(Number(e.target.value))}
+              className="w-full bg-black border border-primary/30 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-px w-4 bg-primary/50" />
+            <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Terminal Intelligence</span>
+          </div>
+          <div className="flex-1 bg-zinc-900/30 border border-white/5 rounded-xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <Zap className="h-6 w-6 text-primary mb-4 opacity-50" />
+            <span className="flex items-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500 mb-2">
+              Pivot Point Reached In
+              <InfoTooltip text="The exact month your accumulated monthly savings equal your initial closing costs." />
+            </span>
+            <div className="text-6xl font-black italic tracking-tighter text-white mb-2">
+              {pivotMonths} <span className="text-sm not-italic text-zinc-500 uppercase tracking-widest ml-1 font-sans">Months</span>
+            </div>
+            <p className="text-[11px] font-bold text-zinc-400 uppercase leading-relaxed max-w-[240px]">
+              At <span className="text-white">${monthlySavings.toFixed(0)}/mo</span> savings, you recoup your costs in <span className="text-primary italic">{ (pivotMonths / 12).toFixed(1) } years</span>.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
+              <span className="flex items-center text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
+                Monthly Surplus
+                <InfoTooltip text="BENEFIT: The pure cash profit remaining in your budget each month after switching loans." />
+              </span>
+              <span className="text-lg font-mono font-black text-emerald-500">+${monthlySavings.toFixed(0)}</span>
+            </div>
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
+              <span className="flex items-center justify-end text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
+                Efficiency Score
+                <InfoTooltip text="HIGH: Break-even under 2 years. MID: 2-4 years. LOW: Over 4 years." />
+              </span>
+              <span className={`text-lg font-mono font-black ${pivotMonths < 24 ? 'text-emerald-500' : 'text-yellow-500'}`}>
+                {pivotMonths < 24 ? 'HIGH' : 'MID'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
