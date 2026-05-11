@@ -9,7 +9,7 @@ const InfoTooltip = ({ text }: { text: string }) => (
   <span className="group relative ml-1.5 inline-block cursor-help">
     <Info className="h-3 w-3 text-zinc-600 hover:text-primary transition-colors" />
     <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 w-56 -translate-x-1/2 rounded-md bg-zinc-900 border border-white/10 p-2.5 text-[9px] font-bold uppercase leading-relaxed text-zinc-300 opacity-0 shadow-2xl transition-opacity group-hover:opacity-100 z-50">
-      <span className="text-primary block mb-1">Terminal Guidance:</span>
+      <span className="text-primary block mb-1 font-black">Terminal Guidance:</span>
       {text}
     </span>
   </span>
@@ -61,8 +61,13 @@ export default function TaxExemptWealthGap() {
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="h-4 w-4 text-primary" />
             <h2 className="text-xl font-black uppercase tracking-tighter text-white italic">
-              Tax-Exempt <span className="text-primary">Wealth Gap</span>
+              Tax-Exempt <span className="text-white">Wealth Gap</span>
             </h2>
+            <div className="ml-4 px-2 py-0.5 border border-red-500/30 bg-red-500/5 rounded">
+              <span className="text-[8px] font-black text-red-500 uppercase tracking-widest">
+                Simulation Only: Not Advice
+              </span>
+            </div>
           </div>
           <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
             Simulate capital growth against <span className="text-white">Tax Drag</span> and <span className="text-white">Inflation</span>.
@@ -161,7 +166,7 @@ export default function TaxExemptWealthGap() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
-              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Tax-Exempt Strategy</span>
+              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest text-left">Tax-Exempt Strategy</span>
               <span className="text-lg font-mono font-black text-emerald-500">${taxExemptTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
             </div>
             <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
@@ -177,10 +182,11 @@ export default function TaxExemptWealthGap() {
         </div>
       </div>
       
+      {/* INSTITUTIONAL FOOTNOTE */}
       <div className="flex items-start gap-3 bg-white/5 p-4 rounded border border-white/5">
         <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
         <p className="text-[10px] text-zinc-400 font-medium leading-relaxed italic">
-          <span className="text-white font-bold uppercase not-italic">Terminal Advice:</span> To achieve this same outcome in a taxable account, you would need to sustain a <span className="text-white">{(expectedReturn / (1 - taxRate/100)).toFixed(2)}%</span> return. By choosing a tax-exempt vehicle, you are effectively generating <span className="text-primary font-bold">{( (expectedReturn / (1 - taxRate/100)) - expectedReturn ).toFixed(2)}% of "Alpha"</span> purely through structural efficiency.
+          <span className="text-white font-bold uppercase not-italic">Terminal Advice:</span> This model simulates structural efficiency and is not a recommendation to invest. To achieve this same outcome in a taxable account, you would need a <span className="text-white">{(expectedReturn / (1 - taxRate/100)).toFixed(2)}%</span> return. Consult a professional for personalized strategy.
         </p>
       </div>
     </div>
