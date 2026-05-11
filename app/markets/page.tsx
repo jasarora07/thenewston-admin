@@ -1,17 +1,17 @@
 "use client"
 
 import React, { useState } from "react"
-import dynamic from 'next/dynamic' // Added for SEO performance
+import dynamic from 'next/dynamic'
 import { ChevronDown, Map, Zap, Building2 } from "lucide-react"
 
-// Performance: Lazy load the heavy chart to boost First Contentful Paint (FCP)
+// Performance: Lazy load the heavy chart to boost speed scores (Core Web Vitals)
 const AdvancedChart = dynamic(() => import("@/components/advanced-chart"), {
   ssr: false,
   loading: () => (
     <div className="h-full w-full flex flex-col items-center justify-center bg-[#131722] gap-4">
       <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 animate-pulse">
-        Initializing Western Terminal Visualizer...
+        Initializing Terminal Visualizer...
       </span>
     </div>
   ),
@@ -64,4 +64,121 @@ const MARKET_DATA = {
       { name: "Index Overview", s: "FOREXCOM:DJI" },
       { name: "Goldman Sachs (GS)", s: "NYSE:GS" },
       { name: "Boeing (BA)", s: "NYSE:BA" },
-      { name: "Caterpillar (CAT)", s: "NYSE:
+      { name: "Caterpillar (CAT)", s: "NYSE:CAT" }, // Fixed Unterminated String Error
+      { name: "Salesforce (CRM)", s: "NYSE:CRM" },
+      { name: "Disney (DIS)", s: "NYSE:DIS" },
+      { name: "McDonald's (MCD)", s: "NYSE:MCD" },
+      { name: "Walmart (WMT)", s: "NYSE:WMT" },
+      { name: "Coca-Cola (KO)", s: "NYSE:KO" },
+    ]
+  },
+  "Europe": {
+    "FTSE 100 (UK)": [
+      { name: "Index Overview", s: "FOREXCOM:UK100" },
+      { name: "AstraZeneca", s: "LSE:AZN" },
+      { name: "Shell", s: "LSE:SHEL" },
+      { name: "HSBC Holdings", s: "LSE:HSBA" },
+      { name: "Unilever", s: "LSE:ULVR" },
+      { name: "BP", s: "LSE:BP." },
+      { name: "Rio Tinto", s: "LSE:RIO" },
+      { name: "Diageo", s: "LSE:DGE" },
+      { name: "GSK", s: "LSE:GSK" },
+      { name: "Relx", s: "LSE:REL" },
+      { name: "Glencore", s: "LSE:GLEN" },
+    ],
+    "DAX 40 (Germany)": [
+      { name: "Index Overview", s: "FOREXCOM:GER40" },
+      { name: "SAP", s: "XETR:SAP" },
+      { name: "Siemens", s: "XETR:SIE" },
+      { name: "Allianz", s: "XETR:ALV" },
+      { name: "Airbus", s: "XETR:AIR" },
+      { name: "Deutsche Telekom", s: "XETR:DTE" },
+      { name: "Mercedes-Benz", s: "XETR:MBG" },
+      { name: "BMW", s: "XETR:BMW" },
+      { name: "Volkswagen", s: "XETR:VOW3" },
+      { name: "Bayer", s: "XETR:BAYN" },
+      { name: "Adidas", s: "XETR:ADS" },
+    ],
+    "CAC 40 (France)": [
+      { name: "Index Overview", s: "FOREXCOM:FRA40" },
+      { name: "LVMH", s: "EURONEXT:MC" },
+      { name: "L'Oreal", s: "EURONEXT:OR" },
+      { name: "Hermes", s: "EURONEXT:RMS" },
+      { name: "TotalEnergies", s: "EURONEXT:TTE" },
+      { name: "Sanofi", s: "EURONEXT:SAN" },
+      { name: "Schneider Electric", s: "EURONEXT:SU" },
+      { name: "Air Liquide", s: "EURONEXT:AI" },
+      { name: "BNP Paribas", s: "EURONEXT:BNP" },
+      { name: "Safran", s: "EURONEXT:SAF" },
+      { name: "AXA", s: "EURONEXT:CS" },
+    ]
+  }
+}
+
+export default function MarketsPage() {
+  const [region, setRegion] = useState<keyof typeof MARKET_DATA>("North America")
+  const [index, setIndex] = useState(Object.keys(MARKET_DATA["North America"])[0])
+  const [symbol, setSymbol] = useState(MARKET_DATA["North America"]["S&P 500"][0].s)
+
+  const handleRegionChange = (val: string) => {
+    const r = val as keyof typeof MARKET_DATA
+    setRegion(r)
+    const firstIndex = Object.keys(MARKET_DATA[r])[0]
+    setIndex(firstIndex)
+    // @ts-ignore
+    setSymbol(MARKET_DATA[r][firstIndex][0].s)
+  }
+
+  const handleIndexChange = (val: string) => {
+    setIndex(val)
+    // @ts-ignore
+    setSymbol(MARKET_DATA[region][val][0].s)
+  }
+
+  return (
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <main className="flex-1 container mx-auto px-4 py-8 space-y-8">
+        <header className="border-b border-border/40 pb-6">
+          <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3 italic">
+            WESTERN <span className="text-primary italic">TERMINAL</span>
+          </h1>
+        </header>
+
+        {/* SELECTORS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-secondary/10 p-6 rounded-2xl border border-border/60">
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+              <Map className="h-3 w-3" /> Region
+            </label>
+            <div className="relative">
+              <select 
+                value={region} 
+                onChange={(e) => handleRegionChange(e.target.value)}
+                className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer focus:ring-1 focus:ring-primary"
+              >
+                {Object.keys(MARKET_DATA).map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+              <Zap className="h-3 w-3" /> Index
+            </label>
+            <div className="relative">
+              <select 
+                value={index} 
+                onChange={(e) => handleIndexChange(e.target.value)}
+                className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer focus:ring-1 focus:ring-primary"
+              >
+                {/* @ts-ignore */}
+                {Object.keys(MARKET_DATA[region]).map(i => <option key={i} value={i}>{i}</option>)}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+              <Building2 className="h-3 w-
