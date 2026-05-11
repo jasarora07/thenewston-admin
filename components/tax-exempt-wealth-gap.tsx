@@ -4,6 +4,17 @@ import React, { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { TrendingUp, ShieldAlert, Zap, Info, MousePointer2 } from "lucide-react"
 
+// Helper Component for Guidance Tips
+const InfoTooltip = ({ text }: { text: string }) => (
+  <span className="group relative ml-1.5 inline-block cursor-help">
+    <Info className="h-3 w-3 text-zinc-600 hover:text-primary transition-colors" />
+    <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 w-56 -translate-x-1/2 rounded-md bg-zinc-900 border border-white/10 p-2.5 text-[9px] font-bold uppercase leading-relaxed text-zinc-300 opacity-0 shadow-2xl transition-opacity group-hover:opacity-100 z-50">
+      <span className="text-primary block mb-1">Terminal Guidance:</span>
+      {text}
+    </span>
+  </span>
+);
+
 export default function TaxExemptWealthGap() {
   const [indicators, setIndicators] = useState<any[]>([])
   const [initialInvestment, setInitialInvestment] = useState(50000)
@@ -58,7 +69,6 @@ export default function TaxExemptWealthGap() {
           </p>
         </div>
         
-        {/* LIVE INFLATION DATA BOX */}
         <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 flex items-center gap-4">
           <div className="flex flex-col">
             <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em]">Market Inflation (CPI)</span>
@@ -83,12 +93,18 @@ export default function TaxExemptWealthGap() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">Initial Principal ($)</label>
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
+                Initial Principal ($)
+                <InfoTooltip text="The starting amount of cash you are placing into this specific investment account." />
+              </label>
               <input type="number" value={initialInvestment} onChange={(e) => setInitialInvestment(Number(e.target.value))}
                 className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
             </div>
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">Annual Addition ($)</label>
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">
+                Annual Addition ($)
+                <InfoTooltip text="Your planned yearly savings. Example: If you save $500 per month, enter $6,000." />
+              </label>
               <input type="number" value={annualContribution} onChange={(e) => setAnnualContribution(Number(e.target.value))}
                 className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
             </div>
@@ -96,17 +112,26 @@ export default function TaxExemptWealthGap() {
           
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Time (Years)</label>
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                Time (Years)
+                <InfoTooltip text="The total duration you intend to let the capital compound without withdrawals." />
+              </label>
               <input type="number" value={years} onChange={(e) => setYears(Number(e.target.value))}
                 className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
             </div>
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Target Return (%)</label>
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                Return (%)
+                <InfoTooltip text="Expected growth rate. Long-term stock market (S&P 500) average is 7-10%." />
+              </label>
               <input type="number" value={expectedReturn} onChange={(e) => setExpectedReturn(Number(e.target.value))}
                 className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
             </div>
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Tax Bracket (%)</label>
+              <label className="flex items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                Tax Bracket (%)
+                <InfoTooltip text="Your highest Federal tax rate based on income (e.g., 22% or 24% for most professionals)." />
+              </label>
               <input type="number" value={taxRate} onChange={(e) => setTaxRate(Number(e.target.value))}
                 className="w-full bg-black border border-primary/30 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none shadow-[0_0_15px_-5px_rgba(34,197,94,0.1)]" />
             </div>
@@ -134,14 +159,16 @@ export default function TaxExemptWealthGap() {
             </p>
           </div>
 
-          {/* GROWTH COMPARISON */}
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
               <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Tax-Exempt Strategy</span>
               <span className="text-lg font-mono font-black text-emerald-500">${taxExemptTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
             </div>
             <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
-              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Purchasing Power (Real)</span>
+              <span className="flex items-center justify-end text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">
+                Purchasing Power (Real)
+                <InfoTooltip text="Calculated as (Expected Return - Live Inflation). This shows your actual gain in buying power." />
+              </span>
               <span className={`text-lg font-mono font-black ${realReturn > 0 ? 'text-white' : 'text-red-500'}`}>
                 {realReturn.toFixed(2)}%
               </span>
@@ -150,7 +177,6 @@ export default function TaxExemptWealthGap() {
         </div>
       </div>
       
-      {/* INSTITUTIONAL FOOTNOTE */}
       <div className="flex items-start gap-3 bg-white/5 p-4 rounded border border-white/5">
         <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
         <p className="text-[10px] text-zinc-400 font-medium leading-relaxed italic">
