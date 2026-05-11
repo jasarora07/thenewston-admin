@@ -64,7 +64,7 @@ const MARKET_DATA = {
       { name: "Index Overview", s: "FOREXCOM:DJI" },
       { name: "Goldman Sachs (GS)", s: "NYSE:GS" },
       { name: "Boeing (BA)", s: "NYSE:BA" },
-      { name: "Caterpillar (CAT)", s: "NYSE:CAT" }, // Fixed Unterminated String Error
+      { name: "Caterpillar (CAT)", s: "NYSE:CAT" },
       { name: "Salesforce (CRM)", s: "NYSE:CRM" },
       { name: "Disney (DIS)", s: "NYSE:DIS" },
       { name: "McDonald's (MCD)", s: "NYSE:MCD" },
@@ -181,4 +181,31 @@ export default function MarketsPage() {
 
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-              <Building2 className="h-3 w-
+              <Building2 className="h-3 w-3" /> Symbol
+            </label>
+            <div className="relative">
+              <select 
+                value={symbol} 
+                onChange={(e) => setSymbol(e.target.value)}
+                className="w-full h-12 bg-background border border-border rounded-lg px-4 text-sm font-semibold appearance-none cursor-pointer focus:ring-1 focus:ring-primary"
+              >
+                {/* @ts-ignore */}
+                {MARKET_DATA[region][index].map(stock => (
+                  <option key={stock.s} value={stock.s}>{stock.name}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-muted-foreground" />
+            </div>
+          </div>
+        </div>
+
+        {/* CHART */}
+        <div className="rounded-xl border border-border bg-[#131722] overflow-hidden h-[650px] shadow-2xl relative z-10">
+          <AdvancedChart key={symbol} symbol={symbol} />
+        </div>
+
+        <div className="h-10" />
+      </main>
+    </div>
+  )
+}
