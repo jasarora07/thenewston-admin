@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { NewsGrid } from "@/components/news-grid"
 import { MacroBar } from "@/components/macro-bar"
 import Link from "next/link"
-import { ArrowRight, ShieldCheck, Home, Banknote } from "lucide-react" // FIXED IMPORT HERE
+import { ArrowRight, ShieldCheck, Home, Banknote } from "lucide-react"
 
 export const dynamic = 'force-dynamic'
 
@@ -39,11 +39,8 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
 
-      {/* --- STICKY MACROBAR FIX --- */}
-      {/* Positioned exactly below the h-14 Header */}
-      <div className="sticky top-14 z-40 w-full border-b border-white/5 bg-black/90 backdrop-blur-md">
-        <MacroBar />
-      </div>
+      {/* --- MACROBAR: CENTRALIZED ABOVE CONTENT --- */}
+      <MacroBar />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         
@@ -145,8 +142,9 @@ export default async function HomePage() {
         </section>
       </main>
 
+      {/* FOOTER */}
       <footer className="bg-zinc-950 border-t border-white/5 py-12 mt-20 text-[10px]">
-        {/* ... Footer content remains the same ... */}
+         {/* ... (footer remains same) ... */}
       </footer>
     </div>
   )
