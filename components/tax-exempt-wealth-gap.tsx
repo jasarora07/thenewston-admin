@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { TrendingUp, ShieldAlert, Zap, Info } from "lucide-react"
+import { TrendingUp, ShieldAlert, Zap, Info, MousePointer2 } from "lucide-react"
 
 export default function TaxExemptWealthGap() {
   const [indicators, setIndicators] = useState<any[]>([])
@@ -10,7 +10,7 @@ export default function TaxExemptWealthGap() {
   const [annualContribution, setAnnualContribution] = useState(6000)
   const [years, setYears] = useState(20)
   const [expectedReturn, setExpectedReturn] = useState(7)
-  const [taxRate, setTaxRate] = useState(24) // Default federal bracket
+  const [taxRate, setTaxRate] = useState(24) 
   
   const supabase = createClient()
 
@@ -22,9 +22,8 @@ export default function TaxExemptWealthGap() {
     fetchMacro()
   }, [])
 
-  const inflationRate = indicators.find(i => i.symbol === 'CPIAUCSL')?.value || "3.0"
+  const inflationRate = indicators.find(i => i.symbol === 'CPIAUCSL')?.value || "3.29"
 
-  // Analytical Calculation: Taxable vs Tax-Exempt
   const calculateGrowth = (isTaxable: boolean) => {
     let balance = initialInvestment
     const monthlyRate = (expectedReturn / 100) / 12
@@ -32,7 +31,6 @@ export default function TaxExemptWealthGap() {
     
     for (let i = 0; i < years * 12; i++) {
       const interest = balance * monthlyRate
-      // Taxes apply to the interest earned every month/year in a taxable account
       balance += (interest * taxMultiplier) + (annualContribution / 12)
     }
     return balance
@@ -44,82 +42,107 @@ export default function TaxExemptWealthGap() {
   const realReturn = expectedReturn - Number(inflationRate)
 
   return (
-    <div className="space-y-6 bg-zinc-950 p-6 rounded-xl border border-white/5 font-sans">
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+    <div className="space-y-8 bg-zinc-950 p-8 rounded-xl border border-white/10 font-sans shadow-2xl">
+      
+      {/* 1. GUIDANCE HEADER */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-6">
         <div>
-          <h2 className="text-xl font-black italic uppercase tracking-tighter text-white">
-            Tax-Exempt <span className="text-primary">Wealth Gap</span>
-          </h2>
-          <div className="flex items-center gap-2 mt-1">
-            <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-              Live Inflation (CPI): {inflationRate}%
-            </span>
+          <div className="flex items-center gap-2 mb-1">
+            <TrendingUp className="h-4 w-4 text-primary" />
+            <h2 className="text-xl font-black uppercase tracking-tighter text-white italic">
+              Tax-Exempt <span className="text-primary">Wealth Gap</span>
+            </h2>
           </div>
+          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+            Simulate capital growth against <span className="text-white">Tax Drag</span> and <span className="text-white">Inflation</span>.
+          </p>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 rounded bg-primary/10 border border-primary/20 text-primary">
-          <Zap className="h-3.5 w-3.5" />
-          <span className="text-[10px] font-black uppercase tracking-widest">Compounding Alpha</span>
+        
+        {/* LIVE INFLATION DATA BOX */}
+        <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 flex items-center gap-4">
+          <div className="flex flex-col">
+            <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em]">Market Inflation (CPI)</span>
+            <span className="text-lg font-mono font-black text-white italic">{inflationRate}%</span>
+          </div>
+          <div className="h-8 w-px bg-primary/20" />
+          <div className="flex items-center gap-2 text-primary">
+            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            <span className="text-[9px] font-black uppercase tracking-widest italic">Terminal Feed</span>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* INPUTS */}
-        <div className="space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        {/* LEFT: USER CONFIGURATION */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2 mb-2">
+            <MousePointer2 className="h-3 w-3 text-zinc-500" />
+            <span className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.3em]">User Strategy Inputs</span>
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Initial Principal</label>
+            <div className="space-y-2 group">
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">Initial Principal ($)</label>
               <input type="number" value={initialInvestment} onChange={(e) => setInitialInvestment(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white outline-none focus:border-primary" />
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
             </div>
-            <div className="space-y-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Annual Addition</label>
+            <div className="space-y-2 group">
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-focus-within:text-white transition-colors">Annual Addition ($)</label>
               <input type="number" value={annualContribution} onChange={(e) => setAnnualContribution(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white outline-none focus:border-primary" />
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
             </div>
           </div>
           
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Years</label>
+            <div className="space-y-2 group">
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Time (Years)</label>
               <input type="number" value={years} onChange={(e) => setYears(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white outline-none" />
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
             </div>
-            <div className="space-y-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Return %</label>
+            <div className="space-y-2 group">
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Target Return (%)</label>
               <input type="number" value={expectedReturn} onChange={(e) => setExpectedReturn(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white outline-none" />
+                className="w-full bg-black border border-white/10 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none" />
             </div>
-            <div className="space-y-1">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Tax Rate %</label>
+            <div className="space-y-2 group">
+              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Tax Bracket (%)</label>
               <input type="number" value={taxRate} onChange={(e) => setTaxRate(Number(e.target.value))}
-                className="w-full bg-black border border-white/10 rounded p-2 text-sm font-mono text-white outline-none" />
+                className="w-full bg-black border border-primary/30 rounded-md py-3 px-4 text-white font-mono font-bold text-base focus:border-primary outline-none shadow-[0_0_15px_-5px_rgba(34,197,94,0.1)]" />
             </div>
           </div>
         </div>
 
-        {/* ANALYTICS BOX */}
-        <div className="relative group overflow-hidden bg-black/50 border border-white/5 rounded-lg p-6 text-center">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-30" />
-          
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-2 block">Wealth Gap (Capital Lost)</span>
-          <div className="text-4xl font-black italic tracking-tighter text-white mb-1">
-            ${wealthGap.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-          </div>
-          
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <ShieldAlert className="h-3 w-3 text-red-500" />
-            <p className="text-[9px] font-bold text-red-500/80 uppercase">Taxes reduced your outcome by {( (wealthGap/taxExemptTotal)*100 ).toFixed(1)}%</p>
+        {/* RIGHT: ANALYTICAL ENGINE */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Zap className="h-3 w-3 text-primary" />
+            <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Wealth Degradation Analysis</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
-            <div className="text-left">
-              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1">Tax-Exempt Total</span>
-              <span className="text-xs font-mono font-black text-white">${taxExemptTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+          <div className="flex-1 bg-zinc-900/30 border border-white/5 rounded-xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+            
+            <ShieldAlert className="h-6 w-6 text-red-500 mb-4 opacity-50" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500 mb-2">Total Capital Lost to Taxes</span>
+            <div className="text-5xl font-black italic tracking-tighter text-white mb-2">
+              ${wealthGap.toLocaleString(undefined, { maximumFractionDigits: 0 })}
             </div>
-            <div className="text-right">
-              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1">Real Return Adj.</span>
-              <span className={`text-xs font-mono font-black ${realReturn > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+            
+            <p className="text-[11px] font-bold text-zinc-400 uppercase leading-relaxed max-w-[280px]">
+              Taxes will reduce your potential net worth by <span className="text-red-500">{( (wealthGap/taxExemptTotal)*100 ).toFixed(1)}%</span> over the next <span className="text-white">{years} years</span>.
+            </p>
+          </div>
+
+          {/* GROWTH COMPARISON */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg">
+              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Tax-Exempt Strategy</span>
+              <span className="text-lg font-mono font-black text-emerald-500">${taxExemptTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+            </div>
+            <div className="bg-black/50 border border-white/5 p-4 rounded-lg text-right">
+              <span className="text-[8px] font-black text-zinc-600 uppercase block mb-1 tracking-widest">Purchasing Power (Real)</span>
+              <span className={`text-lg font-mono font-black ${realReturn > 0 ? 'text-white' : 'text-red-500'}`}>
                 {realReturn.toFixed(2)}%
               </span>
             </div>
@@ -127,10 +150,11 @@ export default function TaxExemptWealthGap() {
         </div>
       </div>
       
+      {/* INSTITUTIONAL FOOTNOTE */}
       <div className="flex items-start gap-3 bg-white/5 p-4 rounded border border-white/5">
         <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
         <p className="text-[10px] text-zinc-400 font-medium leading-relaxed italic">
-          <span className="text-white font-bold uppercase not-italic">Institutional Insight:</span> In a taxable account, you must earn a <span className="text-white">{(expectedReturn / (1 - taxRate/100)).toFixed(2)}%</span> return just to match a tax-free return of {expectedReturn}%. Your "Wealth Gap" represents money earned that was never reinvested due to annual tax liabilities.
+          <span className="text-white font-bold uppercase not-italic">Terminal Advice:</span> To achieve this same outcome in a taxable account, you would need to sustain a <span className="text-white">{(expectedReturn / (1 - taxRate/100)).toFixed(2)}%</span> return. By choosing a tax-exempt vehicle, you are effectively generating <span className="text-primary font-bold">{( (expectedReturn / (1 - taxRate/100)) - expectedReturn ).toFixed(2)}% of "Alpha"</span> purely through structural efficiency.
         </p>
       </div>
     </div>
