@@ -5,11 +5,12 @@ import { Inter, Montserrat } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 import { PageTransition } from "@/components/page-transition"
+import { NewsHeader } from "@/components/news-header" // IMPORTED
+import { TickerBar } from "@/components/ticker-bar"   // IMPORTED
 
 import "@/app/globals.css"
 import { Suspense } from "react"
 
-// Use only Google Fonts to avoid any local font references
 const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -45,6 +46,10 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <div className="relative flex min-h-screen flex-col">
+            {/* Nav and Ticker stay outside PageTransition to avoid flickering */}
+            <TickerBar />
+            <NewsHeader /> 
+            
             <Suspense>
               <PageTransition>
                 <div className="flex-1">{children}</div>
