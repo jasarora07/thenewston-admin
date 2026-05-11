@@ -6,8 +6,8 @@ export async function createClient() {
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    // CHANGE THIS LINE BELOW:
-    process.env.SUPABASE_SERVICE_ROLE_KEY!, 
+    // USE ANON KEY TO RESPECT SECURITY POLICIES
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, 
     {
       cookies: {
         getAll() {
@@ -19,7 +19,7 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             )
           } catch {
-            // This is expected when called from Server Components
+            // Expected in Server Components
           }
         },
       },
