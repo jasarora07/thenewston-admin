@@ -1,10 +1,9 @@
 "use client"
 
 import React, { useState } from "react"
-import { TickerBar } from "@/components/ticker-bar"
-import { NewsHeader } from "@/components/news-header"
+// REMOVED TickerBar and NewsHeader imports
 import AdvancedChart from "@/components/advanced-chart"
-import { ChevronDown, Globe, Map, Zap, Building2 } from "lucide-react"
+import { ChevronDown, Map, Zap, Building2 } from "lucide-react"
 
 const MARKET_DATA = {
   "North America": {
@@ -89,7 +88,7 @@ const MARKET_DATA = {
       { name: "Adidas", s: "XETR:ADS" },
     ],
     "CAC 40 (France)": [
-      { name: "Index Overview", s: "FOREXCOM:FRA40" },
+      { name: "Index Overview", s: "FRA40" },
       { name: "LVMH", s: "EURONEXT:MC" },
       { name: "L'Oreal", s: "EURONEXT:OR" },
       { name: "Hermes", s: "EURONEXT:RMS" },
@@ -126,9 +125,8 @@ export default function MarketsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <TickerBar />
-      <NewsHeader />
-
+      {/* Ticker and Nav removed from here to prevent duplication */}
+      
       <main className="flex-1 container mx-auto px-4 py-8 space-y-8">
         <header className="border-b border-border/40 pb-6">
           <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3 italic">
@@ -136,9 +134,8 @@ export default function MarketsPage() {
           </h1>
         </header>
 
-        {/* TRIPLE SELECTOR - DESIGNED FOR EXTENSIVE LISTS */}
+        {/* SELECTORS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-secondary/10 p-6 rounded-2xl border border-border/60">
-          
           <div className="space-y-2">
             <label className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
               <Map className="h-3 w-3" /> Region
@@ -192,7 +189,7 @@ export default function MarketsPage() {
           </div>
         </div>
 
-        {/* CHART - Reacts to the third dropdown */}
+        {/* CHART */}
         <div className="rounded-xl border border-border bg-[#131722] overflow-hidden h-[650px] shadow-2xl relative z-10">
           <AdvancedChart key={symbol} symbol={symbol} />
         </div>
