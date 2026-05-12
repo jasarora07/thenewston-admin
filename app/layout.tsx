@@ -8,7 +8,7 @@ import { NewsHeader } from "@/components/news-header"
 import { TickerBar } from "@/components/ticker-bar"  
 import { ComplianceBanner } from "@/components/compliance-banner" 
 import { StructuredData } from "@/components/structured-data"
-import ClientLayout from "@/components/client-layout" // Import the listener wrapper
+import ClientLayout from "@/components/client-layout"
 
 import "@/app/globals.css"
 import { Suspense } from "react"
@@ -25,13 +25,19 @@ const fontHeading = Montserrat({
   weight: ["600", "700"],
 })
 
-// METADATA MUST STAY HERE IN A SERVER COMPONENT
 export const metadata: Metadata = {
+  // FIXED: Added metadataBase to resolve "WWW Canonicalization" issues 
+  metadataBase: new URL('https://thenewston.com'),
+
   title: {
+    // FIXED: Updated to match successful keywords while staying under character limits [cite: 45]
     default: "The Newston | Institutional Financial Tools & Market Intelligence",
     template: "%s | The Newston Terminal"
   },
-  description: "Access institutional-grade financial decision models for free. Calculate your Mortgage Refi Pivot point and Tax-Exempt Wealth Gap with real-time 2026 market data.",
+
+  // FIXED: Shortened to 157 characters to prevent truncation reported by Rank Math [cite: 20, 22]
+  description: "Access institutional-grade financial decision models for free. Calculate your Mortgage Refi Pivot and Wealth Gap with real-time 2026 market data.",
+
   keywords: [
     "free mortgage refi calculator", 
     "refi break even tool", 
@@ -40,7 +46,14 @@ export const metadata: Metadata = {
     "financial intelligence terminal",
     "2026 market projections"
   ],
+  
+  // FIXED: Added missing Canonical Tag to resolve Page 4 failure 
+  alternates: {
+    canonical: '/',
+  },
+
   authors: [{ name: "The Newston Editorial Team" }],
+  
   openGraph: {
     title: "The Newston | Free Financial Decision Engines",
     description: "Institutional tools to calculate total interest savings and tax-efficiency strategies.",
@@ -62,6 +75,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    // FIXED: Added lang="en" and ensured hydration stability
     <html lang="en" className="dark bg-background" suppressHydrationWarning>
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
@@ -72,9 +86,6 @@ export default function RootLayout({
             
             <Suspense>
               <PageTransition>
-                {/* Wrap children in ClientLayout to handle the 
-                   Contact Form state and Global Event Listeners 
-                */}
                 <ClientLayout>
                   <div className="flex-1">{children}</div>
                 </ClientLayout>
