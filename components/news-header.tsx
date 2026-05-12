@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, House, ChevronDown, LogOut, Terminal, ShieldCheck, PieChart, Activity } from "lucide-react"
+import { Bell, House, ChevronDown, LogOut, Terminal, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client" 
 import { signout } from "@/app/auth/actions"
@@ -33,18 +33,18 @@ export function NewsHeader() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  // FIXED: Expanded internal links to improve "Links Ratio" audit failure (8 internal -> 10+)
+  // FIXED: Restored professional labels and removed redundant "Terminal Feed" to clean up UI
   const navLinks = [
     { name: "Home", href: "/", icon: <House className="h-3 w-3" /> },
-    { name: "Analysis", href: "/calculate-financials", icon: <PieChart className="h-3 w-3" /> },
-    { name: "Markets", href: "/markets", icon: <Activity className="h-3 w-3" /> },
+    { name: "Financial Analysis", href: "/calculate-financials" }, 
+    { name: "Markets", href: "/markets" },
     { name: "Crypto", href: "/crypto" },
-    { name: "Terminal Feed", href: "/#feed" }, // Added for internal anchor density
   ];
 
   const activeLink = navLinks.find(link => link.href === pathname) || navLinks[0];
 
   return (
+    // FIXED: Sticky placement with backdrop-blur and specific z-index to manage ticker layering
     <header className="sticky top-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-50">
       <div className="container flex h-16 items-center justify-between px-4 mx-auto">
         
@@ -54,7 +54,6 @@ export function NewsHeader() {
             <div className="h-8 w-8 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
               <Terminal className="h-5 w-5 text-black" />
             </div>
-            {/* SEO: Brand keyword preserved as per audit report */}
             <span className="font-black text-sm sm:text-xl text-white italic uppercase tracking-tighter">
               The Newston
             </span>
@@ -134,7 +133,6 @@ export function NewsHeader() {
             </div>
           ) : (
             <Link href="/auth/gate?mode=login">
-              {/* FIXED: Standardized text for "Initialize ID" to align with found keywords in report */}
               <Button 
                 className="bg-primary text-black font-black text-[10px] uppercase tracking-widest px-4 py-2 hover:bg-white transition-colors"
               >
