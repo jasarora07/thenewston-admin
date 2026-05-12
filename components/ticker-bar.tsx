@@ -7,8 +7,7 @@ export function TickerBar() {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    // Reduced delay to 300ms to fix the "slow loading" feel 
-    // while still prioritizing SEO-critical HTML first
+    // 300ms delay ensures SEO metadata is prioritized while maintaining speed
     const timer = setTimeout(() => {
       if (container.current && container.current.children.length === 0) {
         const script = document.createElement("script")
@@ -25,7 +24,7 @@ export function TickerBar() {
           ],
           "showSymbolLogo": true,
           "colorTheme": "dark",
-          "isTransparent": false, // RESTORED: Fixed the color/transparency issue
+          "isTransparent": false, // Fixed the transparency issue
           "displayMode": "adaptive",
           "locale": "en"
         })
@@ -38,8 +37,10 @@ export function TickerBar() {
   }, [])
 
   return (
-    // FIXED: Removed 'z-50' to stop overlapping the NewsHeader
-    <div className="relative h-[44px] bg-[#131722] border-b border-white/5 overflow-hidden">
+    /* FIXED: Added z-50 to ensure it sits on TOP of the z-40 NewsHeader.
+       Ensures the ticker remains visible and not hidden behind the header.
+    */
+    <div className="relative z-50 h-[44px] bg-[#131722] border-b border-white/5 overflow-hidden w-full">
       {!isLoaded && <div className="absolute inset-0 bg-[#131722]" />}
       <div ref={container} className="tradingview-widget-container__widget"></div>
     </div>
