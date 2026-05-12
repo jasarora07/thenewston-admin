@@ -28,10 +28,10 @@ const fontHeading = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL('https://thenewston.com'),
   title: {
-    default: "The Newston | Institutional Financial Tools & Market Intelligence", [cite: 45, 46]
+    default: "The Newston | Institutional Financial Tools & Market Intelligence",
     template: "%s | The Newston Terminal"
   },
-  description: "Access institutional-grade financial decision models for free. Calculate your Mortgage Refi Pivot and Wealth Gap with real-time 2026 market data.", [cite: 22, 23, 58]
+  description: "Access institutional-grade financial decision models for free. Calculate your Mortgage Refi Pivot and Wealth Gap with real-time 2026 market data.",
   keywords: [
     "free mortgage refi calculator", 
     "refi break even tool", 
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     "2026 market projections"
   ],
   alternates: {
-    canonical: '/', [cite: 63]
+    canonical: '/',
   },
   authors: [{ name: "The Newston Editorial Team" }],
   openGraph: {
@@ -68,17 +68,13 @@ export default function RootLayout({
     <html lang="en" className="dark bg-background" suppressHydrationWarning>
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
-          {/* FIXED: Removed 'relative' from the container to allow 
-            TickerBar (z-50) and NewsHeader (z-40) to stack 
-            properly in the fixed document flow.
-          */}
           <div className="flex min-h-screen flex-col">
             <StructuredData /> 
             
-            {/* TickerBar should be z-50 in its own component */}
+            {/* TickerBar (z-50) sits at the very top */}
             <TickerBar />
             
-            {/* NewsHeader should be z-40 and top-0 in its own component */}
+            {/* NewsHeader (z-40) is sticky top-0 */}
             <NewsHeader /> 
             
             <Suspense>
