@@ -7,8 +7,8 @@ export function TickerBar() {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    // Only run on the client after the initial paint
-    // This improves the 1.55s response time by prioritizing the main HTML
+    // Reduced delay to 300ms to fix the "slow loading" feel 
+    // while still prioritizing SEO-critical HTML first
     const timer = setTimeout(() => {
       if (container.current && container.current.children.length === 0) {
         const script = document.createElement("script")
@@ -25,24 +25,22 @@ export function TickerBar() {
           ],
           "showSymbolLogo": true,
           "colorTheme": "dark",
-          "isTransparent": true, // Changed to true for better UI blending
+          "isTransparent": false, // RESTORED: Fixed the color/transparency issue
           "displayMode": "adaptive",
           "locale": "en"
         })
         container.current.appendChild(script)
         setIsLoaded(true)
       }
-    }, 1000) // 1-second delay to let the Calculators/H1 load first
+    }, 300) 
 
     return () => clearTimeout(timer)
   }, [])
 
   return (
-    <div className="relative z-50 h-[44px] bg-[#131722] border-b border-white/5 overflow-hidden">
-      {/* Placeholder div ensures the layout doesn't "jump" when the script loads,
-         resolving CLS (Cumulative Layout Shift) SEO issues.
-      */}
-      {!isLoaded && <div className="absolute inset-0 bg-[#131722] animate-pulse" />}
+    // FIXED: Removed 'z-50' to stop overlapping the NewsHeader
+    <div className="relative h-[44px] bg-[#131722] border-b border-white/5 overflow-hidden">
+      {!isLoaded && <div className="absolute inset-0 bg-[#131722]" />}
       <div ref={container} className="tradingview-widget-container__widget"></div>
     </div>
   )
