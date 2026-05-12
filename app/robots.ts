@@ -4,19 +4,14 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: [
-        '/', 
-        '/calculate-financials', // Explicitly allow the lead magnet
-        '/markets', 
-        '/crypto'
-      ],
+      allow: '/', 
       disallow: [
         '/admin/', 
-        '/api/',      // Prevents bots from crawling your internal data fetches
-        '/_next/',     // Prevents crawling of internal Next.js build files
-        '/static/'     // Keeps bots focused on content, not assets
+        '/api/',
+        '/auth/gate', // FIXED: Specifically block the gate page to save crawl budget
       ],
     },
+    // FIXED: Ensured absolute URL for sitemap discovery
     sitemap: 'https://thenewston.com/sitemap.xml',
   }
 }
