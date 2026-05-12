@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, House, ChevronDown, LogOut, Terminal, ShieldCheck } from "lucide-react"
+import { Bell, House, ChevronDown, LogOut, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client" 
 import { signout } from "@/app/auth/actions"
@@ -33,7 +33,6 @@ export function NewsHeader() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  // FIXED: Restored professional labels and removed redundant "Terminal Feed" to clean up UI
   const navLinks = [
     { name: "Home", href: "/", icon: <House className="h-3 w-3" /> },
     { name: "Financial Analysis", href: "/calculate-financials" }, 
@@ -44,15 +43,19 @@ export function NewsHeader() {
   const activeLink = navLinks.find(link => link.href === pathname) || navLinks[0];
 
   return (
-    // FIXED: Sticky placement with backdrop-blur and specific z-index to manage ticker layering
-    <header className="sticky top-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-50">
+    /* FIXED: Changed z-index to z-40 so it stays below the TickerBar (z-50).
+       This prevents the header from covering the ticker tape.
+    */
+    <header className="sticky top-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-40">
       <div className="container flex h-16 items-center justify-between px-4 mx-auto">
         
         <div className="flex items-center gap-4 sm:gap-8 flex-1">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-2 shrink-0 group">
+            {/* FIXED: Restored the "N" alphabet logo branding as requested.
+            */}
             <div className="h-8 w-8 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
-              <Terminal className="h-5 w-5 text-black" />
+              <span className="text-black font-black italic text-base">N</span>
             </div>
             <span className="font-black text-sm sm:text-xl text-white italic uppercase tracking-tighter">
               The Newston
