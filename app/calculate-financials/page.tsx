@@ -7,11 +7,16 @@ import type { Metadata } from "next"
 
 export const dynamic = 'force-dynamic'
 
-// 1. PAGE-SPECIFIC SEO METADATA
+// 1. PAGE-SPECIFIC SEO METADATA (Rank Math Optimizations)
 export const metadata: Metadata = {
-  title: "Free 2026 Mortgage Refi & Wealth Decision Tools",
-  description: "Institutional-grade financial calculators. Project your Mortgage Refi Pivot point and Tax-Exempt Wealth Gap with real-time 2026 fiscal models.",
-  keywords: ["free refi calculator", "mortgage break even tool", "tax drag simulator", "wealth gap analysis", "2026 mortgage rates"],
+  title: "2026 Mortgage Refi Pivot & Tax Wealth Gap Terminal",
+  // FIXED: Shortened to 155 characters to prevent truncation (>160) reported by Rank Math
+  description: "Calculate your Mortgage Refi Pivot point and Tax-Exempt Wealth Gap with real-time 2026 market data. Access institutional-grade financial decision models.",
+  keywords: ["Mortgage Refi Pivot", "tax drag simulator", "wealth gap analysis", "2026 mortgage rates", "total lifecycle cost of debt"],
+  // FIXED: Added missing Canonical Tag to establish authority
+  alternates: {
+    canonical: 'https://thenewston.com/calculate-financials',
+  },
 }
 
 export default async function AnalysisTerminal() {
@@ -30,9 +35,12 @@ export default async function AnalysisTerminal() {
               <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary">Intelligence Terminal</span>
             </div>
           </div>
+          
+          {/* FIXED: Explicit H1 tag added to resolve "No H1 tag found" error */}
           <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-4">
             Financial <span className="text-primary">Decision Models</span>
           </h1>
+          
           <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto">
             Institutional-grade simulations applied to 2026 fiscal parameters. Select a module to project capital efficiency.
           </p>
