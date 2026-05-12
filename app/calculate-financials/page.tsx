@@ -7,13 +7,14 @@ import type { Metadata } from "next"
 
 export const dynamic = 'force-dynamic'
 
-// 1. PAGE-SPECIFIC SEO METADATA (Rank Math Optimizations)
+// 1. PAGE-SPECIFIC SEO METADATA
 export const metadata: Metadata = {
-  title: "2026 Mortgage Refi Pivot & Tax Wealth Gap Terminal",
-  // FIXED: Shortened to 155 characters to prevent truncation (>160) reported by Rank Math
+  // FIXED: Trimmed to satisfy Bing's strict length requirements (under 60 chars)
+  title: "2026 Mortgage Refi Pivot & Tax Wealth Gap Tool",
+  // FIXED: Reduced to 155 characters to prevent truncation reported by Rank Math
   description: "Calculate your Mortgage Refi Pivot point and Tax-Exempt Wealth Gap with real-time 2026 market data. Access institutional-grade financial decision models.",
   keywords: ["Mortgage Refi Pivot", "tax drag simulator", "wealth gap analysis", "2026 mortgage rates", "total lifecycle cost of debt"],
-  // FIXED: Added missing Canonical Tag to establish authority
+  // FIXED: Explicitly defined canonical to resolve Rank Math "Not Found" error
   alternates: {
     canonical: 'https://thenewston.com/calculate-financials',
   },
@@ -36,7 +37,7 @@ export default async function AnalysisTerminal() {
             </div>
           </div>
           
-          {/* FIXED: Explicit H1 tag added to resolve "No H1 tag found" error */}
+          {/* FIXED: Explicit H1 tag added to resolve "No H1 tag found" failure */}
           <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-4">
             Financial <span className="text-primary">Decision Models</span>
           </h1>
@@ -77,7 +78,7 @@ export default async function AnalysisTerminal() {
             <TaxExemptWealthGap />
           </section>
 
-          {/* 3. SEMANTIC SEO CONTENT SECTION (Helps Ranking) */}
+          {/* 3. SEMANTIC SEO CONTENT SECTION */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12 py-12 border-t border-white/5">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
@@ -113,8 +114,7 @@ export default async function AnalysisTerminal() {
               <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider text-justify">
                 The Newston Intelligence Terminal and its associated modules are strictly for <span className="text-zinc-300 underline underline-offset-4 decoration-zinc-800">educational and illustrative purposes</span>. 
                 The simulations provided do not constitute professional financial, tax, or legal advice. 
-                All projections are mathematical models based on user-provided inputs and market data; they are not guarantees of performance or specific bank offers. 
-                The Newston assumes no liability for financial actions taken based on these terminal simulations.
+                All projections are mathematical models based on user-provided inputs and market data.
               </p>
             </div>
           </section>
