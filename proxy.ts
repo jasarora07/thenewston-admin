@@ -19,23 +19,21 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
-
-  // --- PROTECTED ROUTES LOGIC ---
-  const isProtectedRoute = 
-    request.nextUrl.pathname.startsWith('/calculate-financials') ||
-    request.nextUrl.pathname.startsWith('/auth/update-password');
-
-  if (!user && isProtectedRoute) {
-    return NextResponse.redirect(new URL('/auth/gate', request.url))
-  }
+  // We keep the getUser call so the app still knows if someone IS logged in,
+  // but we REMOVE the redirect logic that was blocking bots.
+  await supabase.auth.getUser()
 
   return response
 }
 
 export const config = {
   matcher: [
-    '/calculate-financials/:path*',
-    '/auth/update-password/:path*'
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
