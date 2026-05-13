@@ -47,7 +47,7 @@ export default async function TaxWealthGapPage() {
 
       {/* CALCULATOR SECTION */}
       <div className="max-w-5xl mx-auto">
-        <section className="space-y-4">
+        <section className="space-y-4 mb-12">
           <div className="flex items-center gap-3 ml-2">
             <TrendingUp className="h-4 w-4 text-zinc-500" />
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500">Structural Alpha & Tax Leakage Analysis</h2>
@@ -55,32 +55,7 @@ export default async function TaxWealthGapPage() {
           <TaxExemptWealthGap />
         </section>
 
-        {/* INTERNAL LINK HUB */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 py-8 border-t border-white/5">
-          <Link href="/calculators" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
-            <div className="flex items-center gap-3 mb-2">
-              <LayoutGrid className="h-4 w-4 text-primary" />
-              <h3 className="text-[10px] font-black uppercase tracking-widest">Calculator Hub</h3>
-            </div>
-            <p className="text-[9px] text-zinc-500 uppercase font-bold">Return to the institutional suite of financial modules.</p>
-          </Link>
-          <Link href="/calculators/mortgage-refi-pivot" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
-            <div className="flex items-center gap-3 mb-2">
-              <Landmark className="h-4 w-4 text-primary" />
-              <h3 className="text-[10px] font-black uppercase tracking-widest">Mortgage Refi Pivot</h3>
-            </div>
-            <p className="text-[9px] text-zinc-500 uppercase font-bold">Calculate lifecycle costs of debt and break-even reset points.</p>
-          </Link>
-          <Link href="/calculators/home-equity-liquidity" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
-            <div className="flex items-center gap-3 mb-2">
-              <Globe className="h-4 w-4 text-primary" />
-              <h3 className="text-[10px] font-black uppercase tracking-widest">Equity Liquidity</h3>
-            </div>
-            <p className="text-[9px] text-zinc-500 uppercase font-bold">Analyze HELOC vs. Cash-out strategies for 2026 capital extraction.</p>
-          </Link>
-        </section>
-
-        {/* SEMANTIC CONTENT SECTION */}
+        {/* 3. MOVED UP: SEMANTIC CONTENT SECTION */}
         <section className="py-12 border-t border-white/5">
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-2">
@@ -92,6 +67,31 @@ export default async function TaxWealthGapPage() {
               This module quantifies that loss over time, demonstrating how <span className="text-white font-black">Tax-Exempt Structural Alpha</span> can significantly outperform higher-yield taxable strategies.
             </p>
           </div>
+        </section>
+
+        {/* 4. MOVED DOWN: INTERNAL LINK HUB */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8 border-t border-white/5">
+          <Link href="/calculators" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
+            <div className="flex items-center gap-3 mb-2">
+              <LayoutGrid className="h-4 w-4 text-primary" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Calculator Hub</h3>
+            </div>
+            <p className="text-[9px] text-zinc-500 uppercase font-bold">Return to the institutional suite of financial modules.</p>
+          </Link>
+          <Link href="/calculators/mortgage-refi-pivot" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
+            <div className="flex items-center gap-3 mb-2">
+              <Landmark className="h-4 w-4 text-primary" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Mortgage Refi Pivot</h3>
+            </div>
+            <p className="text-[9px] text-zinc-500 uppercase font-bold">Calculate lifecycle costs of debt and break-even reset points.</p>
+          </Link>
+          <Link href="/calculators/home-equity-liquidity" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
+            <div className="flex items-center gap-3 mb-2">
+              <Globe className="h-4 w-4 text-primary" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Equity Liquidity</h3>
+            </div>
+            <p className="text-[9px] text-zinc-500 uppercase font-bold">Analyze HELOC vs. Cash-out strategies for 2026 capital extraction.</p>
+          </Link>
         </section>
 
         {/* LEGAL PROTOCOL */}
