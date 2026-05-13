@@ -31,15 +31,6 @@ export default function HomeEquityPage() {
         </p>
       </div>
 
-      {/* 2. ADVISORY NOTICE */}
-      <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4">
-        <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
-        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
-          <span className="text-red-500 font-black">Advisory Notice:</span> This terminal is an educational simulation engine. 
-          Outputs are mathematical projections and <span className="text-white underline decoration-red-500/50 underline-offset-4">not professional financial advice</span>.
-        </p>
-      </div>
-
       {/* 3. THE CALCULATOR */}
       <div className="max-w-6xl mx-auto mb-20">
         <EquityCalculatorTerminal />
