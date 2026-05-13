@@ -6,7 +6,6 @@ import Link from "next/link"
 
 export const dynamic = 'force-dynamic'
 
-// 1. PAGE-SPECIFIC SEO METADATA
 export const metadata: Metadata = {
   title: "Tax-Exempt Wealth Gap & Drag Simulator | 2026 Terminal",
   description: "Simulate annual tax leakage and project the 'Alpha' generated through tax-exempt wealth strategies. Analyze capital appreciation efficiency for 2026.",
@@ -37,7 +36,7 @@ export default async function TaxWealthGapPage() {
         </p>
       </div>
 
-      {/* 2. ADVISORY NOTICE */}
+      {/* ADVISORY NOTICE */}
       <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4">
         <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
@@ -56,7 +55,7 @@ export default async function TaxWealthGapPage() {
           <TaxExemptWealthGap />
         </section>
 
-        {/* 3. INTERNAL LINK HUB */}
+        {/* INTERNAL LINK HUB */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 py-8 border-t border-white/5">
           <Link href="/calculators" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
             <div className="flex items-center gap-3 mb-2">
@@ -81,9 +80,29 @@ export default async function TaxWealthGapPage() {
           </Link>
         </section>
 
-        {/* 4. SEMANTIC CONTENT SECTION */}
+        {/* SEMANTIC CONTENT SECTION */}
         <section className="py-12 border-t border-white/5">
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-2">
               <HelpCircle className="h-4 w-4 text-primary" />
-              <h3 className="
+              <h3 className="text-sm font-black uppercase tracking-widest italic text-white">Understanding Tax Drag</h3>
+            </div>
+            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase text-justify">
+              Tax drag is the silent inhibitor of compounding. When returns are taxed annually, the amount of capital available to generate future returns is diminished. 
+              This module quantifies that loss over time, demonstrating how <span className="text-white font-black">Tax-Exempt Structural Alpha</span> can significantly outperform higher-yield taxable strategies.
+            </p>
+          </div>
+        </section>
+
+        {/* LEGAL PROTOCOL */}
+        <section className="mt-4 border-t border-white/5 pt-12 pb-8">
+          <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm">
+            <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
+              <span className="text-zinc-300">Institutional Disclosure:</span> All projections are mathematical simulations based on current 2026 fiscal guidelines. The Newston Terminal does not provide tax advice. Users should consult with a CPA or tax professional regarding their specific liability.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  )
+}
