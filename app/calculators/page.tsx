@@ -5,13 +5,14 @@ import {
   TrendingUp, 
   Home, 
   ArrowRight, 
-  Zap 
+  Zap,
+  PieChart
 } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Financial Calculator Hub | The Newston Intelligence Terminal",
-  description: "Access institutional-grade financial decision models. From Mortgage Refi Pivot points to Tax-Exempt Wealth Gap simulations and Home Equity Liquidity engines.",
+  description: "Access institutional-grade financial decision models. From Mortgage Refi Pivot points to Tax-Exempt Wealth Gap simulations and Strategic Capital Allocation engines.",
   alternates: {
     canonical: 'https://thenewston.com/calculators',
   },
@@ -40,7 +41,15 @@ const modules = [
     desc: "Model capital extraction strategies. Contrast HELOC blended rates against total debt replacement models.",
     href: "/calculators/home-equity-liquidity",
     icon: <Home className="h-6 w-6" />,
-    status: "LIVE" // UPDATED TO LIVE
+    status: "LIVE"
+  },
+  {
+    id: "04",
+    title: "Capital Allocation",
+    desc: "Quantify the wealth divergence between taxable and tax-exempt growth. Model dividend leakage and capital gains drag.",
+    href: "/calculators/capital-allocation",
+    icon: <PieChart className="h-6 w-6" />,
+    status: "LIVE"
   }
 ]
 
@@ -65,13 +74,13 @@ export default function CalculatorHub() {
           </p>
         </div>
 
-        {/* MODULE GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* MODULE GRID - Updated to grid-cols-2 for 4 modules */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {modules.map((mod) => (
             <Link 
               key={mod.id} 
               href={mod.href}
-              className="group relative p-10 bg-zinc-900/20 border border-white/5 hover:border-primary/40 hover:bg-zinc-900/40 transition-all duration-500 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[380px]"
+              className="group relative p-10 bg-zinc-900/20 border border-white/5 hover:border-primary/40 hover:bg-zinc-900/40 transition-all duration-500 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[340px]"
             >
               {/* TOP ACCENT */}
               <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -79,7 +88,7 @@ export default function CalculatorHub() {
               </div>
 
               <div>
-                <div className="mb-10 p-4 bg-black border border-white/10 rounded-xl w-fit group-hover:border-primary/50 group-hover:scale-110 transition-all duration-500 text-white group-hover:text-primary">
+                <div className="mb-8 p-4 bg-black border border-white/10 rounded-xl w-fit group-hover:border-primary/50 group-hover:scale-110 transition-all duration-500 text-white group-hover:text-primary">
                   {mod.icon}
                 </div>
 
@@ -94,7 +103,7 @@ export default function CalculatorHub() {
                     </h2>
                   </div>
                   
-                  <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
+                  <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider max-w-md">
                     {mod.desc}
                   </p>
                 </div>
