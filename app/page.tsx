@@ -53,6 +53,10 @@ export default async function HomePage() {
       </div>
 
       <main className="flex-1 container mx-auto px-4 py-8">
+        
+        {/* SEO COMPLIANCE: Hidden H1 for Bing/Google keyword anchoring */}
+        <h1 className="sr-only">The Newston | Institutional Financial Intelligence & Analysis Terminals</h1>
+
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           <div className="lg:col-span-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
@@ -84,19 +88,19 @@ export default async function HomePage() {
           </div>
 
           <aside className="lg:col-span-4 space-y-8">
-            {/* UPDATED: THE ANALYSIS TERMINAL CARD */}
+            {/* THE ANALYSIS TERMINAL CARD */}
             <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all shadow-lg shadow-primary/5">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
               <div className="relative z-10 text-left">
                 <div className="flex items-center gap-2 mb-4">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Live Simulation Engine</span>
+                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Simulation Engine v1.4</span>
                 </div>
                 <h3 className="text-sm font-black text-white italic uppercase tracking-tighter mb-2 leading-none">
                    The Analysis <span className="text-primary group-hover:text-white transition-colors text-left italic">Terminal</span>
                 </h3>
                 <p className="text-[10px] text-zinc-500 font-bold uppercase mb-6 leading-relaxed">
-                  Model your fiscal future with 2026 parameters. Analyze Refi Pivots, Tax Drag, and Strategic Allocation.
+                  Private suite for 2026 fiscal modeling. Analyze Refi Pivots, Tax Drag, and Strategic Allocation.
                 </p>
                 <div className="flex gap-2 pt-2">
                   <Link href="/calculators" className="flex-[2] bg-primary text-black text-[10px] font-black py-3 rounded-md uppercase tracking-[0.2em] text-center hover:bg-white transition-all shadow-md shadow-primary/10 italic flex items-center justify-center gap-2">
