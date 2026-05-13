@@ -2,16 +2,15 @@ import { createClient } from "@/lib/supabase/server"
 import { NewsGrid } from "@/components/news-grid"
 import { MacroBar } from "@/components/macro-bar"
 import Link from "next/link"
-import { ShieldCheck } from "lucide-react"
+import { ShieldCheck, ArrowRight } from "lucide-react"
 import { ContactTrigger } from "@/components/contact-trigger"
 import type { Metadata } from "next"
 
 export const dynamic = 'force-dynamic'
 
-// 1. UPDATED SEO METADATA
 export const metadata: Metadata = {
   title: "The Newston | Institutional Financial Intelligence & Terminals",
-  description: "Access 2026 mortgage refi pivots, tax-exempt growth models, and equity liquidity engines. Institutional grade data for the modern fiscal environment.",
+  description: "Access 2026 mortgage refi pivots, tax-exempt growth models, and capital allocation engines. Institutional grade data for the modern fiscal environment.",
   alternates: {
     canonical: 'https://thenewston.com',
   },
@@ -85,22 +84,24 @@ export default async function HomePage() {
           </div>
 
           <aside className="lg:col-span-4 space-y-8">
-            {/* UPDATED: INTELLIGENCE TERMINAL ACCESS */}
+            {/* UPDATED: THE ANALYSIS TERMINAL CARD */}
             <div className="bg-zinc-950 border border-primary/20 rounded-xl p-6 relative overflow-hidden group hover:border-primary/50 transition-all shadow-lg shadow-primary/5">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
               <div className="relative z-10 text-left">
                 <div className="flex items-center gap-2 mb-4">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Institutional Engine</span>
+                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Live Simulation Engine</span>
                 </div>
                 <h3 className="text-sm font-black text-white italic uppercase tracking-tighter mb-2 leading-none">
-                   Financial <span className="text-primary group-hover:text-white transition-colors text-left italic">Terminal Hub</span>
+                   The Analysis <span className="text-primary group-hover:text-white transition-colors text-left italic">Terminal</span>
                 </h3>
                 <p className="text-[10px] text-zinc-500 font-bold uppercase mb-6 leading-relaxed">
-                  Analyze Refi Pivots, Tax Drag, and Equity Liquidity. <span className="text-white underline decoration-primary/40 underline-offset-2 tracking-tight italic">2026 Fiscal Models.</span>
+                  Model your fiscal future with 2026 parameters. Analyze Refi Pivots, Tax Drag, and Strategic Allocation.
                 </p>
                 <div className="flex gap-2 pt-2">
-                  <Link href="/calculators" className="flex-[2] bg-primary text-black text-[10px] font-black py-3 rounded-md uppercase tracking-widest text-center hover:bg-white transition-all shadow-md shadow-primary/10 italic">Access</Link>
+                  <Link href="/calculators" className="flex-[2] bg-primary text-black text-[10px] font-black py-3 rounded-md uppercase tracking-[0.2em] text-center hover:bg-white transition-all shadow-md shadow-primary/10 italic flex items-center justify-center gap-2">
+                    Enter Suite <ArrowRight className="h-3 w-3" />
+                  </Link>
                   <Link href="/auth/gate?mode=signup" className="flex-1 border border-white/10 text-white text-[10px] font-black py-3 rounded-md uppercase tracking-widest text-center hover:bg-white/5 transition-all italic">Join</Link>
                 </div>
               </div>
@@ -146,12 +147,12 @@ export default async function HomePage() {
             </div>
             
             <div className="space-y-4">
-              <h5 className="font-black uppercase tracking-widest text-white">Terminals</h5>
+              <h5 className="font-black uppercase tracking-widest text-white">Strategic Suite</h5>
               <nav className="flex flex-col gap-2 font-bold uppercase text-zinc-500">
-                <Link href="/calculators" className="hover:text-primary transition-colors italic">Institutional Hub</Link>
+                <Link href="/calculators" className="hover:text-primary transition-colors italic">Analysis Hub</Link>
                 <Link href="/calculators/mortgage-refi-pivot" className="hover:text-primary transition-colors">Mortgage Pivot</Link>
                 <Link href="/calculators/tax-exempt-wealth-gap" className="hover:text-primary transition-colors">Tax Alpha</Link>
-                <Link href="/calculators/home-equity-liquidity" className="hover:text-primary transition-colors">Equity Liquidity</Link>
+                <Link href="/calculators/capital-allocation" className="hover:text-primary transition-colors text-primary/80">Capital Allocation</Link>
               </nav>
             </div>
 
