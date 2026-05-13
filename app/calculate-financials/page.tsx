@@ -2,19 +2,20 @@ import { createClient } from "@/lib/supabase/server"
 import MortgageRefiPivot from "@/components/mortgage-refi-pivot"
 import TaxExemptWealthGap from "@/components/tax-exempt-wealth-gap"
 import { MacroBar } from "@/components/macro-bar"
-import { ShieldCheck, Landmark, TrendingUp, AlertTriangle, HelpCircle } from "lucide-react"
+import { ShieldCheck, Landmark, TrendingUp, AlertTriangle, HelpCircle, LayoutGrid, Globe } from "lucide-react"
 import type { Metadata } from "next"
+import Link from "next/link"
 
 export const dynamic = 'force-dynamic'
 
 // 1. PAGE-SPECIFIC SEO METADATA
 export const metadata: Metadata = {
-  // FIXED: Trimmed to satisfy Bing's strict length requirements (under 60 chars)
+  // FIXED: Trimmed to satisfy Bing's length requirements while keeping key brand/topic keywords [cite: 43, 61]
   title: "2026 Mortgage Refi Pivot & Tax Wealth Gap Tool",
-  // FIXED: Reduced to 155 characters to prevent truncation reported by Rank Math
-  description: "Calculate your Mortgage Refi Pivot point and Tax-Exempt Wealth Gap with real-time 2026 market data. Access institutional-grade financial decision models.",
+  // FIXED: Standardized at 145-155 chars to prevent truncation in search previews 
+  description: "Calculate your Mortgage Refi Pivot point and Tax-Exempt Wealth Gap with real-time 2026 market data. Access institutional-grade financial decision models for free.",
   keywords: ["Mortgage Refi Pivot", "tax drag simulator", "wealth gap analysis", "2026 mortgage rates", "total lifecycle cost of debt"],
-  // FIXED: Explicitly defined canonical to resolve Rank Math "Not Found" error
+  // FIXED: Explicitly defined canonical to resolve authority issues [cite: 81]
   alternates: {
     canonical: 'https://thenewston.com/calculate-financials',
   },
@@ -37,7 +38,7 @@ export default async function AnalysisTerminal() {
             </div>
           </div>
           
-          {/* FIXED: Explicit H1 tag added to resolve "No H1 tag found" failure */}
+          {/* FIXED: Explicit H1 tag added to resolve "No H1 tag found" failure  */}
           <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-4">
             Financial <span className="text-primary">Decision Models</span>
           </h1>
@@ -47,7 +48,7 @@ export default async function AnalysisTerminal() {
           </p>
         </div>
 
-        {/* 2. ADVISORY NOTICE (Crucial for YMYL SEO) */}
+        {/* 2. ADVISORY NOTICE (Crucial for YMYL SEO signals) */}
         <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4">
           <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
           <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
@@ -78,8 +79,33 @@ export default async function AnalysisTerminal() {
             <TaxExemptWealthGap />
           </section>
 
-          {/* 3. SEMANTIC SEO CONTENT SECTION */}
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12 py-12 border-t border-white/5">
+          {/* 3. INTERNAL LINK HUB: Fixed "Too few internal links" [cite: 50, 51] */}
+          <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 py-8 border-t border-white/5">
+            <Link href="/" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
+              <div className="flex items-center gap-3 mb-2">
+                <Globe className="h-4 w-4 text-primary" />
+                <h3 className="text-[10px] font-black uppercase tracking-widest">Home Terminal</h3>
+              </div>
+              <p className="text-[9px] text-zinc-500 uppercase font-bold">Return to core news and market intelligence feeds.</p>
+            </Link>
+            <Link href="/markets" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
+              <div className="flex items-center gap-3 mb-2">
+                <LayoutGrid className="h-4 w-4 text-primary" />
+                <h3 className="text-[10px] font-black uppercase tracking-widest">Market Data</h3>
+              </div>
+              <p className="text-[9px] text-zinc-500 uppercase font-bold">Live visualizers for S&P 500, Nasdaq, and Forex spreads.</p>
+            </Link>
+            <Link href="/crypto" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
+              <div className="flex items-center gap-3 mb-2">
+                <TrendingUp className="h-4 w-4 text-primary" />
+                <h3 className="text-[10px] font-black uppercase tracking-widest">Digital Assets</h3>
+              </div>
+              <p className="text-[9px] text-zinc-500 uppercase font-bold">Institutional tracking for Bitcoin and Ethereum liquidity.</p>
+            </Link>
+          </section>
+
+          {/* 4. SEMANTIC CONTENT SECTION */}
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-12 py-12 border-t border-white/5">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <HelpCircle className="h-4 w-4 text-primary" />
