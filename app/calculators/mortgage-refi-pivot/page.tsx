@@ -6,11 +6,9 @@ import Link from "next/link"
 
 export const dynamic = 'force-dynamic'
 
-// 1. PAGE-SPECIFIC SEO METADATA
 export const metadata: Metadata = {
   title: "Mortgage Refi Pivot Point Calculator | 2026 Terminal",
   description: "Determine your mortgage refinance break-even point with real-time 2026 market data. Institutional-grade lifecycle cost of debt modeling.",
-  keywords: ["Mortgage Refi Pivot", "refinance calculator", "break-even point", "2026 mortgage rates", "total lifecycle cost of debt"],
   alternates: {
     canonical: 'https://thenewston.com/calculators/mortgage-refi-pivot',
   },
@@ -37,7 +35,7 @@ export default async function MortgageRefiPage() {
         </p>
       </div>
 
-      {/* 2. ADVISORY NOTICE */}
+      {/* ADVISORY NOTICE */}
       <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4">
         <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
@@ -48,7 +46,7 @@ export default async function MortgageRefiPage() {
 
       {/* CALCULATOR SECTION */}
       <div className="max-w-5xl mx-auto">
-        <section className="space-y-4">
+        <section className="space-y-4 mb-12">
           <div className="flex items-center gap-3 ml-2">
             <Landmark className="h-4 w-4 text-zinc-500" />
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500">Lifecycle Cost of Debt Analysis</h2>
@@ -56,8 +54,22 @@ export default async function MortgageRefiPage() {
           <MortgageRefiPivot />
         </section>
 
-        {/* 3. INTERNAL LINK HUB */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 py-8 border-t border-white/5">
+        {/* 3. MOVED UP: SEMANTIC CONTENT SECTION */}
+        <section className="py-12 border-t border-white/5">
+          <div className="space-y-4 max-w-2xl">
+            <div className="flex items-center gap-2">
+              <HelpCircle className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-black uppercase tracking-widest italic">How our models work</h3>
+            </div>
+            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase text-justify">
+              Most bank calculators only show monthly savings. The Newston Terminal calculates the <span className="text-white">Total Lifecycle Cost of Debt</span>. 
+              Our Mortgage Pivot tool factors in amortized interest resets, time-value of money, and closing costs to find your true break-even point in the 2026 rate environment.
+            </p>
+          </div>
+        </section>
+
+        {/* 4. MOVED DOWN: INTERNAL LINK HUB */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8 border-t border-white/5">
           <Link href="/calculators" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
             <div className="flex items-center gap-3 mb-2">
               <LayoutGrid className="h-4 w-4 text-primary" />
@@ -79,20 +91,6 @@ export default async function MortgageRefiPage() {
             </div>
             <p className="text-[9px] text-zinc-500 uppercase font-bold">Model HELOC vs Cash-out strategies for capital extraction.</p>
           </Link>
-        </section>
-
-        {/* 4. SEMANTIC CONTENT SECTION */}
-        <section className="py-12 border-t border-white/5">
-          <div className="space-y-4 max-w-2xl">
-            <div className="flex items-center gap-2">
-              <HelpCircle className="h-4 w-4 text-primary" />
-              <h3 className="text-sm font-black uppercase tracking-widest italic">How our models work</h3>
-            </div>
-            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase text-justify">
-              Most bank calculators only show monthly savings. The Newston Terminal calculates the <span className="text-white">Total Lifecycle Cost of Debt</span>. 
-              Our Mortgage Pivot tool factors in amortized interest resets, time-value of money, and closing costs to find your true break-even point in the 2026 rate environment.
-            </p>
-          </div>
         </section>
 
         {/* LEGAL PROTOCOL */}
