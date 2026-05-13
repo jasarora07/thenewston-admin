@@ -1,40 +1,40 @@
-import type { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next'
+import { createClient } from "@/lib/supabase/server"
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  // Manual timestamp to ensure a hard signal to Google/Bing bots
-  // that a structural change (Removal of Auth Gate) has occurred.
-  const lastUpdated = new Date('2026-05-13T04:00:00Z') 
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://thenewston.com'
+  const supabase = await createClient()
 
-  return [
-    {
-      url: 'https://thenewston.com',
-      lastModified: lastUpdated,
-      changeFrequency: 'daily', // Changed from always to reduce server ping
-      priority: 1,
-    },
-    {
-      url: 'https://thenewston.com/calculate-financials',
-      lastModified: lastUpdated,
-      changeFrequency: 'always', // Boosted to 'always' to prioritize the lead magnet
-      priority: 1, // Set to 1 to match homepage authority
-    },
-    {
-      url: 'https://thenewston.com/crypto',
-      lastModified: lastUpdated,
-      changeFrequency: 'hourly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://thenewston.com/markets',
-      lastModified: lastUpdated,
-      changeFrequency: 'hourly',
-      priority: 0.8, // Increased priority for market data nodes
-    },
-    {
-      url: 'https://thenewston.com/privacy',
-      lastModified: lastUpdated,
-      changeFrequency: 'monthly',
-      priority: 0.1, // Lowered to keep crawl budget on tools
-    },
-  ]
+  // 1. FETCH DYNAMIC NEWS ARTICLES
+  // We fetch the latest 100 articles to keep the sitemap fresh without hitting DB limits
+  const { data: newsItems } = await supabase
+    .from('news')
+    .select('url, date')
+    .order('date', { ascending: false })
+    .limit(100)
+
+  const newsEntries = (newsItems || []).map((item) => ({
+    url: item.url, // Supabase stores the full external link or internal slug
+    lastModified: new Date(item.date),
+    changeFrequency: 'daily' as const,
+    priority: 0.7,
+  }))
+
+  // 2. DEFINE STATIC TERMINAL ROUTES
+  const staticRoutes = [
+    '', // Home
+    '/calculators', // Hub
+    '/calculators/mortgage-refi-pivot',
+    '/calculators/tax-exempt-wealth-gap',
+    '/calculators/home-equity-liquidity',
+    '/calculators/capital-allocation', // Module 04
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: route === '' ? ('always' as const) : ('weekly' as const),
+    priority: route === '' ? 1.0 : 0.9,
+  }))
+
+  // 3. MERGE AND RETURN
+  return [...staticRoutes, ...newsEntries]
 }
