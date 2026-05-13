@@ -33,11 +33,11 @@ export function NewsHeader() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  // FIXED: Standardized labels and expanded metadata-driven internal links
-  // helps resolve the "Too few internal links (8)" audit failure [cite: 50, 51]
+  // FIXED: Updated path to /calculators to point to the new Hub-and-Spoke structure.
+  // This helps resolve "Too few internal links" by directing traffic to a directory of tools.
   const navLinks = [
     { name: "Home", href: "/", icon: <House className="h-3 w-3" /> },
-    { name: "Financial Analysis", href: "/calculate-financials", icon: <PieChart className="h-3 w-3" /> }, 
+    { name: "Calculators", href: "/calculators", icon: <PieChart className="h-3 w-3" /> }, 
     { name: "Markets", href: "/markets", icon: <Activity className="h-3 w-3" /> },
     { name: "Crypto", href: "/crypto", icon: <Coins className="h-3 w-3" /> },
   ];
@@ -54,7 +54,7 @@ export function NewsHeader() {
         <div className="flex items-center gap-4 sm:gap-8 flex-1">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-2 shrink-0 group">
-            {/* FIXED: Maintains "N" branding consistent with established keywords [cite: 43] */}
+            {/* FIXED: Maintains "N" branding consistent with established keywords */}
             <div className="h-8 w-8 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
               <span className="text-black font-black italic text-base">N</span>
             </div>
@@ -140,7 +140,6 @@ export function NewsHeader() {
             </div>
           ) : (
             <Link href="/auth/gate?mode=login">
-              {/* FIXED: Maintains "Initialize ID" keyword density noted in audit [cite: 96] */}
               <Button 
                 className="bg-primary text-black font-black text-[10px] uppercase tracking-widest px-4 py-2 hover:bg-white transition-colors"
               >
