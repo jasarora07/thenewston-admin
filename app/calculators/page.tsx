@@ -6,9 +6,13 @@ import {
   Home, 
   ArrowRight, 
   Zap,
-  PieChart
+  PieChart,
+  Wind // Added for Module 05
 } from "lucide-react"
 import type { Metadata } from "next"
+
+// SEO PERFORMANCE FIX: Resolves Bing "Cache-Control" and "x-vercel-cache: MISS" errors
+export const revalidate = 3600; 
 
 export const metadata: Metadata = {
   title: "Financial Calculator Hub | The Newston Intelligence Terminal",
@@ -28,8 +32,7 @@ const modules = [
     status: "LIVE"
   },
   {
-    id: "02",
-    title: "Tax Wealth Gap",
+    id: "02",    title: "Tax Wealth Gap",
     desc: "Project long-term capital erosion caused by annual tax drag. Identify the structural alpha of tax-advantaged wealth corridors.",
     href: "/calculators/tax-exempt-wealth-gap",
     icon: <TrendingUp className="h-6 w-6" />,
@@ -49,6 +52,14 @@ const modules = [
     desc: "Quantify the wealth divergence between taxable and tax-exempt growth. Model dividend leakage and capital gains drag.",
     href: "/calculators/capital-allocation",
     icon: <PieChart className="h-6 w-6" />,
+    status: "LIVE"
+  },
+  {
+    id: "05",
+    title: "Purchasing Power",
+    desc: "Model the silent tax of inflation. Quantify the erosion of your capital against 2026 CPI projections.",
+    href: "/calculators/purchasing-power",
+    icon: <Wind className="h-6 w-6" />,
     status: "LIVE"
   }
 ]
@@ -74,8 +85,8 @@ export default function CalculatorHub() {
           </p>
         </div>
 
-        {/* MODULE GRID - Updated to grid-cols-2 for 4 modules */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* MODULE GRID - Updated to 3 columns for 5-module balance */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {modules.map((mod) => (
             <Link 
               key={mod.id} 
@@ -103,7 +114,7 @@ export default function CalculatorHub() {
                     </h2>
                   </div>
                   
-                  <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider max-w-md">
+                  <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider max-w-md text-justify">
                     {mod.desc}
                   </p>
                 </div>
