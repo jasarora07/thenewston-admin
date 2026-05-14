@@ -7,12 +7,16 @@ import {
   ArrowRight, 
   Zap,
   PieChart,
-  Wind // Added for Module 05
+  Wind
 } from "lucide-react"
 import type { Metadata } from "next"
 
-// SEO PERFORMANCE FIX: Resolves Bing "Cache-Control" and "x-vercel-cache: MISS" errors
-export const revalidate = 3600; 
+/** * BING SEO HARDENING: 
+ * We force the page to be static and set a long revalidation period.
+ * This ensures 'x-vercel-cache: HIT' and 'public' Cache-Control headers.
+ */
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 Hours
 
 export const metadata: Metadata = {
   title: "Financial Calculator Hub | The Newston Intelligence Terminal",
@@ -32,7 +36,8 @@ const modules = [
     status: "LIVE"
   },
   {
-    id: "02",    title: "Tax Wealth Gap",
+    id: "02",
+    title: "Tax Wealth Gap",
     desc: "Project long-term capital erosion caused by annual tax drag. Identify the structural alpha of tax-advantaged wealth corridors.",
     href: "/calculators/tax-exempt-wealth-gap",
     icon: <TrendingUp className="h-6 w-6" />,
@@ -77,21 +82,21 @@ export default function CalculatorHub() {
               Institutional Suite // 2026
             </span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6 text-white leading-none">
+          <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6 text-white leading-none text-left">
             Decision <span className="text-primary">Models</span>
           </h1>
-          <p className="text-zinc-500 text-xs font-bold uppercase tracking-[0.2em] leading-relaxed max-w-2xl italic">
+          <p className="text-zinc-500 text-xs font-bold uppercase tracking-[0.2em] leading-relaxed max-w-2xl italic text-left">
             Select a modular simulation engine to project capital efficiency across debt, equity, and tax-advantaged asset classes.
           </p>
         </div>
 
-        {/* MODULE GRID - Updated to 3 columns for 5-module balance */}
+        {/* MODULE GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {modules.map((mod) => (
             <Link 
               key={mod.id} 
               href={mod.href}
-              className="group relative p-10 bg-zinc-900/20 border border-white/5 hover:border-primary/40 hover:bg-zinc-900/40 transition-all duration-500 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[340px]"
+              className="group relative p-10 bg-zinc-900/20 border border-white/5 hover:border-primary/40 hover:bg-zinc-900/40 transition-all duration-500 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[340px] text-left"
             >
               {/* TOP ACCENT */}
               <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -106,8 +111,8 @@ export default function CalculatorHub() {
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-black text-primary uppercase tracking-widest italic">Module {mod.id}</span>
-                      <span className="text-[8px] px-1.5 py-0.5 border border-primary/30 text-primary rounded font-black tracking-tighter group-hover:bg-primary group-hover:text-black transition-colors duration-500">{mod.status}</span>
+                      <span className="text-[10px] font-black text-primary uppercase tracking-widest italic leading-none">Module {mod.id}</span>
+                      <span className="text-[8px] px-1.5 py-0.5 border border-primary/30 text-primary rounded font-black tracking-tighter group-hover:bg-primary group-hover:text-black transition-colors duration-500 leading-none">{mod.status}</span>
                     </div>
                     <h2 className="text-3xl font-black uppercase tracking-tighter text-white group-hover:text-primary transition-colors duration-500 italic leading-tight">
                       {mod.title}
