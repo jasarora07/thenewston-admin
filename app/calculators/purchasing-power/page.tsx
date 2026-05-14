@@ -3,12 +3,15 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import InflationTerminal from "@/components/calculators/inflation-terminal"
 
-// SEO PERFORMANCE: Enable ISR (24-hour cache) to satisfy Bing/Google speed requirements
-export const revalidate = 86400; 
+/** * BING SEO HARDENING: 
+ * We force the terminal to be static to resolve the "no-cache" header error.
+ */
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 Hours
 
 export const metadata: Metadata = {
-  title: "Purchasing Power & Inflation Terminal | The Newston Intelligence Suite",
-  description: "Analyze the long-term erosion of capital. Project real-world purchasing power adjusted for 2026 inflation targets and portfolio yields.",
+  title: "Purchasing Power & Inflation Terminal | 2026 Analysis",
+  description: "Model the silent tax of inflation. Quantify the erosion of your capital against 2026 CPI projections with our institutional simulation engine.",
   alternates: {
     canonical: 'https://thenewston.com/calculators/purchasing-power',
   },
@@ -28,7 +31,7 @@ export default function PurchasingPowerPage() {
         <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter mb-4 text-white">
           Purchasing <span className="text-primary">Power</span> Terminal
         </h1>
-        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto">
+        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto italic">
           Model the "Silent Tax" of currency debasement. Quantify the divergence between nominal balances and real-world utility in a 2026 fiscal environment.
         </p>
       </div>
@@ -71,17 +74,17 @@ export default function PurchasingPowerPage() {
         </div>
       </section>
 
-      {/* 5. NAVIGATION HUB (Terminal Links) */}
-      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5">
-        <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl text-left">
+      {/* 5. NAVIGATION HUB */}
+      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left">
+        <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <LayoutGrid className="h-4 w-4 text-primary" />
             <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Calculator Hub</h3>
           </div>
-          <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Return to the institutional suite of financial intelligence modules.</p>
+          <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Return to the institutional suite of financial modules.</p>
         </Link>
         
-        <Link href="/calculators/tax-exempt-wealth-gap" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl text-left">
+        <Link href="/calculators/tax-exempt-wealth-gap" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <TrendingUp className="h-4 w-4 text-primary" />
             <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Tax Wealth Gap</h3>
@@ -89,21 +92,21 @@ export default function PurchasingPowerPage() {
           <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Project long-term capital erosion caused by annual tax drag.</p>
         </Link>
 
-        <Link href="/calculators/mortgage-refi-pivot" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl text-left">
+        <Link href="/calculators/mortgage-refi-pivot" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <Landmark className="h-4 w-4 text-primary" />
             <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Mortgage Refi Pivot</h3>
           </div>
-          <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Calculate lifecycle costs of debt and break-even reset points.</p>
+          <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Calculate lifecycle costs of debt and break-even points.</p>
         </Link>
       </section>
 
       {/* 6. INSTITUTIONAL DISCLOSURE */}
-      <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8">
-        <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4 text-left">
+      <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8 text-left">
+        <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4">
           <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
           <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
-            <span className="text-zinc-300">Protocol Disclosure:</span> Projections are based on 2026 CPI targets. Actual purchasing power varies by geography and expenditure. The Newston Terminal provides mathematical simulations, not advice.
+            <span className="text-zinc-300">Protocol Disclosure:</span> Projections are based on mathematical models using 2026 CPI estimates. Actual purchasing power varies by geography and expenditure. The Newston Terminal is not an economic forecasting agency.
           </p>
         </div>
       </section>
