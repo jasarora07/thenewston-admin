@@ -1,7 +1,14 @@
-import { ShieldCheck, Info, HelpCircle, TrendingUp, AlertTriangle, LayoutGrid, Landmark, Globe } from "lucide-react"
+import { ShieldCheck, Info, HelpCircle, TrendingUp, AlertTriangle, LayoutGrid, Landmark, Wind } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import EquityCalculatorTerminal from "@/components/calculators/equity-terminal"
+
+/** * BING SEO HARDENING: 
+ * We force the page to be static and set a long revalidation period.
+ * This ensures 'x-vercel-cache: HIT' and 'public' Cache-Control headers.
+ */
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 Hours
 
 export const metadata: Metadata = {
   title: "Home Equity & HELOC Liquidity Engine | 2026 Terminal",
@@ -16,18 +23,27 @@ export default function HomeEquityPage() {
   return (
     <main className="container mx-auto px-4 py-12">
       {/* 1. SECTION HEADER */}
-      <div className="max-w-4xl mx-auto mb-12 text-center">
+      <div className="max-w-4xl mx-auto mb-12 text-center animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="flex justify-center mb-4">
           <div className="bg-primary/10 border border-primary/20 rounded-full px-4 py-1 flex items-center gap-2">
             <ShieldCheck className="h-3 w-3 text-primary" />
             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary">Module 03: Liquidity Engine</span>
           </div>
         </div>
-        <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter mb-4">
+        <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter mb-4 text-white">
           Equity <span className="text-primary">Liquidity</span> Engine
         </h1>
-        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto">
+        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto italic">
           Contrast weighted average costs of capital against unified replacement debt. Optimized for the 2026 high-equity environment.
+        </p>
+      </div>
+
+      {/* 2. ADVISORY NOTICE */}
+      <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
+        <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
+          <span className="text-red-500 font-black">Macro Warning:</span> This terminal is an educational simulation engine. 
+          LTV thresholds and interest rate spreads are mathematical estimates and <span className="text-white underline decoration-red-500/50 underline-offset-4">not professional financial advice</span>.
         </p>
       </div>
 
@@ -36,8 +52,8 @@ export default function HomeEquityPage() {
         <EquityCalculatorTerminal />
       </div>
 
-      {/* 4. MOVED UP: SEMANTIC CONTENT SECTION */}
-      <section className="max-w-5xl mx-auto py-16 border-t border-white/5">
+      {/* 4. SEMANTIC CONTENT SECTION */}
+      <section className="max-w-5xl mx-auto py-16 border-t border-white/5 text-left">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -62,8 +78,8 @@ export default function HomeEquityPage() {
         </div>
       </section>
 
-      {/* 5. MOVED DOWN: INTERNAL LINK HUB */}
-      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5">
+      {/* 5. INTERNAL LINK HUB - Updated to include Module 05 (Purchasing Power) */}
+      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left">
         <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <LayoutGrid className="h-4 w-4 text-primary" />
@@ -72,14 +88,6 @@ export default function HomeEquityPage() {
           <p className="text-[9px] text-zinc-500 uppercase font-bold">Return to the institutional suite of financial modules.</p>
         </Link>
         
-        <Link href="/calculators/mortgage-refi-pivot" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl">
-          <div className="flex items-center gap-3 mb-3">
-            <Landmark className="h-4 w-4 text-primary" />
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Mortgage Refi Pivot</h3>
-          </div>
-          <p className="text-[9px] text-zinc-500 uppercase font-bold">Calculate lifecycle costs of debt and break-even reset points.</p>
-        </Link>
-
         <Link href="/calculators/tax-exempt-wealth-gap" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <TrendingUp className="h-4 w-4 text-primary" />
@@ -87,10 +95,18 @@ export default function HomeEquityPage() {
           </div>
           <p className="text-[9px] text-zinc-500 uppercase font-bold">Analyze structural alpha and tax-exempt growth corridors.</p>
         </Link>
+
+        <Link href="/calculators/purchasing-power" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded-xl">
+          <div className="flex items-center gap-3 mb-3">
+            <Wind className="h-4 w-4 text-primary" />
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-white italic">Purchasing Power</h3>
+          </div>
+          <p className="text-[9px] text-zinc-500 uppercase font-bold">Model the silent tax of inflation and capital debasement.</p>
+        </Link>
       </section>
 
       {/* 6. INSTITUTIONAL DISCLOSURE */}
-      <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8">
+      <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8 text-left">
         <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4">
           <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
           <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
