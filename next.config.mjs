@@ -1,14 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
-    // Keeping this enabled for now to bypass minor type mismatches during launch
     ignoreBuildErrors: true,
   },
   images: {
     unoptimized: true,
   },
-  // In Next.js 16+, ESLint is handled via the CLI or separate config, 
-  // not inside nextConfig. 
+  // SEO PROTECTION: Redirect ghost maintenance page
+  async redirects() {
+    return [
+      {
+        source: '/maintenance',
+        destination: '/',
+        permanent: true, // Sends 301 status to remove it from Google/Bing index
+      },
+    ]
+  },
 }
 
 export default nextConfig
