@@ -1,10 +1,11 @@
 import { createClient } from "@/lib/supabase/server"
 import TaxExemptWealthGap from "@/components/tax-exempt-wealth-gap"
-import { ShieldCheck, TrendingUp, AlertTriangle, HelpCircle, LayoutGrid, Globe, Landmark } from "lucide-react"
+import { ShieldCheck, TrendingUp, AlertTriangle, HelpCircle, LayoutGrid, Wind, Landmark } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 
-export const dynamic = 'force-dynamic'
+// SEO PERFORMANCE FIX: Replaces 'force-dynamic' to resolve Bing "no-cache" errors
+export const revalidate = 86400; 
 
 export const metadata: Metadata = {
   title: "Tax-Exempt Wealth Gap & Drag Simulator | 2026 Terminal",
@@ -27,17 +28,17 @@ export default async function TaxWealthGapPage() {
           </div>
         </div>
         
-        <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-4">
+        <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-4 text-white">
           Tax <span className="text-primary">Wealth Gap</span> Simulator
         </h1>
         
-        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto">
+        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto italic">
           Project long-term capital erosion caused by annual tax drag. Identify the structural alpha of tax-advantaged wealth corridors.
         </p>
       </div>
 
       {/* ADVISORY NOTICE */}
-      <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4">
+      <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
         <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
           <span className="text-red-500 font-black">Advisory Notice:</span> This terminal is an educational simulation engine. 
@@ -48,29 +49,29 @@ export default async function TaxWealthGapPage() {
       {/* CALCULATOR SECTION */}
       <div className="max-w-5xl mx-auto">
         <section className="space-y-4 mb-12">
-          <div className="flex items-center gap-3 ml-2">
+          <div className="flex items-center gap-3 ml-2 text-left">
             <TrendingUp className="h-4 w-4 text-zinc-500" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500">Structural Alpha & Tax Leakage Analysis</h2>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 font-mono">Structural Alpha & Tax Leakage Analysis</h2>
           </div>
           <TaxExemptWealthGap />
         </section>
 
-        {/* 3. MOVED UP: SEMANTIC CONTENT SECTION */}
-        <section className="py-12 border-t border-white/5">
+        {/* SEMANTIC CONTENT SECTION */}
+        <section className="py-12 border-t border-white/5 text-left">
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-2">
               <HelpCircle className="h-4 w-4 text-primary" />
               <h3 className="text-sm font-black uppercase tracking-widest italic text-white">Understanding Tax Drag</h3>
             </div>
-            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase text-justify">
+            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase text-justify tracking-tighter">
               Tax drag is the silent inhibitor of compounding. When returns are taxed annually, the amount of capital available to generate future returns is diminished. 
-              This module quantifies that loss over time, demonstrating how <span className="text-white font-black">Tax-Exempt Structural Alpha</span> can significantly outperform higher-yield taxable strategies.
+              This module quantifies that loss over time, demonstrating how <span className="text-white font-black text-[12px]">Tax-Exempt Structural Alpha</span> can significantly outperform higher-yield taxable strategies.
             </p>
           </div>
         </section>
 
-        {/* 4. MOVED DOWN: INTERNAL LINK HUB */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8 border-t border-white/5">
+        {/* INTERNAL LINK HUB - Updated to include Module 05 */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8 border-t border-white/5 text-left">
           <Link href="/calculators" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
             <div className="flex items-center gap-3 mb-2">
               <LayoutGrid className="h-4 w-4 text-primary" />
@@ -78,6 +79,7 @@ export default async function TaxWealthGapPage() {
             </div>
             <p className="text-[9px] text-zinc-500 uppercase font-bold">Return to the institutional suite of financial modules.</p>
           </Link>
+          
           <Link href="/calculators/mortgage-refi-pivot" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
             <div className="flex items-center gap-3 mb-2">
               <Landmark className="h-4 w-4 text-primary" />
@@ -85,18 +87,20 @@ export default async function TaxWealthGapPage() {
             </div>
             <p className="text-[9px] text-zinc-500 uppercase font-bold">Calculate lifecycle costs of debt and break-even reset points.</p>
           </Link>
-          <Link href="/calculators/home-equity-liquidity" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
+
+          <Link href="/calculators/purchasing-power" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
             <div className="flex items-center gap-3 mb-2">
-              <Globe className="h-4 w-4 text-primary" />
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Equity Liquidity</h3>
+              <Wind className="h-4 w-4 text-primary" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-white italic">Purchasing Power</h3>
             </div>
-            <p className="text-[9px] text-zinc-500 uppercase font-bold">Analyze HELOC vs. Cash-out strategies for 2026 capital extraction.</p>
+            <p className="text-[9px] text-zinc-500 uppercase font-bold">Model the silent tax of inflation and currency debasement.</p>
           </Link>
         </section>
 
         {/* LEGAL PROTOCOL */}
-        <section className="mt-4 border-t border-white/5 pt-12 pb-8">
-          <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm">
+        <section className="mt-4 border-t border-white/5 pt-12 pb-8 text-left">
+          <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4">
+            <TrendingUp className="h-5 w-5 text-zinc-600 shrink-0 mt-1" />
             <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
               <span className="text-zinc-300">Institutional Disclosure:</span> All projections are mathematical simulations based on current 2026 fiscal guidelines. The Newston Terminal does not provide tax advice. Users should consult with a CPA or tax professional regarding their specific liability.
             </p>
