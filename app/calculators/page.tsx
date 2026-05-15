@@ -12,8 +12,7 @@ import {
 import type { Metadata } from "next"
 
 /** * BING SEO HARDENING: 
- * We force the page to be static and set a long revalidation period.
- * This ensures 'x-vercel-cache: HIT' and 'public' Cache-Control headers.
+ * Static generation ensures the 'HIT' header Bing requires for speed scores.
  */
 export const dynamic = 'force-static';
 export const revalidate = 86400; // 24 Hours
@@ -22,7 +21,9 @@ export const metadata: Metadata = {
   title: "Financial Calculator Hub | The Newston Intelligence Terminal",
   description: "Access institutional-grade financial decision models. From Mortgage Refi Pivot points to Tax-Exempt Wealth Gap simulations and Strategic Capital Allocation engines.",
   alternates: {
-    canonical: 'https://thenewston.com/calculators',
+    /* FIXED: Changed to './' to allow Next.js to generate the unique canonical 
+       for this hub without conflicting with the root layout or sub-modules. */
+    canonical: './',
   },
 }
 
@@ -83,7 +84,7 @@ export default function CalculatorHub() {
             </span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6 text-white leading-none text-left">
-            Decision <span className="text-primary">Models</span>
+            Decision <span className="text-primary text-[#22c55e]">Models</span>
           </h1>
           <p className="text-zinc-500 text-xs font-bold uppercase tracking-[0.2em] leading-relaxed max-w-2xl italic text-left">
             Select a modular simulation engine to project capital efficiency across debt, equity, and tax-advantaged asset classes.
@@ -96,37 +97,35 @@ export default function CalculatorHub() {
             <Link 
               key={mod.id} 
               href={mod.href}
-              className="group relative p-10 bg-zinc-900/20 border border-white/5 hover:border-primary/40 hover:bg-zinc-900/40 transition-all duration-500 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[340px] text-left"
+              className="group relative p-10 bg-zinc-900/20 border border-white/5 hover:border-[#22c55e]/40 hover:bg-zinc-900/40 transition-all duration-500 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[340px] text-left"
             >
-              {/* TOP ACCENT */}
               <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                 <Zap className="h-5 w-5 text-primary animate-pulse" />
+                 <Zap className="h-5 w-5 text-[#22c55e] animate-pulse" />
               </div>
 
               <div>
-                <div className="mb-8 p-4 bg-black border border-white/10 rounded-xl w-fit group-hover:border-primary/50 group-hover:scale-110 transition-all duration-500 text-white group-hover:text-primary">
+                <div className="mb-8 p-4 bg-black border border-white/10 rounded-xl w-fit group-hover:border-[#22c55e]/50 group-hover:scale-110 transition-all duration-500 text-white group-hover:text-[#22c55e]">
                   {mod.icon}
                 </div>
 
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-black text-primary uppercase tracking-widest italic leading-none">Module {mod.id}</span>
-                      <span className="text-[8px] px-1.5 py-0.5 border border-primary/30 text-primary rounded font-black tracking-tighter group-hover:bg-primary group-hover:text-black transition-colors duration-500 leading-none">{mod.status}</span>
+                      <span className="text-[10px] font-black text-[#22c55e] uppercase tracking-widest italic leading-none">Module {mod.id}</span>
+                      <span className="text-[8px] px-1.5 py-0.5 border border-[#22c55e]/30 text-[#22c55e] rounded font-black tracking-tighter group-hover:bg-[#22c55e] group-hover:text-black transition-colors duration-500 leading-none">{mod.status}</span>
                     </div>
-                    <h2 className="text-3xl font-black uppercase tracking-tighter text-white group-hover:text-primary transition-colors duration-500 italic leading-tight">
+                    <h2 className="text-3xl font-black uppercase tracking-tighter text-white group-hover:text-[#22c55e] transition-colors duration-500 italic leading-tight">
                       {mod.title}
                     </h2>
                   </div>
                   
-                  <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider max-w-md text-justify">
+                  <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider max-w-md">
                     {mod.desc}
                   </p>
                 </div>
               </div>
 
-              {/* ACTION FOOTER */}
-              <div className="flex items-center gap-2 pt-8 text-[10px] font-black uppercase tracking-[0.3em] text-white group-hover:text-primary transition-all group-hover:translate-x-2">
+              <div className="flex items-center gap-2 pt-8 text-[10px] font-black uppercase tracking-[0.3em] text-white group-hover:text-[#22c55e] transition-all group-hover:translate-x-2">
                 Launch Terminal <ArrowRight className="h-3 w-3" />
               </div>
             </Link>
