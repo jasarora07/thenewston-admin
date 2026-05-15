@@ -26,14 +26,11 @@ const fontHeading = Montserrat({
 })
 
 export const metadata: Metadata = {
-  // FIXED: metadataBase ensures all social/canonical links use the absolute root URL [cite: 82, 108]
   metadataBase: new URL('https://thenewston.com'),
   title: {
-    // FIXED: Standardized title length (65 chars) optimized for both Desktop and Mobile [cite: 61, 88]
     default: "The Newston | Institutional Financial Tools & Market Intelligence",
     template: "%s | The Newston Terminal"
   },
-  // FIXED: Explicitly matches the high-performing audit keywords: 'intelligence', 'news', 'newston', 'free' [cite: 11, 43, 47]
   description: "Access institutional-grade financial decision models for free. Calculate your Mortgage Refi Pivot and Wealth Gap with real-time 2026 market data.",
   keywords: [
     "free mortgage refi calculator", 
@@ -43,23 +40,45 @@ export const metadata: Metadata = {
     "financial intelligence terminal",
     "2026 market projections"
   ],
+  
+  // FIX: Added the Icons registry to resolve the generic globe in browser tabs
+  icons: {
+    icon: '/favicon.ico', // Standard favicon
+    shortcut: '/favicon-32x32.png',
+    apple: '/apple-touch-icon.png', // For mobile bookmarks
+  },
+
   alternates: {
-    // FIXED: Forces the non-www version as the master to resolve WWW Canonicalization [cite: 108]
     canonical: 'https://thenewston.com',
   },
   authors: [{ name: "The Newston Editorial Team" }],
+  
+  // BING ROBOTS FIX: Explicitly tells Bing we are a high-value indexable site
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+
   openGraph: {
     title: "The Newston | Free Financial Decision Engines",
     description: "Institutional tools to calculate total interest savings and tax-efficiency strategies.",
     type: "website",
     url: "https://thenewston.com",
     siteName: "The Newston",
-    images: [{ url: "/og-image-calculators.png" }], 
+    images: [{ url: "/og-image-calculators.png", width: 1200, height: 630 }], 
   },
   twitter: {
     card: "summary_large_image",
     title: "The Newston Financial Terminal",
     description: "Project your 2026 fiscal outcomes with our institutional decision models.",
+    images: ["/og-image-calculators.png"],
   }
 }
 
@@ -69,28 +88,23 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    // FIXED: Ensured lang="en" for accessibility and SEO crawler identification
     <html lang="en" className="dark bg-background" suppressHydrationWarning>
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <div className="flex min-h-screen flex-col">
             <StructuredData /> 
             
-            {/* TickerBar (z-50) sits at the very top */}
             <TickerBar />
             
-            {/* NewsHeader (z-40) is sticky top-0 */}
+            {/* SEO NOTE: Ensure NewsHeader doesn't contain un-suspended dynamic logic */}
             <NewsHeader /> 
             
-            {/* PERFORMANCE FIX: Suspense boundary ensures the shell loads immediately, 
-                improving the 2.24s response time by prioritizing the initial HTML paint 
-            */}
             <Suspense fallback={<div className="flex-1 bg-black" />}>
               <PageTransition>
                 <ClientLayout>
-                  <div className="flex-1">
+                  <main className="flex-1">
                     {children}
-                  </div>
+                  </main>
                 </ClientLayout>
               </PageTransition>
             </Suspense>
