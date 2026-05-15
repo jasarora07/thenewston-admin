@@ -7,7 +7,6 @@ export function TickerBar() {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    // 300ms delay ensures SEO metadata is prioritized while maintaining speed
     const timer = setTimeout(() => {
       if (container.current && container.current.children.length === 0) {
         const script = document.createElement("script")
@@ -24,7 +23,7 @@ export function TickerBar() {
           ],
           "showSymbolLogo": true,
           "colorTheme": "dark",
-          "isTransparent": false, // Fixed the transparency issue
+          "isTransparent": false,
           "displayMode": "adaptive",
           "locale": "en"
         })
@@ -37,12 +36,26 @@ export function TickerBar() {
   }, [])
 
   return (
-    /* FIXED: Added z-50 to ensure it sits on TOP of the z-40 NewsHeader.
-       Ensures the ticker remains visible and not hidden behind the header.
-    */
-    <div className="relative z-50 h-[44px] bg-[#131722] border-b border-white/5 overflow-hidden w-full">
-      {!isLoaded && <div className="absolute inset-0 bg-[#131722]" />}
-      <div ref={container} className="tradingview-widget-container__widget"></div>
+    /**
+     * HEIGHT & OVERLAP FIX: 
+     * 1. h-[44px] is explicitly set to match TradingView's default output.
+     * 2. flex-shrink-0 ensures the layout doesn't compress the ticker when the screen is small.
+     * 3. block-size containment prevents the browser from recalculating layout when the script loads.
+     */
+    <div 
+      className="relative z-50 h-[44px] min-h-[44px] w-full bg-[#131722] border-b border-white/5 overflow-hidden flex-shrink-0"
+      style={{ contain: 'size layout', contentVisibility: 'auto' }}
+    >
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-[#131722] flex items-center px-4 animate-pulse">
+           {/* Placeholder line to maintain visual weight before script execution */}
+           <div className="h-1 w-full bg-white/5 rounded" />
+        </div>
+      )}
+      <div 
+        ref={container} 
+        className="tradingview-widget-container__widget h-full w-full"
+      ></div>
     </div>
   )
 }
