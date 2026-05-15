@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, House, ChevronDown, LogOut, ShieldCheck, PieChart, Activity, Coins } from "lucide-react"
+import { Bell, House, ChevronDown, LogOut, ShieldCheck, PieChart, Activity, Coins, Briefcase } from "lucide-react" // Added Briefcase
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client" 
 import { signout } from "@/app/auth/actions"
@@ -33,28 +33,24 @@ export function NewsHeader() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  // FIXED: Updated path to /calculators to point to the new Hub-and-Spoke structure.
-  // This helps resolve "Too few internal links" by directing traffic to a directory of tools.
+  // UPDATED: Added "Partners" to the navigation for 2026 Professional Protocol
   const navLinks = [
     { name: "Home", href: "/", icon: <House className="h-3 w-3" /> },
     { name: "Calculators", href: "/calculators", icon: <PieChart className="h-3 w-3" /> }, 
     { name: "Markets", href: "/markets", icon: <Activity className="h-3 w-3" /> },
     { name: "Crypto", href: "/crypto", icon: <Coins className="h-3 w-3" /> },
+    { name: "Partners", href: "/partnership", icon: <Briefcase className="h-3 w-3" /> }, // New professional entry point
   ];
 
   const activeLink = navLinks.find(link => link.href === pathname) || navLinks[0];
 
   return (
-    /* FIXED: Sticky placement with specific z-index to manage ticker layering.
-       Ensures the header remains beneath the TickerBar while staying on top of content.
-    */
     <header className="sticky top-0 w-full bg-black/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-40">
       <div className="container flex h-16 items-center justify-between px-4 mx-auto">
         
         <div className="flex items-center gap-4 sm:gap-8 flex-1">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-2 shrink-0 group">
-            {/* FIXED: Maintains "N" branding consistent with established keywords */}
             <div className="h-8 w-8 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
               <span className="text-black font-black italic text-base">N</span>
             </div>
@@ -117,7 +113,7 @@ export function NewsHeader() {
           </Button>
 
           {user ? (
-            <div className="flex items-center gap-4 ml-2 border-l border-white/10 pl-4">
+            <div className="flex items-center gap-4 ml-2 border-l border-white/10 pl-4 text-left">
               <div className="hidden lg:flex flex-col items-end">
                 <div className="flex items-center gap-1">
                   <ShieldCheck className="h-2.5 w-2.5 text-primary" />
