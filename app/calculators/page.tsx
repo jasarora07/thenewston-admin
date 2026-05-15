@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   title: "Financial Calculator Hub | The Newston Intelligence Terminal",
   description: "Access institutional-grade financial decision models. From Mortgage Refi Pivot points to Tax-Exempt Wealth Gap simulations and Strategic Capital Allocation engines.",
   alternates: {
-    /* FIXED: Changed to './' to allow Next.js to generate the unique canonical 
-       for this hub without conflicting with the root layout or sub-modules. */
+    /* FIXED: Using relative path to resolve the Bing Canonical Error and 
+       ensure unique identification for the Hub. */
     canonical: './',
   },
 }
@@ -76,15 +76,15 @@ export default function CalculatorHub() {
       <div className="max-w-6xl mx-auto">
         
         {/* HEADER SECTION */}
-        <div className="mb-20 text-left">
+        <div className="mb-20 text-left animate-in fade-in slide-in-from-top-4 duration-700">
           <div className="flex items-center gap-2 mb-4">
-            <ShieldCheck className="h-4 w-4 text-primary" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">
+            <ShieldCheck className="h-4 w-4 text-[#22c55e]" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#22c55e]">
               Institutional Suite // 2026
             </span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-6 text-white leading-none text-left">
-            Decision <span className="text-primary text-[#22c55e]">Models</span>
+            Decision <span className="text-[#22c55e]">Models</span>
           </h1>
           <p className="text-zinc-500 text-xs font-bold uppercase tracking-[0.2em] leading-relaxed max-w-2xl italic text-left">
             Select a modular simulation engine to project capital efficiency across debt, equity, and tax-advantaged asset classes.
@@ -99,27 +99,28 @@ export default function CalculatorHub() {
               href={mod.href}
               className="group relative p-10 bg-zinc-900/20 border border-white/5 hover:border-[#22c55e]/40 hover:bg-zinc-900/40 transition-all duration-500 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[340px] text-left"
             >
+              {/* HOVER GLOW EFFECT */}
               <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                  <Zap className="h-5 w-5 text-[#22c55e] animate-pulse" />
               </div>
 
               <div>
-                <div className="mb-8 p-4 bg-black border border-white/10 rounded-xl w-fit group-hover:border-[#22c55e]/50 group-hover:scale-110 transition-all duration-500 text-white group-hover:text-[#22c55e]">
+                <div className="mb-8 p-4 bg-black border border-white/10 rounded-xl w-fit group-hover:border-[#22c55e]/50 group-hover:scale-110 transition-all duration-500 text-zinc-400 group-hover:text-[#22c55e]">
                   {mod.icon}
                 </div>
 
                 <div className="space-y-4">
-                  <div className="space-y-1">
+                  <div className="space-y-1 text-left">
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-black text-[#22c55e] uppercase tracking-widest italic leading-none">Module {mod.id}</span>
                       <span className="text-[8px] px-1.5 py-0.5 border border-[#22c55e]/30 text-[#22c55e] rounded font-black tracking-tighter group-hover:bg-[#22c55e] group-hover:text-black transition-colors duration-500 leading-none">{mod.status}</span>
                     </div>
-                    <h2 className="text-3xl font-black uppercase tracking-tighter text-white group-hover:text-[#22c55e] transition-colors duration-500 italic leading-tight">
+                    <h2 className="text-3xl font-black uppercase tracking-tighter text-white group-hover:text-[#22c55e] transition-colors duration-500 italic leading-tight text-left">
                       {mod.title}
                     </h2>
                   </div>
                   
-                  <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider max-w-md">
+                  <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider max-w-md text-left">
                     {mod.desc}
                   </p>
                 </div>
