@@ -41,11 +41,15 @@ export const metadata: Metadata = {
     "2026 market projections"
   ],
   
-  // FIX: Added the Icons registry to resolve the generic globe in browser tabs
+  // FIXED: Explicitly mapping the neon green icon.svg for browser tab recognition
   icons: {
-    icon: '/favicon.ico', // Standard favicon
-    shortcut: '/favicon-32x32.png',
-    apple: '/apple-touch-icon.png', // For mobile bookmarks
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico' }, // Fallback for older browsers
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png' },
+    ],
   },
 
   alternates: {
@@ -53,7 +57,6 @@ export const metadata: Metadata = {
   },
   authors: [{ name: "The Newston Editorial Team" }],
   
-  // BING ROBOTS FIX: Explicitly tells Bing we are a high-value indexable site
   robots: {
     index: true,
     follow: true,
@@ -93,10 +96,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <div className="flex min-h-screen flex-col">
             <StructuredData /> 
-            
             <TickerBar />
-            
-            {/* SEO NOTE: Ensure NewsHeader doesn't contain un-suspended dynamic logic */}
             <NewsHeader /> 
             
             <Suspense fallback={<div className="flex-1 bg-black" />}>
