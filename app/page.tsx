@@ -97,7 +97,7 @@ export default async function HomePage() {
                   <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Simulation Engine v1.4</span>
                 </div>
                 <h3 className="text-sm font-black text-white italic uppercase tracking-tighter mb-2 leading-none">
-                   The Analysis <span className="text-primary group-hover:text-white transition-colors text-left italic">Terminal</span>
+                    The Analysis <span className="text-primary group-hover:text-white transition-colors text-left italic">Terminal</span>
                 </h3>
                 <p className="text-[10px] text-zinc-500 font-bold uppercase mb-6 leading-relaxed">
                   Private suite for 2026 fiscal modeling. Analyze Refi Pivots, Tax Drag, and Strategic Allocation.
@@ -156,7 +156,8 @@ export default async function HomePage() {
                 <Link href="/calculators" className="hover:text-primary transition-colors italic">Analysis Hub</Link>
                 <Link href="/calculators/mortgage-refi-pivot" className="hover:text-primary transition-colors">Mortgage Pivot</Link>
                 <Link href="/calculators/tax-exempt-wealth-gap" className="hover:text-primary transition-colors">Tax Alpha</Link>
-                <Link href="/calculators/capital-allocation" className="hover:text-primary transition-colors text-primary/80">Capital Allocation</Link>
+                <Link href="/calculators/capital-allocation" className="hover:text-primary transition-colors">Capital Allocation</Link>
+                <Link href="/calculators/purchasing-power" className="hover:text-primary transition-colors">Purchasing Power</Link>
               </nav>
             </div>
 
