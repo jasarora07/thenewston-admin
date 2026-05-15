@@ -1,53 +1,47 @@
-import { createClient } from "@/lib/supabase/server"
-import TaxExemptWealthGap from "@/components/tax-exempt-wealth-gap"
-import { ShieldCheck, TrendingUp, AlertTriangle, HelpCircle, LayoutGrid, Wind, Landmark } from "lucide-react"
+import { ShieldCheck, TrendingUp, HelpCircle, LayoutGrid, Wind, Landmark, Lock, Info } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
+import TaxExemptWealthGap from "@/components/tax-exempt-wealth-gap"
 
-// SEO PERFORMANCE FIX: Replaces 'force-dynamic' to resolve Bing "no-cache" errors
-export const revalidate = 86400; 
+/** * BING SEO HARDENING: 
+ * Ensures 'force-static' for Edge cache performance and 'HIT' headers.
+ */
+export const dynamic = 'force-static';
+export const revalidate = 86400; // 24 Hours
 
 export const metadata: Metadata = {
   title: "Tax-Exempt Wealth Gap & Drag Simulator | 2026 Terminal",
   description: "Simulate annual tax leakage and project the 'Alpha' generated through tax-exempt wealth strategies. Analyze capital appreciation efficiency for 2026.",
   keywords: ["tax drag simulator", "wealth gap analysis", "capital appreciation", "tax-exempt growth", "financial efficiency"],
   alternates: {
-    canonical: 'https://thenewston.com/calculators/tax-exempt-wealth-gap',
+    /* FIXED: Using relative path to resolve the Bing Canonical Error */
+    canonical: './',
   },
 }
 
 export default async function TaxWealthGapPage() {
   return (
-    <main className="flex-1 container mx-auto px-4 py-12">
-      {/* SECTION HEADER */}
-      <div className="max-w-4xl mx-auto mb-8 text-center">
+    <main className="flex-1 container mx-auto px-4 py-12 bg-black min-h-screen">
+      {/* 1. SECTION HEADER */}
+      <div className="max-w-4xl mx-auto mb-12 text-center animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="flex justify-center mb-4">
-          <div className="bg-primary/10 border border-primary/20 rounded-full px-4 py-1 flex items-center gap-2">
-            <ShieldCheck className="h-3 w-3 text-primary" />
-            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary">Module 02: Capital Efficiency</span>
+          <div className="bg-[#22c55e]/10 border border-[#22c55e]/20 rounded-full px-4 py-1 flex items-center gap-2">
+            <ShieldCheck className="h-3 w-3 text-[#22c55e]" />
+            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#22c55e]">Module 02: Capital Efficiency</span>
           </div>
         </div>
         
-        <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-4 text-white">
-          Tax <span className="text-primary">Wealth Gap</span> Simulator
+        <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter mb-4 text-white text-center">
+          Tax <span className="text-[#22c55e]">Wealth Gap</span> Simulator
         </h1>
         
-        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto italic">
+        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto italic text-center">
           Project long-term capital erosion caused by annual tax drag. Identify the structural alpha of tax-advantaged wealth corridors.
         </p>
       </div>
 
-      {/* ADVISORY NOTICE */}
-      <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
-        <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
-        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
-          <span className="text-red-500 font-black">Advisory Notice:</span> This terminal is an educational simulation engine. 
-          Outputs are mathematical projections and <span className="text-white underline decoration-red-500/50 underline-offset-4">not professional tax advice</span>.
-        </p>
-      </div>
-
-      {/* CALCULATOR SECTION */}
-      <div className="max-w-5xl mx-auto">
+      {/* 2. THE CALCULATOR TERMINAL (Advisory is rendered from the source component) */}
+      <div className="max-w-5xl mx-auto mb-20">
         <section className="space-y-4 mb-12">
           <div className="flex items-center gap-3 ml-2 text-left">
             <TrendingUp className="h-4 w-4 text-zinc-500" />
@@ -56,53 +50,60 @@ export default async function TaxWealthGapPage() {
           <TaxExemptWealthGap />
         </section>
 
-        {/* SEMANTIC CONTENT SECTION */}
+        {/* 3. INTELLIGENCE BRIEFING (Consistent Commentary with White Font) */}
         <section className="py-12 border-t border-white/5 text-left">
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-2">
-              <HelpCircle className="h-4 w-4 text-primary" />
+              <HelpCircle className="h-4 w-4 text-[#22c55e]" />
               <h3 className="text-sm font-black uppercase tracking-widest italic text-white">Understanding Tax Drag</h3>
             </div>
-            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase text-justify tracking-tighter">
+            <p className="text-[11px] text-white font-bold leading-relaxed uppercase text-justify tracking-tighter">
               Tax drag is the silent inhibitor of compounding. When returns are taxed annually, the amount of capital available to generate future returns is diminished. 
-              This module quantifies that loss over time, demonstrating how <span className="text-white font-black text-[12px]">Tax-Exempt Structural Alpha</span> can significantly outperform higher-yield taxable strategies.
+              This module quantifies that loss over time, demonstrating how <span className="text-[#22c55e] font-black uppercase">Tax-Exempt Structural Alpha</span> can significantly outperform higher-yield taxable strategies.
             </p>
           </div>
         </section>
 
-        {/* INTERNAL LINK HUB - Updated to include Module 05 */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8 border-t border-white/5 text-left">
-          <Link href="/calculators" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
-            <div className="flex items-center gap-3 mb-2">
-              <LayoutGrid className="h-4 w-4 text-primary" />
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Calculator Hub</h3>
+        {/* 4. CONVERSION BRIDGE (Synchronized Bottom Cards) */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left">
+          
+          {/* CARD 01: HUB */}
+          <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
+            <div className="flex items-center gap-3 mb-3">
+              <LayoutGrid className="h-4 w-4 text-[#22c55e]" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none">Decision Models</h3>
             </div>
-            <p className="text-[9px] text-zinc-500 uppercase font-bold">Return to the institutional suite of financial modules.</p>
+            <p className="text-[9px] text-zinc-500 uppercase font-bold text-left">Return to the full suite of institutional intelligence engines.</p>
           </Link>
           
-          <Link href="/calculators/mortgage-refi-pivot" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
-            <div className="flex items-center gap-3 mb-2">
-              <Landmark className="h-4 w-4 text-primary" />
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Mortgage Refi Pivot</h3>
+          {/* CARD 02: CONSULT ADVISOR (Locked State) */}
+          <div className="relative p-6 bg-zinc-900/10 border border-white/5 rounded-xl cursor-not-allowed group text-left">
+            <div className="flex items-center gap-3 mb-3">
+              <Lock className="h-3.5 w-3.5 text-zinc-500" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 leading-none">Consult Advisor</h3>
             </div>
-            <p className="text-[9px] text-zinc-500 uppercase font-bold">Calculate lifecycle costs of debt and break-even reset points.</p>
-          </Link>
+            <p className="text-[9px] text-zinc-600 uppercase font-bold mb-4">Direct integration with verified CPAs and Fiduciaries.</p>
+            <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-[8px] font-black text-[#22c55e] uppercase tracking-[0.2em] animate-pulse">
+              Feature Pending // 2026
+            </div>
+          </div>
 
-          <Link href="/calculators/purchasing-power" className="group p-4 bg-zinc-900/50 border border-white/5 hover:border-primary/50 transition-all rounded">
-            <div className="flex items-center gap-3 mb-2">
-              <Wind className="h-4 w-4 text-primary" />
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-white italic">Purchasing Power</h3>
+          {/* CARD 03: PARTNER PROTOCOL */}
+          <Link href="/partnership" className="group p-6 bg-[#22c55e]/5 border border-[#22c55e]/20 hover:border-[#22c55e] transition-all rounded-xl">
+            <div className="flex items-center gap-3 mb-3 text-left">
+              <ShieldCheck className="h-4 w-4 text-[#22c55e]" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none italic">Become a Partner</h3>
             </div>
-            <p className="text-[9px] text-zinc-500 uppercase font-bold">Model the silent tax of inflation and currency debasement.</p>
+            <p className="text-[9px] text-[#22c55e] uppercase font-black text-left">Apply for firm-level integration into the Newston Terminal.</p>
           </Link>
         </section>
 
-        {/* LEGAL PROTOCOL */}
+        {/* 5. INSTITUTIONAL DISCLOSURE */}
         <section className="mt-4 border-t border-white/5 pt-12 pb-8 text-left">
           <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4">
-            <TrendingUp className="h-5 w-5 text-zinc-600 shrink-0 mt-1" />
+            <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
             <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
-              <span className="text-zinc-300">Institutional Disclosure:</span> All projections are mathematical simulations based on current 2026 fiscal guidelines. The Newston Terminal does not provide tax advice. Users should consult with a CPA or tax professional regarding their specific liability.
+              <span className="text-[#22c55e]">Institutional Disclosure:</span> All projections are mathematical simulations based on current 2026 fiscal guidelines. The Newston Terminal does not provide tax advice. Users should consult with a CPA or tax professional regarding their specific liability.
             </p>
           </div>
         </section>
