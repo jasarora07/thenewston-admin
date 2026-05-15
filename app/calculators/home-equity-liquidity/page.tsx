@@ -37,7 +37,7 @@ export default function HomeEquityPage() {
         </p>
       </div>
 
-      {/* 2. ADVISORY NOTICE (Positioned exactly as in Capital Allocation) */}
+      {/* 2. SINGLE ADVISORY NOTICE (Positioned exactly below subtitle) */}
       <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
         <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
@@ -50,7 +50,7 @@ export default function HomeEquityPage() {
         <EquityCalculatorTerminal />
       </div>
 
-      {/* 4. CONVERSION BRIDGE (Standardized with Decision Models footer) */}
+      {/* 4. CONVERSION BRIDGE (Standardized Terminal Navigation) */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left">
         
         {/* CARD 01: HUB */}
@@ -62,7 +62,7 @@ export default function HomeEquityPage() {
           <p className="text-[9px] text-zinc-500 uppercase font-bold text-left">Return to the full suite of institutional intelligence engines.</p>
         </Link>
         
-        {/* CARD 02: CONSULT ADVISOR (Standardized Locked State) */}
+        {/* CARD 02: CONSULT ADVISOR (Locked State) */}
         <div className="relative p-6 bg-zinc-900/10 border border-white/5 rounded-xl cursor-not-allowed group text-left">
           <div className="flex items-center gap-3 mb-3">
             <Lock className="h-3.5 w-3.5 text-zinc-500" />
@@ -84,7 +84,7 @@ export default function HomeEquityPage() {
         </Link>
       </section>
 
-      {/* 5. INSTITUTIONAL DISCLOSURE (Standardized terminology) */}
+      {/* 5. INSTITUTIONAL DISCLOSURE (Standardized Terminology) */}
       <section className="max-w-5xl mx-auto border-t border-white/5 pt-12 pb-8 text-left">
         <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl flex items-start gap-4">
           <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
