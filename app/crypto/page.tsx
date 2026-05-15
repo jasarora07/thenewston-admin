@@ -1,11 +1,24 @@
 import { createClient } from "@/lib/supabase/server"
-// REMOVED TickerBar and NewsHeader imports as they are global now
 import { TrendingUp, TrendingDown, Bitcoin, ArrowUpDown } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
+import type { Metadata } from "next" // Added import
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * BING SEO HARDENING:
+ * This explicitly tells Bing that /crypto is a unique page.
+ * It prevents the canonical loop error from your screenshot.
+ */
+export const metadata: Metadata = {
+  title: "Crypto Market Intelligence | The Newston Terminal",
+  description: "Real-time institutional tracking of digital asset market caps, price velocity, and 24h volatility. Optimized for 2026 fiscal cycles.",
+  alternates: {
+    canonical: './', 
+  },
+}
 
 interface Props {
   searchParams: Promise<{ sort?: string; order?: 'asc' | 'desc' }>
@@ -15,7 +28,6 @@ export default async function CryptoPage({ searchParams }: Props) {
   const supabase = await createClient()
   const { sort = 'rank', order = 'asc' } = await searchParams
 
-  // Fetch data with dynamic sorting
   const { data: rawData } = await supabase
     .from('crypto_assets')
     .select('*')
@@ -40,13 +52,12 @@ export default async function CryptoPage({ searchParams }: Props) {
   }
 
   return (
-    // REMOVED <TickerBar /> and <NewsHeader /> from here
     <main className="min-h-screen bg-black">
       <div className="container max-w-6xl px-4 py-8">
         <div className="flex items-center gap-4 mb-8">
-          <Bitcoin className="h-8 w-8 text-primary" />
+          <Bitcoin className="h-8 w-8 text-[#22c55e]" />
           <h1 className="text-2xl font-black italic uppercase text-white tracking-tight">
-            Market <span className="text-primary">Cap</span> Ranking
+            Market <span className="text-[#22c55e]">Cap</span> Ranking
           </h1>
         </div>
 
@@ -90,8 +101,8 @@ export default async function CryptoPage({ searchParams }: Props) {
                       {coin.rank}
                     </TableCell>
                     <TableCell className="py-3">
-                      <div className="flex flex-col leading-tight">
-                        <span className="font-bold text-white text-sm group-hover:text-primary transition-colors uppercase italic">
+                      <div className="flex flex-col leading-tight text-left">
+                        <span className="font-bold text-white text-sm group-hover:text-[#22c55e] transition-colors uppercase italic">
                           {coin.symbol}
                         </span>
                         <span className="text-[10px] text-zinc-500 font-medium">{coin.name}</span>
