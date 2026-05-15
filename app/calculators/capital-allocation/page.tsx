@@ -62,26 +62,26 @@ export default function CapitalAllocationPage() {
         </div>
       </section>
 
-      {/* 4. CONVERSION BRIDGE (Standardized with Disabled Advisor State) */}
+      {/* 4. CONVERSION BRIDGE (Refined for legibility and terminology) */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left">
         
         {/* CARD 01: HUB */}
         <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <LayoutGrid className="h-4 w-4 text-[#22c55e]" />
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none">Terminal Hub</h3>
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none">Decision Models</h3>
           </div>
-          <p className="text-[9px] text-zinc-500 uppercase font-bold">Return to the full suite of institutional decision models.</p>
+          <p className="text-[9px] text-zinc-500 uppercase font-bold">Return to the full suite of institutional intelligence engines.</p>
         </Link>
         
-        {/* CARD 02: DISABLED ADVISOR (COMING SOON) */}
-        <div className="relative p-6 bg-zinc-950 border border-white/5 rounded-xl cursor-not-allowed group">
-          <div className="flex items-center gap-3 mb-3 opacity-40">
-            <Lock className="h-3.5 w-3.5 text-zinc-600" />
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-600 leading-none">Consult Advisor</h3>
+        {/* CARD 02: CONSULT ADVISOR (Improved Contrast) */}
+        <div className="relative p-6 bg-zinc-900/10 border border-white/5 rounded-xl cursor-not-allowed group">
+          <div className="flex items-center gap-3 mb-3">
+            <Lock className="h-3.5 w-3.5 text-zinc-500" />
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 leading-none">Consult Advisor</h3>
           </div>
-          <p className="text-[9px] text-zinc-700 uppercase font-bold mb-4 opacity-40">Direct integration with verified CPAs and Fiduciaries.</p>
-          <div className="inline-block px-2 py-1 bg-white/5 border border-white/10 rounded text-[8px] font-black text-[#22c55e] uppercase tracking-[0.2em] animate-pulse">
+          <p className="text-[9px] text-zinc-600 uppercase font-bold mb-4">Direct integration with verified CPAs and Fiduciaries.</p>
+          <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-[8px] font-black text-[#22c55e] uppercase tracking-[0.2em] animate-pulse">
             Feature Pending // 2026
           </div>
         </div>
@@ -97,12 +97,12 @@ export default function CapitalAllocationPage() {
 
       </section>
 
-      {/* 5. INSTITUTIONAL DISCLOSURE */}
+      {/* 5. INSTITUTIONAL DISCLOSURE (Standardized Terminology) */}
       <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8">
         <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4">
           <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
           <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
-            <span className="text-[#22c55e]">Protocol Disclosure:</span> Projections assume current 2026 capital gains tax brackets. This is a modular simulation and does not constitute formal tax or investment advice.
+            <span className="text-[#22c55e]">Institutional Disclosure:</span> Projections assume current 2026 fiscal parameters. This is a modular simulation and does not constitute formal tax or investment advice.
           </p>
         </div>
       </section>
