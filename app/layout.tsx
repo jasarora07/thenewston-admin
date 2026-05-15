@@ -41,11 +41,10 @@ export const metadata: Metadata = {
     "2026 market projections"
   ],
   
-  // FIXED: Explicitly mapping the neon green icon.svg for browser tab recognition
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico' }, // Fallback for older browsers
+      { url: '/favicon.ico' }, 
     ],
     apple: [
       { url: '/apple-touch-icon.png' },
@@ -53,8 +52,13 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: 'https://thenewston.com',
+    /* FIXED: Changed from hardcoded string to './'
+       This prevents the "Canonical Loop" where all pages point to the home page.
+       Bing will now see /markets as its own unique, indexable entity.
+    */
+    canonical: './',
   },
+  
   authors: [{ name: "The Newston Editorial Team" }],
   
   robots: {
