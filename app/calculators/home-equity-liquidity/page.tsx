@@ -3,16 +3,12 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import EquityCalculatorTerminal from "@/components/calculators/equity-terminal"
 
-/** * BING SEO HARDENING: 
- * Ensures 'x-vercel-cache: HIT' and public visibility for crawlers.
- */
 export const dynamic = 'force-static';
 export const revalidate = 86400; // 24 Hours
 
 export const metadata: Metadata = {
   title: "Home Equity & HELOC Liquidity Engine | 2026 Terminal",
   description: "Calculate safe home equity withdrawal limits and compare HELOC vs. Cash-out Refinance blended rates using real-time market data.",
-  keywords: ["HELOC vs Refi", "Home Equity Calculator", "Blended Interest Rate", "2026 Mortgage Trends"],
   alternates: {
     canonical: './',
   },
@@ -37,7 +33,7 @@ export default function HomeEquityPage() {
         </p>
       </div>
 
-      {/* 2. SINGLE ADVISORY NOTICE (Positioned exactly below subtitle) */}
+      {/* 2. ADVISORY NOTICE (Standard Red Bar) */}
       <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
         <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
@@ -50,19 +46,39 @@ export default function HomeEquityPage() {
         <EquityCalculatorTerminal />
       </div>
 
-      {/* 4. CONVERSION BRIDGE (Standardized Terminal Navigation) */}
+      {/* 4. INTELLIGENCE BRIEFING (Added for consistency with Module 04) */}
+      <section className="max-w-5xl mx-auto py-16 border-t border-white/5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <HelpCircle className="h-4 w-4 text-[#22c55e]" />
+              <h3 className="text-sm font-black uppercase tracking-widest italic text-white text-left">Weighted Average Analysis</h3>
+            </div>
+            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase tracking-tighter">
+              The Newston Terminal identifies if adding a HELOC preserves more of your <span className="text-white font-black uppercase">low-interest primary debt</span> than a full replacement refinance.
+            </p>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-[#22c55e]" />
+              <h3 className="text-sm font-black uppercase tracking-widest italic text-white text-left">LTV Risk Benchmarking</h3>
+            </div>
+            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase tracking-tighter">
+              Liquidity extraction is benchmarked against an <span className="text-white font-black uppercase">80% LTV safety ceiling</span>, protecting your profile from market volatility.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. CONVERSION BRIDGE */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left">
-        
-        {/* CARD 01: HUB */}
         <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <LayoutGrid className="h-4 w-4 text-[#22c55e]" />
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none">Decision Models</h3>
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none text-left">Decision Models</h3>
           </div>
           <p className="text-[9px] text-zinc-500 uppercase font-bold text-left">Return to the full suite of institutional intelligence engines.</p>
         </Link>
-        
-        {/* CARD 02: CONSULT ADVISOR (Locked State) */}
         <div className="relative p-6 bg-zinc-900/10 border border-white/5 rounded-xl cursor-not-allowed group text-left">
           <div className="flex items-center gap-3 mb-3">
             <Lock className="h-3.5 w-3.5 text-zinc-500" />
@@ -73,8 +89,6 @@ export default function HomeEquityPage() {
             Feature Pending // 2026
           </div>
         </div>
-
-        {/* CARD 03: PARTNER PROTOCOL */}
         <Link href="/partnership" className="group p-6 bg-[#22c55e]/5 border border-[#22c55e]/20 hover:border-[#22c55e] transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3 text-left">
             <ShieldCheck className="h-4 w-4 text-[#22c55e]" />
@@ -84,7 +98,7 @@ export default function HomeEquityPage() {
         </Link>
       </section>
 
-      {/* 5. INSTITUTIONAL DISCLOSURE (Standardized Terminology) */}
+      {/* 6. INSTITUTIONAL DISCLOSURE */}
       <section className="max-w-5xl mx-auto border-t border-white/5 pt-12 pb-8 text-left">
         <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl flex items-start gap-4">
           <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
