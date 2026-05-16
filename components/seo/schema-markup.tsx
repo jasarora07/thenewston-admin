@@ -11,17 +11,12 @@ interface SchemaProps {
 export default function CalculatorSchema({ name, description, url }: SchemaProps) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "FinancialService", // ⚡ CHANGED FROM WEBAPPLICATION TO DROP RATING WARNINGS
+    "@type": "FinancialProduct", // ⚡ Pure digital application structure
     "@id": url,
     "url": url,
     "name": name,
     "description": description,
-    "serviceType": "Macroeconomic Simulation Terminal", // Defines what the service executes
-    "provider": { // Replaces 'author' with the proper financial service entity
-      "@type": "Organization",
-      "name": "The Newston Terminal",
-      "url": "https://thenewston.com"
-    },
+    "financialProductType": "Macroeconomic Simulation Engine", 
     "offers": {
       "@type": "Offer",
       "price": "0.00",
