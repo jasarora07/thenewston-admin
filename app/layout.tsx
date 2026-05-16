@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { PageTransition } from "@/components/page-transition"
 import { NewsHeader } from "@/components/news-header" 
 import { TickerBar } from "@/components/ticker-bar"   
-// import { ComplianceBanner } from "@/components/compliance-banner" // Temporarily disabled for 24-hr cache debugging
+import { ComplianceBanner } from "@/components/compliance-banner" // ⚡ RESTORED IMPORT
 import { StructuredData } from "@/components/structured-data"
 import ClientLayout from "@/components/client-layout"
 
@@ -114,8 +114,8 @@ export default function RootLayout({
               </PageTransition>
             </Suspense>
 
-            {/* TEMPORARILY DISABLED FOR 24-HOUR CRAWLER DIAGNOSTICS */}
-            {/* <ComplianceBanner /> */}
+            {/* ⚡ RESTORED LIVE ELEMENT */}
+            <ComplianceBanner />
           </div>
         </ThemeProvider>
       </body>
