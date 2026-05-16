@@ -325,3 +325,15 @@
     font-family: var(--font-sans);
   }
 }
+
+/* ==========================================================================
+   CRITICAL BOT PREVIEW OVERRIDES
+   Forces elements locked behind initial opacity frames to paint instantly.
+   ========================================================================== */
+html body div[style*="opacity:0"],
+div[style*="opacity: 0"],
+main {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
