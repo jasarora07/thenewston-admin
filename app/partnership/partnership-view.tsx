@@ -1,17 +1,56 @@
 "use client"
 
 import React, { useState } from "react"
-import { Send, Loader2, CheckCircle2, ShieldAlert, Lock, Info } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { Send, Loader2, CheckCircle2, ShieldAlert, Lock, Info, AlertCircle } from "lucide-react"
 
 export default function PartnershipView() {
   const [showForm, setShowForm] = useState(false)
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle")
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [serverError, setServerError] = useState<string | null>(null)
+  const supabase = createClient()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatus("loading")
-    // Simulate API delay
-    setTimeout(() => setStatus("success"), 1500)
+    setServerError(null)
+
+    const formData = new FormData(e.currentTarget)
+    const full_name = formData.get("full_name")?.toString().trim()
+    const email_id = formData.get("email_id")?.toString().trim()
+    const firm_name = formData.get("firm_name")?.toString().trim()
+    const message = formData.get("message")?.toString().trim()
+
+    // STRICT RUNTIME VALIDATION
+    if (!full_name || !email_id || !message) {
+      setServerError("All fields except Firm Name are strictly mandatory.")
+      setStatus("error")
+      return
+    }
+
+    /**
+     * CLEAN ARCHITECTURE MATRIX PAYLOAD:
+     * Dispatches data strictly into the 4 text columns of your contact_queries schema.
+     */
+    const payload = {
+      full_name,
+      email_id,
+      firm_name: firm_name || null, // Gracefully maps empty text to database NULL 
+      message
+    }
+
+    try {
+      const { error } = await supabase
+        .from("contact_queries")
+        .insert([payload])
+
+      if (error) throw error
+      setStatus("success")
+    } catch (err: any) {
+      console.error("Supabase Partnership Sync Error:", err)
+      setServerError(err.message || "Database transmission rejected by terminal directory.")
+      setStatus("error")
+    }
   }
 
   return (
@@ -96,14 +135,60 @@ export default function PartnershipView() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 bg-zinc-900/10 p-8 border border-white/5 rounded-2xl animate-in slide-in-from-bottom-4">
+              
+              {/* BACKEND EXCEPTION SUMMARY */}
+              {serverError && (
+                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3 text-left animate-in fade-in duration-200">
+                  <AlertCircle className="h-4 w-4 text-red-500 shrink-0" />
+                  <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider">{serverError}</p>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input required type="text" placeholder="FULL IDENTITY" className="bg-black border border-white/10 p-4 text-white text-[10px] font-black uppercase tracking-widest focus:border-[#22c55e] focus:outline-none transition-colors rounded" />
-                <input required type="email" placeholder="SECURE EMAIL" className="bg-black border border-white/10 p-4 text-white text-[10px] font-black uppercase tracking-widest focus:border-[#22c55e] focus:outline-none transition-colors rounded" />
+                <input 
+                  required 
+                  name="full_name"
+                  type="text" 
+                  placeholder="FULL IDENTITY *" 
+                  className="bg-black border border-white/10 p-4 text-white text-[10px] font-black uppercase tracking-widest focus:border-[#22c55e] focus:outline-none transition-colors rounded font-mono" 
+                />
+                <input 
+                  required 
+                  name="email_id"
+                  type="email" 
+                  placeholder="SECURE EMAIL *" 
+                  className="bg-black border border-white/10 p-4 text-white text-[10px] font-black uppercase tracking-widest focus:border-[#22c55e] focus:outline-none transition-colors rounded font-mono" 
+                />
               </div>
-              <input required type="text" placeholder="FIRM NAME / NMLS #" className="w-full bg-black border border-white/10 p-4 text-white text-[10px] font-black uppercase tracking-widest focus:border-[#22c55e] focus:outline-none transition-colors rounded" />
-              <textarea required placeholder="HOW CAN WE ASSIST YOUR FIRM?" rows={4} className="w-full bg-black border border-white/10 p-4 text-white text-[10px] font-black uppercase tracking-widest focus:border-[#22c55e] focus:outline-none transition-colors rounded resize-none" />
-              <button disabled={status === "loading"} type="submit" className="w-full py-5 bg-[#22c55e] text-black font-black uppercase text-xs tracking-[0.4em] hover:bg-white transition-all rounded flex items-center justify-center gap-3">
-                {status === "loading" ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Send Transmission <Send className="h-3 w-3" /></>}
+              
+              {/* Optional Field Input */}
+              <input 
+                name="firm_name"
+                type="text" 
+                placeholder="FIRM NAME / NMLS # (OPTIONAL)" 
+                className="w-full bg-black border border-white/10 p-4 text-white text-[10px] font-black uppercase tracking-widest focus:border-[#22c55e] focus:outline-none transition-colors rounded font-mono" 
+              />
+              
+              <textarea 
+                required 
+                name="message"
+                placeholder="HOW CAN WE ASSIST YOUR FIRM? *" 
+                rows={4} 
+                className="w-full bg-black border border-white/10 p-4 text-white text-[10px] font-black uppercase tracking-widest focus:border-[#22c55e] focus:outline-none transition-colors rounded resize-none font-mono" 
+              />
+
+              <button 
+                disabled={status === "loading"} 
+                type="submit" 
+                className="w-full py-5 bg-[#22c55e] text-black font-black uppercase text-xs tracking-[0.4em] hover:bg-white transition-all rounded flex items-center justify-center gap-3 italic"
+              >
+                {status === "loading" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    Send Transmission <Send className="h-3 w-3" />
+                  </>
+                )}
               </button>
             </form>
           )}
