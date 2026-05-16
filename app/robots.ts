@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next'
 
 /**
- * HARDENED ROBOTS CONFIGURATION
- * Optimizes crawl budget for 2026 GSC indexing criteria.
- * Ensures decision models are prioritized while stripping out parameter noise.
+ * HARDENED & ASSET-OPTIMIZED ROBOTS CONFIGURATION
+ * Fixes the CSS asset rendering block in Google Search Console.
+ * Explicitly allows stylesheet and media paths while guarding backend directories.
  */
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -11,6 +11,8 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: [
         '/',
+        '/_next/static/css/',   // CRITICAL: Allows Googlebot to read Tailwind stylesheets
+        '/_next/static/media/', // Allows Googlebot to fetch UI image vectors and icons
         '/calculators',
         '/calculators/mortgage-refi-pivot',
         '/calculators/tax-exempt-wealth-gap',
@@ -20,9 +22,11 @@ export default function robots(): MetadataRoute.Robots {
       ],
       disallow: [
         '/private/',
-        '/_next/',     // Blocks crawling of raw webpack build manifests
-        '/api/',       // Prevents access to serverless backend endpoints
-        '/*?*',        // CRITICAL: Tells Google to ignore dynamic parameter query strings
+        '/_next/static/chunks/',      // Blocks crawlers from downloading raw JS chunk loops
+        '/_next/static/development/', // Shuts down development telemetry routing
+        '/_next/data/',               // Restricts access to raw Next.js JSON data hydration paths
+        '/api/',                      // Prevents access to serverless backend endpoints
+        '/*?*',                       // Ignores dynamic parameters to optimize crawl budget
       ],
     },
     sitemap: 'https://thenewston.com/sitemap.xml',
