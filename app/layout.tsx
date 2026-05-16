@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, Montserrat } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -24,6 +24,17 @@ const fontHeading = Montserrat({
   variable: "--font-heading",
   weight: ["600", "700"],
 })
+
+/**
+ * HARDENED VIEWPORT MODEL
+ * Ensures Googlebot scales layout objects flawlessly during automated snapshots.
+ */
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5, // Grants search engine raters full dynamic zooming capabilities
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://thenewston.com'),
