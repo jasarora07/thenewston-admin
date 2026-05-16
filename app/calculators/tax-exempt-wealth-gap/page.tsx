@@ -1,4 +1,4 @@
-import { ShieldCheck, TrendingUp, HelpCircle, Info, Landmark, LayoutGrid, Lock } from "lucide-react"
+import { ShieldCheck, TrendingUp, AlertTriangle, HelpCircle, Info, Landmark, LayoutGrid, Lock } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import TaxExemptWealthGap from "@/components/tax-exempt-wealth-gap"
@@ -12,6 +12,7 @@ export const revalidate = 86400; // 24 Hours
 export const metadata: Metadata = {
   title: "Tax-Exempt Wealth Gap & Drag Simulator | 2026 Terminal",
   description: "Simulate annual tax leakage and project the 'Alpha' generated through tax-exempt wealth strategies. Analyze capital appreciation efficiency for 2026.",
+  keywords: ["tax drag simulator", "wealth gap analysis", "capital appreciation", "tax-exempt growth", "financial efficiency"],
   alternates: {
     /* FIXED: Using relative path to resolve the Bing Canonical Error */
     canonical: './',
@@ -29,7 +30,7 @@ export default function TaxWealthGapPage() {
             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#22c55e]">Module 02: Capital Efficiency</span>
           </div>
         </div>
-        <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter mb-4 text-white">
+        <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter mb-4 text-white text-center">
           Tax <span className="text-[#22c55e]">Wealth Gap</span> Simulator
         </h1>
         <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest leading-relaxed max-w-2xl mx-auto italic text-center">
@@ -37,12 +38,25 @@ export default function TaxWealthGapPage() {
         </p>
       </div>
 
-      {/* 2. THE CALCULATOR (Advisory Notice renders directly from within the source component) */}
+      {/* 2. ADVISORY PROTOCOL (Fixed styles to guarantee rendering on black background) */}
+      <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
+        <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
+          <span className="text-red-500 font-black uppercase">Advisory Notice:</span> This terminal is an educational simulation engine. 
+          Outputs are mathematical projections and <span className="text-white underline decoration-red-500/50 underline-offset-4 uppercase">not professional tax advice</span>.
+        </p>
+      </div>
+
+      {/* 3. THE CALCULATOR */}
       <div className="max-w-6xl mx-auto mb-20">
+        <div className="flex items-center gap-3 ml-2 mb-4 text-left">
+          <TrendingUp className="h-4 w-4 text-zinc-500" />
+          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 font-mono">Structural Alpha & Tax Leakage Analysis</h2>
+        </div>
         <TaxExemptWealthGap />
       </div>
 
-      {/* 3. INTELLIGENCE BRIEFING (Font updated to White) */}
+      {/* 4. INTELLIGENCE BRIEFING (Font updated to White) */}
       <section className="max-w-5xl mx-auto py-16 border-t border-white/5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
           <div className="space-y-4">
@@ -68,7 +82,7 @@ export default function TaxWealthGapPage() {
         </div>
       </section>
 
-      {/* 4. CONVERSION BRIDGE (Synchronized Bottom Cards) */}
+      {/* 5. CONVERSION BRIDGE (Synchronized Bottom Cards) */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left">
         
         {/* CARD 01: HUB */}
@@ -102,8 +116,8 @@ export default function TaxWealthGapPage() {
         </Link>
       </section>
 
-      {/* 5. INSTITUTIONAL DISCLOSURE (Standardized Terminology) */}
-      <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8 text-left">
+      {/* 6. INSTITUTIONAL DISCLOSURE (Standardized Terminology) */}
+      <section className="max-w-5xl mx-auto border-t border-white/5 pt-12 pb-8 text-left">
         <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4">
           <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
           <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
