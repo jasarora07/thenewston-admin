@@ -1,105 +1,3 @@
-import type React from "react"
-import type { Metadata, Viewport } from "next"
-import { Inter, Montserrat } from "next/font/google"
-import { cn } from "@/lib/utils"
-import { ThemeProvider } from "@/components/theme-provider"
-import { PageTransition } from "@/components/page-transition"
-import { NewsHeader } from "@/components/news-header" 
-import { TickerBar } from "@/components/ticker-bar"  
-import { ComplianceBanner } from "@/components/compliance-banner" 
-import { StructuredData } from "@/components/structured-data"
-import ClientLayout from "@/components/client-layout"
-
-import "@/app/globals.css"
-import { Suspense } from "react"
-
-const fontSans = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["300", "400", "500", "600"],
-})
-
-const fontHeading = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  weight: ["600", "700"],
-})
-
-/**
- * HARDENED VIEWPORT MODEL
- * Ensures Googlebot scales layout objects flawlessly during automated snapshots.
- */
-export const viewport: Viewport = {
-  themeColor: "#000000",
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 5, // Grants search engine raters full dynamic zooming capabilities
-}
-
-export const metadata: Metadata = {
-  metadataBase: new URL('https://thenewston.com'),
-  title: {
-    default: "The Newston | Institutional Financial Tools & Market Intelligence",
-    template: "%s | The Newston Terminal"
-  },
-  description: "Access institutional-grade financial decision models for free. Calculate your Mortgage Refi Pivot and Wealth Gap with real-time 2026 market data.",
-  keywords: [
-    "free mortgage refi calculator", 
-    "refi break even tool", 
-    "tax-exempt wealth gap simulator", 
-    "total interest savings calculator", 
-    "financial intelligence terminal",
-    "2026 market projections"
-  ],
-  
-  icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico' }, 
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png' },
-    ],
-  },
-
-  alternates: {
-    /* FIXED: Changed from hardcoded string to './'
-       This prevents the "Canonical Loop" where all pages point to the home page.
-       Bing will now see /markets as its own unique, indexable entity.
-    */
-    canonical: './',
-  },
-  
-  authors: [{ name: "The Newston Editorial Team" }],
-  
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-
-  openGraph: {
-    title: "The Newston | Free Financial Decision Engines",
-    description: "Institutional tools to calculate total interest savings and tax-efficiency strategies.",
-    type: "website",
-    url: "https://thenewston.com",
-    siteName: "The Newston",
-    images: [{ url: "/og-image-calculators.png", width: 1200, height: 630 }], 
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "The Newston Financial Terminal",
-    description: "Project your 2026 fiscal outcomes with our institutional decision models.",
-    images: ["/og-image-calculators.png"],
-  }
-}
-
 export default function RootLayout({
   children,
 }: {
@@ -107,17 +5,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark bg-background" suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
+      {/* FIXED: Inlining background-color, min-height, and opacity parameters directly on the body tag
+          ensures Googlebot paints a fully visible layout tree even if its network connection times out on external CSS. */}
+      <body 
+        className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}
+        style={{ backgroundColor: '#000000', color: '#ffffff', minHeight: '100vh', opacity: 1 }}
+      >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
-          <div className="flex min-h-screen flex-col">
+          <div className="flex min-h-screen flex-col" style={{ opacity: 1 }}>
             <StructuredData /> 
             <TickerBar />
             <NewsHeader /> 
             
-            <Suspense fallback={<div className="flex-1 bg-black" />}>
+            <Suspense fallback={<div className="flex-1 bg-black" style={{ backgroundColor: '#000000' }} />}>
               <PageTransition>
                 <ClientLayout>
-                  <main className="flex-1">
+                  {/* FIXED: Forcing the direct visibility state wrapper right here */}
+                  <main className="flex-1" style={{ opacity: 1, display: 'block' }}>
                     {children}
                   </main>
                 </ClientLayout>
