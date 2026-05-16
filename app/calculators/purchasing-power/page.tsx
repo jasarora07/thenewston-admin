@@ -1,6 +1,7 @@
 import { ShieldCheck, Wind, HelpCircle, Info, LayoutGrid, Lock } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Suspense } from "react"
 import InflationTerminal from "@/components/calculators/inflation-terminal"
 import CalculatorSchema from "@/components/seo/schema-markup"
 
@@ -17,6 +18,37 @@ export const metadata: Metadata = {
     canonical: './',
   },
 }
+
+/**
+ * SERVER-RENDERED SKELETON BLUEPRINT
+ * This mirrors your exact client panel design using standard static CSS utility parameters.
+ * This forces the Googlebot snapshot tool to paint a complete dashboard matrix instantly.
+ */
+const TerminalStaticBlueprint = () => (
+  <div className="w-full max-w-4xl mx-auto space-y-8 text-left opacity-100 block">
+    <div className="bg-red-500/5 border border-red-500/20 p-4 rounded flex items-center gap-4">
+      <div className="h-4 w-4 rounded bg-red-500/20 animate-pulse" />
+      <div className="h-3 w-1/2 bg-zinc-800 rounded" />
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="bg-zinc-900/50 border border-white/5 p-6 rounded-2xl h-[210px] space-y-4">
+        <div className="h-2 w-20 bg-zinc-800 rounded" />
+        <div className="space-y-3 pt-2">
+          <div className="h-10 w-full bg-black border border-white/10 rounded-lg" />
+          <div className="h-10 w-full bg-black border border-white/10 rounded-lg" />
+        </div>
+      </div>
+      <div className="bg-zinc-900/50 border border-[#22c55e]/10 p-6 rounded-2xl h-[210px] space-y-4">
+        <div className="h-2 w-20 bg-zinc-700 rounded" />
+        <div className="space-y-3 pt-2">
+          <div className="h-10 w-full bg-[#22c55e]/5 border border-[#22c55e]/20 rounded-lg" />
+          <div className="h-10 w-full bg-black border border-white/10 rounded-lg" />
+        </div>
+      </div>
+    </div>
+    <div className="w-full bg-white h-12 rounded-xl" />
+  </div>
+)
 
 export default function PurchasingPowerPage() {
   return (
@@ -40,9 +72,11 @@ export default function PurchasingPowerPage() {
         </p>
       </div>
 
-      {/* 2. THE CALCULATOR COMPONENT FRAME */}
-      <div className="max-w-6xl mx-auto mb-20 min-h-[300px]">
-        <InflationTerminal />
+      {/* 2. THE CALCULATOR COMPONENT FRAME WITH STATIC SUSPENSE BACKUP */}
+      <div className="max-w-6xl mx-auto mb-20 min-h-[350px]">
+        <Suspense fallback={<TerminalStaticBlueprint />}>
+          <InflationTerminal />
+        </Suspense>
       </div>
 
       {/* HARDENED E-E-A-T DATA SOURCE & METHODOLOGY TRANSPARENCY SECTION */}
@@ -106,7 +140,7 @@ export default function PurchasingPowerPage() {
         <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <LayoutGrid className="h-4 w-4 text-[#22c55e]" />
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none">Decision Models</h3>
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white leading-none">Decision Models</h3>
           </div>
           <p className="text-[9px] text-zinc-500 uppercase font-bold text-left">Return to the full suite of institutional intelligence engines.</p>
         </Link>
