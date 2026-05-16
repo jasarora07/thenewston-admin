@@ -11,12 +11,13 @@ interface SchemaProps {
 export default function CalculatorSchema({ name, description, url }: SchemaProps) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "FinancialProduct", // ⚡ Pure digital application structure
+    "@type": "SoftwareApplication", // ⚡ EXPLICITLY SUPPORTED BY GOOGLE RICH RESULTS
     "@id": url,
     "url": url,
     "name": name,
     "description": description,
-    "financialProductType": "Macroeconomic Simulation Engine", 
+    "applicationCategory": "FinanceApplication", // Tells Google it's a financial tool
+    "operatingSystem": "All",
     "offers": {
       "@type": "Offer",
       "price": "0.00",
