@@ -6,19 +6,23 @@ import { calculateInflationOutcome } from "@/lib/math/inflation-logic"
 
 export default function InflationTerminal() {
   const [mounted, setMounted] = useState(false)
-  const [inputs, setInputs] = useState({
+  
+  // 1. Decoupled form input state for user keystrokes
+  const [formInputs, setFormInputs] = useState({
     currentAmount: 100000,
     annualInflation: 3.5,
     years: 10,
     investmentReturn: 4.5
   })
+  
   const [results, setResults] = useState<any>(null)
 
   useEffect(() => { setMounted(true) }, [])
   if (!mounted) return null
 
+  // 2. Click execution handler that snaps the data only upon request
   const handleAnalyze = () => {
-    setResults(calculateInflationOutcome(inputs))
+    setResults(calculateInflationOutcome(formInputs))
   }
 
   /**
@@ -71,8 +75,8 @@ export default function InflationTerminal() {
             >
               <input 
                 type="number" 
-                value={inputs.currentAmount}
-                onChange={(e) => setInputs({...inputs, currentAmount: Number(e.target.value)})}
+                value={formInputs.currentAmount}
+                onChange={(e) => setFormInputs({...formInputs, currentAmount: Number(e.target.value)})}
                 className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] transition-all text-sm" 
               />
             </InputWrapper>
@@ -83,8 +87,8 @@ export default function InflationTerminal() {
             >
               <input 
                 type="number" 
-                value={inputs.years}
-                onChange={(e) => setInputs({...inputs, years: Number(e.target.value)})}
+                value={formInputs.years}
+                onChange={(e) => setFormInputs({...formInputs, years: Number(e.target.value)})}
                 className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] transition-all text-sm" 
               />
             </InputWrapper>
@@ -105,8 +109,8 @@ export default function InflationTerminal() {
               <input 
                 type="number" 
                 step="0.1"
-                value={inputs.annualInflation}
-                onChange={(e) => setInputs({...inputs, annualInflation: Number(e.target.value)})}
+                value={formInputs.annualInflation}
+                onChange={(e) => setFormInputs({...formInputs, annualInflation: Number(e.target.value)})}
                 className="w-full bg-[#22c55e]/5 border border-[#22c55e]/20 rounded-lg p-3 text-[#22c55e] text-xl font-black italic outline-none focus:border-[#22c55e] transition-all" 
               />
             </InputWrapper>
@@ -118,8 +122,8 @@ export default function InflationTerminal() {
               <input 
                 type="number" 
                 step="0.1"
-                value={inputs.investmentReturn}
-                onChange={(e) => setInputs({...inputs, investmentReturn: Number(e.target.value)})}
+                value={formInputs.investmentReturn}
+                onChange={(e) => setFormInputs({...formInputs, investmentReturn: Number(e.target.value)})}
                 className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] transition-all text-sm" 
               />
             </InputWrapper>
@@ -127,6 +131,7 @@ export default function InflationTerminal() {
         </div>
       </div>
 
+      {/* 3. CORE INTERFACE TRIGGER (Calculation fires only here) */}
       <button 
         onClick={handleAnalyze} 
         className="w-full bg-white text-black py-4 rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-[#22c55e] transition-all flex items-center justify-center gap-2 italic shadow-xl shadow-white/5 active:scale-[0.98]"
