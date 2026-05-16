@@ -62,7 +62,7 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
 
         {success ? (
           <div className="p-12 text-center space-y-4">
-            <div className="h-12 w-12 bg-[#22c55e]/20 rounded-full flex items-center justify-center mx-auto">
+            <div className="h-12 w-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
               <Send className="h-6 w-6 text-[#22c55e]" />
             </div>
             <h3 className="text-white font-black uppercase tracking-widest text-sm">Transmission Successful</h3>
@@ -73,7 +73,8 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
             
             {/* FULL NAME FIELD */}
             <div className="space-y-1 text-left">
-              <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Full Name</label>
+              {/* UPDATED: Changed text-zinc-600 to text-white */}
+              <label className="text-[9px] font-black text-white uppercase tracking-widest">Full Name</label>
               <input 
                 name="full_name" 
                 required 
@@ -85,7 +86,8 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
 
             {/* EMAIL ID FIELD */}
             <div className="space-y-1 text-left">
-              <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Email ID</label>
+              {/* UPDATED: Changed text-zinc-600 to text-white */}
+              <label className="text-[9px] font-black text-white uppercase tracking-widest">Email ID</label>
               <input 
                 name="email_id" 
                 required 
@@ -98,8 +100,9 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
             {/* FIRM NAME FIELD (OPTIONAL) */}
             <div className="space-y-1 text-left">
               <div className="flex justify-between items-center">
-                <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Firm Name</label>
-                <span className="text-[8px] font-bold text-zinc-600 uppercase tracking-widest italic">Optional</span>
+                {/* UPDATED: Changed text-zinc-600 to text-white */}
+                <label className="text-[9px] font-black text-white uppercase tracking-widest">Firm Name</label>
+                <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest italic">Optional</span>
               </div>
               <input 
                 name="firm_name" 
@@ -111,7 +114,8 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
 
             {/* BIG MESSAGE BOX */}
             <div className="space-y-1 text-left">
-              <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">How can we assist you?</label>
+              {/* UPDATED: Changed text-zinc-600 to text-white */}
+              <label className="text-[9px] font-black text-white uppercase tracking-widest">How can we assist you?</label>
               <textarea 
                 name="message" 
                 required 
