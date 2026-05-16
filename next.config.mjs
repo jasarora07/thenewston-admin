@@ -1,16 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Preserving your bypass safety toggles
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
-    unoptimized: true, // Keeping this as per your requirement
+    unoptimized: true, 
   },
   
-  // INSTITUTIONAL SECURITY HEADERS: Fixes Bing "Security & Trust" flags
+  /**
+   * CANARY FIXES: In Next.js 16+ Canary, global options are nested under experimental flags
+   * to ensure Turbopack serves raw static assets to external web crawlers smoothly.
+   */
+  experimental: {
+    eslint: {
+      ignoreDuringBuilds: true, // Moves the root lint bypass down into the valid execution layer
+    }
+  },
+
+  // INSTITUTIONAL SECURITY HEADERS: Preserving your exact Bing trust parameters
   async headers() {
     return [
       {
@@ -37,7 +45,7 @@ const nextConfig = {
     ];
   },
 
-  // SEO PROTECTION: Redirect ghost maintenance page
+  // SEO PROTECTION: Preserving your ghost maintenance asset page fallback loop
   async redirects() {
     return [
       {
@@ -49,4 +57,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default nextConfig;
