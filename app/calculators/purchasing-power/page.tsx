@@ -2,6 +2,7 @@ import { ShieldCheck, Wind, HelpCircle, Info, TrendingUp, LayoutGrid, Lock } fro
 import type { Metadata } from "next"
 import Link from "next/link"
 import InflationTerminal from "@/components/calculators/inflation-terminal"
+import CalculatorSchema from "@/components/seo/schema-markup" // Ensure this path matches your schema file setup
 
 /** * BING SEO HARDENING: 
  * Ensures 'x-vercel-cache: HIT' and unique page identification.
@@ -111,6 +112,13 @@ export default function PurchasingPowerPage() {
           </p>
         </div>
       </section>
+
+      {/* 6. TECHNICAL SEO STRUCTURED SCHEMA */}
+      <CalculatorSchema 
+        name="Purchasing Power & Inflation Terminal"
+        description="Model the structural erosion of currency debasement. Quantify the divergence between nominal balances and real asset utility against 2026 CPI targets."
+        url="https://thenewston.com/calculators/purchasing-power"
+      />
     </main>
   )
 }
