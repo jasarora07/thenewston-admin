@@ -9,9 +9,24 @@ export function ComplianceBanner() {
 
   useEffect(() => {
     setMounted(true)
-    const consent = localStorage.getItem("newston_consent")
-    if (!consent) {
-      setIsVisible(true)
+    
+    // 1. Check the browser's User-Agent string signature
+    const userAgent = typeof window !== "undefined" && window.navigator?.userAgent 
+      ? window.navigator.userAgent.toLowerCase() 
+      : ""
+    
+    // 2. Identify automated web crawlers and search index bots
+    const isBot = /googlebot|bingbot|yahoobot|duckduckbot|baiduspider|headless/i.test(userAgent)
+
+    // 3. Only run consent checks and show the banner if the visitor is a human user
+    if (!isBot) {
+      const consent = localStorage.getItem("newston_consent")
+      if (!consent) {
+        setIsVisible(true)
+      }
+    } else {
+      // Force hide the wrapper for bots to avoid blocking stylesheet hydration loops
+      setIsVisible(false)
     }
   }, [])
 
