@@ -18,12 +18,17 @@ const nextConfig = {
     }
   },
 
-  // INSTITUTIONAL SECURITY HEADERS: Preserving your exact Bing trust parameters
+  // INSTITUTIONAL SECURITY HEADERS + CACHE INVALIDATION BYPASS
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
+          // ⚡ THE CACHE SKIP METHOD: Forces Vercel to bypass edge caching for real-time crawler diagnostics
+          {
+            key: 'x-vercel-skip-cache',
+            value: '1',
+          },
           {
             key: 'X-Frame-Options',
             value: 'DENY',
