@@ -67,7 +67,9 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
             <ShieldCheck className="h-4 w-4 text-[#22c55e]" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Secure Data Uplink</span>
           </div>
-          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors"><X className="h-5 w-5" /></button>
+          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
+            <X className="h-5 w-5" />
+          </button>
         </div>
 
         {success ? (
@@ -120,3 +122,49 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
             {/* FIRM NAME FIELD (OPTIONAL) */}
             <div className="space-y-1 text-left">
               <div className="flex justify-between items-center">
+                <label className="text-[9px] font-black text-white uppercase tracking-widest">Firm Name</label>
+                {/* FIXED: Removed the malformed 'tracking-widestSafe' typo causing Turbopack fail */}
+                <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest italic">Optional</span>
+              </div>
+              <input 
+                name="firm_name" 
+                type="text" 
+                placeholder="Capital Management LLC"
+                className="w-full bg-black border border-white/10 rounded p-2.5 text-sm text-white focus:border-[#22c55e] outline-none transition-all font-mono placeholder:text-zinc-700" 
+              />
+            </div>
+
+            {/* MESSAGE BOX (MANDATORY) */}
+            <div className="space-y-1 text-left">
+              <label className="text-[9px] font-black text-white uppercase tracking-widest">
+                How can we assist you? <span className="text-red-500 font-black">*</span>
+              </label>
+              <textarea 
+                name="message" 
+                required 
+                rows={5} 
+                placeholder="Outline your regulatory compliance requirements, custom calculator metrics, or platform verification questions..."
+                className="w-full bg-black border border-white/10 rounded p-2.5 text-sm text-white focus:border-[#22c55e] outline-none resize-none transition-all font-mono placeholder:text-zinc-700" 
+              />
+            </div>
+
+            {/* BUTTON */}
+            <button 
+              disabled={loading} 
+              type="submit" 
+              className="w-full bg-white disabled:opacity-50 text-black font-black uppercase text-[11px] tracking-[0.2em] py-4 rounded flex items-center justify-center gap-2 group hover:bg-[#22c55e] transition-colors duration-300 italic"
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  Send Query <Send className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  )
+}
