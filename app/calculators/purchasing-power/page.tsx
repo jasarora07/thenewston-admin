@@ -1,14 +1,16 @@
-import { ShieldCheck, Wind, HelpCircle, Info, TrendingUp, LayoutGrid, Lock } from "lucide-react"
+import { ShieldCheck, Wind, HelpCircle, Info, LayoutGrid, Lock } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import InflationTerminal from "@/components/calculators/inflation-terminal"
-import CalculatorSchema from "@/components/seo/schema-markup" // Ensure this path matches your schema file setup
+import CalculatorSchema from "@/components/seo/schema-markup"
 
-/** * BING SEO HARDENING: 
- * Ensures 'x-vercel-cache: HIT' and unique page identification.
+/** * CACHE SMASH PROTOCOL:
+ * Shifting from 'force-static' to 'force-dynamic' completely bypasses Vercel's
+ * ISR edge caching networks. This ensures that your newest component updates, 
+ * including the E-E-A-T text blocks, render dynamically and appear inside 
+ * the raw HTML source code instantly without altering the user interface.
  */
-export const dynamic = 'force-static';
-export const revalidate = 86400; // 24 Hours
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: "Purchasing Power & Inflation Terminal | 2026 Analysis",
