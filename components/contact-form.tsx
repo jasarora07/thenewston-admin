@@ -21,26 +21,24 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
     const firm_name = formData.get('firm_name')?.toString().trim()
     const message = formData.get('message')?.toString().trim()
 
-    // STRICT JAVASCRIPT VALIDATION ENFORCEMENT
+    // 1. STRICT VALIDATION
     if (!full_name || !email_id || !message) {
       setFormError("All fields except Firm Name are strictly mandatory.")
       setLoading(false)
-      return;
+      return
     }
     
+    // 2. EXCLUSIVE PAYLOAD: No 'email' or 'query' keys allowed here anymore!
     const payload = {
       full_name,
       email_id,
-      firm_name: firm_name || null, // Optional field sent as null if empty
-      message,
-      // Legacy table compatibility fallbacks
-      first_name: full_name,
-      last_name: "Provided via Unified Field",
-      email: email_id,
-      query: message
+      firm_name: firm_name || null,
+      message
     }
 
-    const { error } = await supabase.from('contact_queries').insert([payload])
+    const { error } = await supabase
+      .from('contact_queries')
+      .insert([payload])
 
     if (!error) {
       setSuccess(true)
@@ -49,7 +47,7 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
         onClose()
       }, 3000)
     } else {
-      console.error("Supabase Uplink Error:", error)
+      console.error("Supabase Database Sync Error:", error)
       setFormError(error.message || "Database transmission rejected.")
     }
     setLoading(false)
@@ -83,7 +81,7 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             
-            {/* ERROR SUMMARY BLOCK */}
+            {/* ERROR DISPATCH DISPLAY */}
             {formError && (
               <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-2 text-left animate-in fade-in duration-200">
                 <AlertCircle className="h-4 w-4 text-red-500 shrink-0" />
@@ -91,7 +89,7 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
               </div>
             )}
 
-            {/* FULL NAME FIELD (MANDATORY) */}
+            {/* FULL NAME (MANDATORY) */}
             <div className="space-y-1 text-left">
               <label className="text-[9px] font-black text-white uppercase tracking-widest">
                 Full Name <span className="text-red-500 font-black">*</span>
@@ -105,7 +103,7 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
               />
             </div>
 
-            {/* EMAIL ID FIELD (MANDATORY) */}
+            {/* EMAIL ID (MANDATORY) */}
             <div className="space-y-1 text-left">
               <label className="text-[9px] font-black text-white uppercase tracking-widest">
                 Email ID <span className="text-red-500 font-black">*</span>
@@ -119,11 +117,10 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
               />
             </div>
 
-            {/* FIRM NAME FIELD (OPTIONAL) */}
+            {/* FIRM NAME (OPTIONAL) */}
             <div className="space-y-1 text-left">
               <div className="flex justify-between items-center">
                 <label className="text-[9px] font-black text-white uppercase tracking-widest">Firm Name</label>
-                {/* FIXED: Removed the malformed 'tracking-widestSafe' typo causing Turbopack fail */}
                 <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest italic">Optional</span>
               </div>
               <input 
@@ -148,7 +145,7 @@ export default function ContactForm({ isOpen, onClose }: { isOpen: boolean, onCl
               />
             </div>
 
-            {/* BUTTON */}
+            {/* SUBMIT BUTTON */}
             <button 
               disabled={loading} 
               type="submit" 
