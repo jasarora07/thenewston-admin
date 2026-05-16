@@ -5,9 +5,8 @@ import { Wind, ArrowRight, Activity, ShieldCheck, HelpCircle, AlertTriangle } fr
 import { calculateInflationOutcome } from "@/lib/math/inflation-logic"
 
 /**
- * FIXED: Reusable UI Component pulled OUTSIDE the main render cycle.
- * This prevents React from tearing down and recreating the DOM layout elements 
- * on every keystroke, which was causing the inputs to freeze and disable.
+ * REUSABLE INPUT WRAPPER
+ * Maintained outside the component render cycle to prevent focus-tearing and freezing.
  */
 const InputWrapper = ({ label, children, tip }: { label: string; children: React.ReactNode; tip: string }) => (
   <div className="group relative space-y-1 text-left">
@@ -44,7 +43,6 @@ export default function InflationTerminal() {
   useEffect(() => { setMounted(true) }, [])
   if (!mounted) return null
 
-  // Execution call remains strictly bound to the action button click
   const handleAnalyze = () => {
     setResults(calculateInflationOutcome(formInputs))
   }
@@ -179,39 +177,6 @@ export default function InflationTerminal() {
           </div>
         </div>
       )}
-
-      {/* HARDENED E-E-A-T DATA SOURCE & METHODOLOGY TRANSPARENCY SECTION */}
-      <div className="mt-12 border-t border-white/5 pt-8 text-left space-y-6 max-w-4xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="h-1.5 w-1.5 bg-[#22c55e] rounded-full animate-pulse" />
-          <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-white">
-            Data Integrity & Empirical Methodology
-          </h4>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
-          <div className="space-y-2">
-            <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block">Operational Core Data Feeds</span>
-            <p className="text-[10px] text-zinc-400 leading-relaxed text-justify uppercase font-bold tracking-tight">
-              The mathematical frameworks running within this module utilize structured algorithms pulling historical and trailing performance matrices. Calculations integrate core metrics sourced directly from the <span className="text-white font-black">U.S. Bureau of Labor Statistics (BLS) Consumer Price Index (CPI-U)</span> datastreams and historical baseline allocations maintained by the <span className="text-white font-black">Federal Reserve Bank of St. Louis (FRED)</span>.
-            </p>
-          </div>
-          
-          <div className="space-y-2">
-            <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block">Algorithmic Computation Vector</span>
-            <p className="text-[10px] text-zinc-400 leading-relaxed text-justify uppercase font-bold tracking-tight">
-              Calculations are processed client-side via continuous compounding equations and standard discount functions. Nominal variables are translated to real net assets through continuous structural adjustments modeled after standard institutional asset valuation protocols. Baseline calculations assume static tax thresholds matching standard current fiscal configurations.
-            </p>
-          </div>
-        </div>
-        
-        {/* FIXED: Closing tag changed safely back to a div wrapper layout */}
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-2 text-[8px] text-zinc-600 font-mono uppercase tracking-wider">
-          <span>[ Citation 01: BLS Data Engine Series CUUR0000SA0 ]</span>
-          <span>[ Citation 02: FRED Macro-Financial Data Core ]</span>
-          <span>[ Security Protocol: Verified TLS 1.3 Encryption ]</span>
-        </div>
-      </div>
 
     </div>
   )
