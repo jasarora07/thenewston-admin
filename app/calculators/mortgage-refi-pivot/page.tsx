@@ -60,14 +60,15 @@ export default async function MortgageRefiPage() {
           <MortgageRefiPivot />
         </section>
 
-        {/* 4. SEMANTIC CONTENT SECTION */}
+        {/* 4. SEMANTIC CONTENT SECTION (Font updated to White) */}
         <section className="py-12 border-t border-white/5 text-left">
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-2">
               <HelpCircle className="h-4 w-4 text-[#22c55e]" />
               <h3 className="text-sm font-black uppercase tracking-widest italic text-white">How our models work</h3>
             </div>
-            <p className="text-[11px] text-zinc-500 font-bold leading-relaxed uppercase text-justify tracking-tighter">
+            {/* UPDATED: text-zinc-500 replaced with text-white for elite visual weight */}
+            <p className="text-[11px] text-white font-bold leading-relaxed uppercase text-justify tracking-tighter">
               Most bank calculators only show monthly savings. The Newston Terminal calculates the <span className="text-white font-black uppercase">Total Lifecycle Cost of Debt</span>. 
               Our Mortgage Pivot tool factors in amortized interest resets, time-value of money, and closing costs to find your true break-even point in the 2026 rate environment.
             </p>
