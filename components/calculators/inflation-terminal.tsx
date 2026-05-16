@@ -205,7 +205,7 @@ export default function InflationTerminal() {
           </div>
         </div>
         
-        {/* FORMAL TRUST CITATIONS */}
+        {/* FIXED: Closing tag changed safely back to a div wrapper layout */}
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-2 text-[8px] text-zinc-600 font-mono uppercase tracking-wider">
           <span>[ Citation 01: BLS Data Engine Series CUUR0000SA0 ]</span>
           <span>[ Citation 02: FRED Macro-Financial Data Core ]</span>
