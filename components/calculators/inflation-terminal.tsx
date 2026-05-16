@@ -4,10 +4,34 @@ import React, { useState, useEffect } from "react"
 import { Wind, ArrowRight, Activity, ShieldCheck, HelpCircle, AlertTriangle } from "lucide-react"
 import { calculateInflationOutcome } from "@/lib/math/inflation-logic"
 
+/**
+ * FIXED: Reusable UI Component pulled OUTSIDE the main render cycle.
+ * This prevents React from tearing down and recreating the DOM layout elements 
+ * on every keystroke, which was causing the inputs to freeze and disable.
+ */
+const InputWrapper = ({ label, children, tip }: { label: string; children: React.ReactNode; tip: string }) => (
+  <div className="group relative space-y-1 text-left">
+    <div className="flex items-center gap-2 mb-1">
+      <label className="text-[9px] font-bold text-zinc-600 uppercase tracking-wider cursor-help">
+        {label}
+      </label>
+      <div className="relative">
+        <HelpCircle className="h-3 w-3 text-zinc-800 cursor-help peer" />
+        <div className="absolute bottom-full mb-2 w-64 p-3 bg-zinc-900 border border-white/10 shadow-2xl rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity z-50 pointer-events-none text-justify">
+          <p className="text-[10px] text-zinc-400 leading-relaxed font-medium uppercase tracking-tight">
+            {tip}
+          </p>
+        </div>
+      </div>
+    </div>
+    {children}
+  </div>
+)
+
 export default function InflationTerminal() {
   const [mounted, setMounted] = useState(false)
   
-  // 1. Decoupled form input state for user keystrokes
+  // Clean staging state for user typing
   const [formInputs, setFormInputs] = useState({
     currentAmount: 100000,
     annualInflation: 3.5,
@@ -20,38 +44,15 @@ export default function InflationTerminal() {
   useEffect(() => { setMounted(true) }, [])
   if (!mounted) return null
 
-  // 2. Click execution handler that snaps the data only upon request
+  // Execution call remains strictly bound to the action button click
   const handleAnalyze = () => {
     setResults(calculateInflationOutcome(formInputs))
   }
 
-  /**
-   * REUSABLE UI COMPONENT: InputWrapper
-   * Standardized labels to text-zinc-600 to match Capital Allocation reference.
-   */
-  const InputWrapper = ({ label, children, tip }: { label: string; children: React.ReactNode; tip: string }) => (
-    <div className="group relative space-y-1 text-left">
-      <div className="flex items-center gap-2 mb-1">
-        <label className="text-[9px] font-bold text-zinc-600 uppercase tracking-wider cursor-help">
-          {label}
-        </label>
-        <div className="relative">
-          <HelpCircle className="h-3 w-3 text-zinc-800 cursor-help peer" />
-          <div className="absolute bottom-full mb-2 w-64 p-3 bg-zinc-900 border border-white/10 shadow-2xl rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity z-50 pointer-events-none text-justify">
-            <p className="text-[10px] text-zinc-400 leading-relaxed font-medium uppercase tracking-tight">
-              {tip}
-            </p>
-          </div>
-        </div>
-      </div>
-      {children}
-    </div>
-  )
-
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
       
-      {/* 1. ADVISORY NOTICE (Integrated for site-wide consistency) */}
+      {/* 1. ADVISORY NOTICE */}
       <div className="bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
         <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
@@ -131,7 +132,7 @@ export default function InflationTerminal() {
         </div>
       </div>
 
-      {/* 3. CORE INTERFACE TRIGGER (Calculation fires only here) */}
+      {/* CORE INTERFACE TRIGGER */}
       <button 
         onClick={handleAnalyze} 
         className="w-full bg-white text-black py-4 rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-[#22c55e] transition-all flex items-center justify-center gap-2 italic shadow-xl shadow-white/5 active:scale-[0.98]"
