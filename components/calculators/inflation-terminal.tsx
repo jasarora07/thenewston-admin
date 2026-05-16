@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Wind, ArrowRight, Activity, ShieldCheck, HelpCircle, AlertTriangle } from "lucide-react"
 import { calculateInflationOutcome } from "@/lib/math/inflation-logic"
 
@@ -28,8 +28,6 @@ const InputWrapper = ({ label, children, tip }: { label: string; children: React
 )
 
 export default function InflationTerminal() {
-  const [mounted, setMounted] = useState(false)
-  
   // Clean staging state for user typing
   const [formInputs, setFormInputs] = useState({
     currentAmount: 100000,
@@ -40,15 +38,12 @@ export default function InflationTerminal() {
   
   const [results, setResults] = useState<any>(null)
 
-  useEffect(() => { setMounted(true) }, [])
-  if (!mounted) return null
-
   const handleAnalyze = () => {
     setResults(calculateInflationOutcome(formInputs))
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
+    <div className="max-w-4xl mx-auto space-y-8">
       
       {/* 1. ADVISORY NOTICE */}
       <div className="bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
@@ -140,7 +135,7 @@ export default function InflationTerminal() {
 
       {/* RESULTS DISPLAY */}
       {results && (
-        <div className="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
           <div className="p-4 flex items-center justify-between bg-[#22c55e]">
             <h3 className="text-black font-black uppercase italic text-sm tracking-tighter flex items-center gap-2">
                <Activity className="h-4 w-4" /> Erosion Analysis Complete
