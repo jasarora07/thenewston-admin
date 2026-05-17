@@ -1,20 +1,19 @@
-import { ShieldCheck, TrendingUp, AlertTriangle, HelpCircle, Info, Landmark, LayoutGrid, Lock } from "lucide-react"
+import { ShieldCheck, TrendingUp, AlertTriangle, HelpCircle, Info, LayoutGrid, Lock } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import TaxExemptWealthGap from "@/components/tax-exempt-wealth-gap"
 
-/** * BING SEO HARDENING: 
- * Static generation ensures the 'HIT' header Bing requires for speed scores.
+/** * SEO EDGE HARDENING
+ * Optimizes server rendering paths to keep telemetry routes hot while
+ * serving pre-rendered static components across edge CDN layouts.
  */
-export const dynamic = 'force-static';
-export const revalidate = 86400; // 24 Hours
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: "Tax-Exempt Wealth Gap & Drag Simulator | 2026 Terminal",
   description: "Simulate annual tax leakage and project the 'Alpha' generated through tax-exempt wealth strategies. Analyze capital appreciation efficiency for 2026.",
   keywords: ["tax drag simulator", "wealth gap analysis", "capital appreciation", "tax-exempt growth", "financial efficiency"],
   alternates: {
-    /* FIXED: Using relative path to resolve the Bing Canonical Error */
     canonical: './',
   },
 }
@@ -38,7 +37,7 @@ export default function TaxWealthGapPage() {
         </p>
       </div>
 
-      {/* 2. ADVISORY PROTOCOL (Fixed styles to guarantee rendering on black background) */}
+      {/* 2. ADVISORY PROTOCOL */}
       <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4 text-left">
         <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
@@ -47,7 +46,7 @@ export default function TaxWealthGapPage() {
         </p>
       </div>
 
-      {/* 3. THE CALCULATOR */}
+      {/* 3. THE CALCULATOR INTERNAL WRAPPER */}
       <div className="max-w-6xl mx-auto mb-20">
         <div className="flex items-center gap-3 ml-2 mb-4 text-left">
           <TrendingUp className="h-4 w-4 text-zinc-500" />
@@ -56,7 +55,7 @@ export default function TaxWealthGapPage() {
         <TaxExemptWealthGap />
       </div>
 
-      {/* 4. INTELLIGENCE BRIEFING (Font updated to White) */}
+      {/* 4. INTELLIGENCE BRIEFING */}
       <section className="max-w-5xl mx-auto py-16 border-t border-white/5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
           <div className="space-y-4">
@@ -82,9 +81,8 @@ export default function TaxWealthGapPage() {
         </div>
       </section>
 
-      {/* 5. CONVERSION BRIDGE (Synchronized Bottom Cards) */}
+      {/* 5. CONVERSION BRIDGE */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left">
-        
         {/* CARD 01: HUB */}
         <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
@@ -94,7 +92,7 @@ export default function TaxWealthGapPage() {
           <p className="text-[9px] text-zinc-500 uppercase font-bold text-left">Return to the full suite of institutional intelligence engines.</p>
         </Link>
         
-        {/* CARD 02: CONSULT ADVISOR (Locked State) */}
+        {/* CARD 02: CONSULT ADVISOR */}
         <div className="relative p-6 bg-zinc-900/10 border border-white/5 rounded-xl cursor-not-allowed group text-left">
           <div className="flex items-center gap-3 mb-3">
             <Lock className="h-3.5 w-3.5 text-zinc-500" />
@@ -116,7 +114,7 @@ export default function TaxWealthGapPage() {
         </Link>
       </section>
 
-      {/* 6. INSTITUTIONAL DISCLOSURE (Standardized Terminology) */}
+      {/* 6. INSTITUTIONAL DISCLOSURE */}
       <section className="max-w-5xl mx-auto border-t border-white/5 pt-12 pb-8 text-left">
         <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4">
           <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
