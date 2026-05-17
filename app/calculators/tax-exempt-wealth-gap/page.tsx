@@ -1,4 +1,4 @@
-import { ShieldCheck, TrendingUp, AlertTriangle, HelpCircle, Info, Landmark, Globe, LayoutGrid } from "lucide-react"
+import { ShieldCheck, TrendingUp, AlertTriangle, HelpCircle, Info, Landmark, Globe, LayoutGrid, Lock } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import TaxExemptWealthGap from "@/components/calculators/tax-growth"
@@ -28,8 +28,8 @@ export default function TaxWealthGapPage() {
         </div>
       </div>
 
-      {/* 1. SECTION HEADER (Vanishes cleanly on paper) */}
-      <div className="max-w-4xl mx-auto mb-6 text-center print:hidden animate-in fade-in slide-in-from-top-4 duration-700">
+      {/* 1. SECTION HEADER */}
+      <div className="max-w-4xl mx-auto mb-12 text-center print:hidden animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="flex justify-center mb-4">
           <div className="bg-[#22c55e]/10 border border-[#22c55e]/20 rounded-full px-4 py-1 flex items-center gap-2">
             <ShieldCheck className="h-3 w-3 text-[#22c55e]" />
@@ -44,7 +44,7 @@ export default function TaxWealthGapPage() {
         </p>
       </div>
 
-      {/* 2. ADVISORY PROTOCOL ALERT - Centered safely below subtitle on desktop, hidden on paper */}
+      {/* 2. ADVISORY PROTOCOL ALERT */}
       <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded-xl flex items-center justify-center gap-3 print:hidden">
         <AlertTriangle className="h-4 w-4 text-red-500 shrink-0" />
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight text-center">
@@ -84,39 +84,45 @@ export default function TaxWealthGapPage() {
         </div>
       </section>
 
-      {/* 5. INTERACTIVE FOOTER HUB (Completely ignored during print rendering) */}
+      {/* 5. NAVIGATION HUB (Second Card Set to Disabled / Locked State) */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 print:hidden">
+        {/* CARD 01: DECISION MODELS */}
         <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <LayoutGrid className="h-4 w-4 text-[#22c55e]" />
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Calculator Hub</h3>
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none">Decision Models</h3>
           </div>
-          <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Return to the institutional suite of financial intelligence modules.</p>
+          <p className="text-[9px] text-zinc-500 uppercase font-bold text-left leading-relaxed">Return to the full suite of institutional intelligence engines.</p>
         </Link>
         
-        <Link href="/calculators/mortgage-accelerator" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
+        {/* CARD 02: CONSULT ADVISOR (Force Disabled / Locked Style Architecture) */}
+        <div className="relative p-6 bg-zinc-900/10 border border-white/5 rounded-xl cursor-not-allowed group text-left opacity-40 select-none">
           <div className="flex items-center gap-3 mb-3">
-            <Landmark className="h-4 w-4 text-[#22c55e]" />
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Mortgage Accelerator</h3>
+            <Lock className="h-3.5 w-3.5 text-zinc-500" />
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-500 leading-none">Consult Advisor</h3>
           </div>
-          <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Quantify compounding wealth profiles by accelerating principal prepayments snowballs.</p>
-        </Link>
+          <p className="text-[9px] text-zinc-600 uppercase font-bold mb-4 leading-relaxed">Direct integration with verified CPAs and Fiduciaries.</p>
+          <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-[8px] font-black text-zinc-600 uppercase tracking-[0.2em]">
+            Feature Pending // 2026
+          </div>
+        </div>
 
-        <Link href="/calculators/home-equity-liquidity" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
-          <div className="flex items-center gap-3 mb-3">
-            <Globe className="h-4 w-4 text-[#22c55e]" />
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Equity Liquidity</h3>
+        {/* CARD 03: BECOME A PARTNER */}
+        <Link href="/partnership" className="group p-6 bg-[#22c55e]/5 border border-[#22c55e]/20 hover:border-[#22c55e] transition-all rounded-xl">
+          <div className="flex items-center gap-3 mb-3 text-left">
+            <ShieldCheck className="h-4 w-4 text-[#22c55e]" />
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none italic">Become a Partner</h3>
           </div>
-          <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Analyze HELOC vs. Cash-out strategies for 2026 capital extraction.</p>
+          <p className="text-[9px] text-[#22c55e] uppercase font-black text-left leading-relaxed">Apply for firm-level integration into the Newston Terminal.</p>
         </Link>
       </section>
 
-      {/* 6. FIXED ENTERPRISE INSTITUTIONAL DISCLOSURE MATRICES */}
-      <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8 print:border-black print:mt-6 print:pt-4">
+      {/* 6. INSTITUTIONAL DISCLOSURE */}
+      <section className="max-w-5xl mx-auto border-t border-white/5 pt-12 pb-8 print:border-black print:mt-6 print:pt-4">
         <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4 print:bg-transparent print:border-none print:p-0">
           <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1 print:hidden" />
           <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider print:text-black print:text-[8px] print:font-medium">
-            <span className="text-zinc-300 print:text-black print:font-black">Institutional Disclosure:</span> All projections are mathematical simulations based on current 2026 fiscal guidelines. The Newston Terminal does not provide tax advice. Consult with a CPA regarding specific liabilities.
+            <span className="text-[#22c55e] font-black">Institutional Disclosure:</span> Projections assume current 2026 capital gains tax brackets and dividend rules. The Newston Terminal does not provide investment advice or CPA-level tax verification. All capital allocation decisions should be reviewed by a certified financial planner.
           </p>
         </div>
       </section>
