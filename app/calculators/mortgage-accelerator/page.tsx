@@ -96,4 +96,74 @@ export default function MortgageAcceleratorPage() {
             <div className="space-y-1 text-left">
               <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Current Debt Balance ($)</label>
               <input
-                type="
+                type="number"
+                className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] text-sm print:bg-white print:border-zinc-300 print:text-black"
+                value={balance}
+                onChange={(e) => setBalance(Math.max(0, Number(e.target.value)))}
+              />
+            </div>
+
+            <div className="space-y-1 text-left">
+              <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Annual Interest Rate (%)</label>
+              <input
+                type="number" step="0.01"
+                className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] text-sm print:bg-white print:border-zinc-300 print:text-black"
+                value={interestRate}
+                onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
+              />
+            </div>
+
+            <div className="space-y-1 text-left">
+              <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Remaining Tenure (Years Left)</label>
+              <input
+                type="number"
+                className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] text-sm print:bg-white print:border-zinc-300 print:text-black"
+                value={yearsLeft}
+                onChange={(e) => setYearsLeft(Math.max(1, Number(e.target.value)))}
+              />
+            </div>
+
+            <div className="space-y-1 text-left border-t border-white/5 pt-4 print:border-zinc-200">
+              <label className="text-[9px] font-black text-[#22c55e] uppercase tracking-widest block print:text-black">Extra Monthly Principal ($)</label>
+              <input
+                type="number"
+                className="w-full bg-[#22c55e]/5 border border-[#22c55e]/20 rounded-lg p-3 text-[#22c55e] text-lg font-black italic font-sans outline-none focus:border-[#22c55e] print:bg-white print:border-zinc-400 print:text-black print:not-italic"
+                value={extraPayment}
+                onChange={(e) => setExtraPayment(Math.max(0, Number(e.target.value)))}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: REAL-TIME OUTPUT TARGETS PANEL */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* CARD 1: INTEREST SAVED */}
+            <div className="relative group bg-zinc-900/30 border border-[#22c55e]/30 p-5 rounded-xl shadow-lg print:border-2 print:border-black print:bg-transparent text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Total Interest Saved</span>
+                <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
+              </div>
+              <span className="text-2xl font-black text-[#22c55e] font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
+                ${data.totalSavings.toLocaleString()}
+              </span>
+              <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
+                {"This is pure cash kept out of the bank's pockets and locked directly into your home equity."}
+              </p>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
+                {"Calculates the cumulative lifetime interest expense avoided by running short-interval principal injections."}
+              </div>
+            </div>
+
+            {/* CARD 2: TIME SAVED */}
+            <div className="relative group bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border-2 print:border-black print:bg-transparent text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Time Shaved Off</span>
+                <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
+              </div>
+              <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
+                {data.yearsSaved} Years
+              </span>
+              <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
+                {"Your debt obligation hits zero years early, giving you full financial freedom sooner."}
+              </p>
