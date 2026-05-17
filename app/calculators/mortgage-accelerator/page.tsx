@@ -110,11 +110,9 @@ export default function MortgageAcceleratorPage() {
               <span className="text-2xl font-black text-[#22c55e] font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
                 ${data.totalSavings.toLocaleString()}
               </span>
-              {/* LAYMAN COMMENTARY */}
               <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
                 This is pure cash kept out of the bank's pockets and locked directly into your home equity.
               </p>
-              {/* HOVER TOOLTIP */}
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
                 Calculates the cumulative lifetime interest expense avoided by running short-interval principal injections.
               </div>
@@ -129,11 +127,9 @@ export default function MortgageAcceleratorPage() {
               <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
                 {data.yearsSaved} Years
               </span>
-              {/* LAYMAN COMMENTARY */}
               <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
                 Your debt obligation hits zero years early, giving you full financial freedom sooner.
               </p>
-              {/* HOVER TOOLTIP */}
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
                 The absolute runtime variance between your contract amortization maturity date and the accelerated projection window.
               </div>
@@ -143,17 +139,17 @@ export default function MortgageAcceleratorPage() {
             <div className="relative group bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border-2 print:border-black print:bg-transparent text-left">
               <div className="flex items-center justify-between">
                 <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Standard Monthly EMI</span>
-                <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
-                  ${data.standardMonthlyEmi.toLocaleString()}
-                </span>
+                <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
               </div>
-              {/* LAYMAN COMMENTARY */}
+              <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
+                ${data.standardMonthlyEmi.toLocaleString()}
+              </span>
               <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
                 Your required base payment. Extra payments don't change this, they just end the loan early.
               </p>
-              {/* HOVER TOOLTIP */}
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
-                Standard monthly installment derived using standard compounding amortization metrics: $M = P \frac{i(1+i)^n}{(1+i)^n - 1}$.
+              {/* FIXED: Removed raw unescaped mathematical characters breaking compilation loops */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl text-left">
+                Standard monthly installment derived via fixed amortization algorithms balancing rate, tenure, and capital.
               </div>
             </div>
           </div>
@@ -178,7 +174,6 @@ export default function MortgageAcceleratorPage() {
                 <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug pt-1 print:text-zinc-700">
                   What you will pay in total interest if you make only standard monthly payments over the loan's life.
                 </p>
-                {/* HOVER TOOLTIP */}
                 <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
                   Total integrated aggregate of interest outlays accrued via non-accelerated timeline tracks.
                 </div>
@@ -195,7 +190,6 @@ export default function MortgageAcceleratorPage() {
                 <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug pt-1 print:text-zinc-700">
                   Your new total interest liability when adding the extra payment allocation vector.
                 </p>
-                {/* HOVER TOOLTIP */}
                 <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
                   Total integrated aggregate of interest outlays accrued when applying client-side prepayment vectors.
                 </div>
@@ -254,18 +248,4 @@ export default function MortgageAcceleratorPage() {
       <div className="max-w-6xl mx-auto mt-6 border-t border-white/5 pt-8 text-left print:border-black print:p-0 print:mt-12">
         <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4 text-left print:border-none print:p-0">
           <div className="space-y-3">
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#22c55e] print:text-black print:font-bold">
-              <span>⚠️</span> Institutional Disclosure &amp; Regulatory Commentary
-            </p>
-            <p className="text-[10px] text-zinc-500 leading-relaxed text-justify uppercase font-bold tracking-tight print:text-zinc-700 print:normal-case print:font-medium">
-              All modeling evaluations executed by this machine are processed client-side via standardized continuous amortization equations. Calculations integrate base parameters sourced straight from active fiscal data architectures. Projections assume a static interest environment and zero intermediate recast intervals. The metrics computed herein are for structural analytical scenario mapping and do not represent formal professional legal, accountancy, or fiduciary financial counsel. The Newston Terminal does not retain individual computation profiles.
-            </p>
-            <p className="hidden print:block text-[9px] font-mono font-bold text-zinc-500 pt-6 border-t border-dashed border-zinc-300">
-              Extraction Source: The Newston Terminal Engine (https://thenewston.com) • Verified SEC 2026 Code Base Deployment Block.
-            </p>
-          </div>
-        </div>
-      </div>
-    </main>
-  )
-}
+            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#22c55e] print:text-black print
