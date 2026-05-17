@@ -1,13 +1,12 @@
 import Link from "next/link"
 import { 
   ShieldCheck, 
-  Landmark, 
   TrendingUp, 
-  Home, 
-  ArrowRight, 
   Zap,
   PieChart,
-  Wind
+  Wind,
+  Gauge,
+  ArrowRight
 } from "lucide-react"
 import type { Metadata } from "next"
 
@@ -19,7 +18,7 @@ export const revalidate = 86400; // 24 Hours
 
 export const metadata: Metadata = {
   title: "Financial Calculator Hub | The Newston Intelligence Terminal",
-  description: "Access institutional-grade financial decision models. From Mortgage Refi Pivot points to Tax-Exempt Wealth Gap simulations and Strategic Capital Allocation engines.",
+  description: "Access institutional-grade financial decision models. From our high-demand Mortgage Accelerator to Tax-Exempt Wealth Gap simulations and Strategic Capital Allocation engines.",
   alternates: {
     /* FIXED: Using relative path to resolve the Bing Canonical Error and 
        ensure unique identification for the Hub. */
@@ -30,10 +29,10 @@ export const metadata: Metadata = {
 const modules = [
   {
     id: "01",
-    title: "Mortgage Refi Pivot",
-    desc: "Analyze the mathematical intersection where refinancing costs offset interest savings. Optimized for 2026 amortized resets.",
-    href: "/calculators/mortgage-refi-pivot",
-    icon: <Landmark className="h-6 w-6" />,
+    title: "Mortgage Accelerator",
+    desc: "Quantify the compounding wealth gap saved by launching principal prepayment strategies. Shave years off amortized note life cycles.",
+    href: "/calculators/mortgage-accelerator",
+    icon: <Gauge className="h-6 w-6" />, // Swapped to Gauge to visually sync with 'Accelerator' branding
     status: "LIVE"
   },
   {
@@ -46,14 +45,6 @@ const modules = [
   },
   {
     id: "03",
-    title: "Equity Liquidity Engine",
-    desc: "Model capital extraction strategies. Contrast HELOC blended rates against total debt replacement models.",
-    href: "/calculators/home-equity-liquidity",
-    icon: <Home className="h-6 w-6" />,
-    status: "LIVE"
-  },
-  {
-    id: "04",
     title: "Capital Allocation",
     desc: "Quantify the wealth divergence between taxable and tax-exempt growth. Model dividend leakage and capital gains drag.",
     href: "/calculators/capital-allocation",
@@ -61,9 +52,9 @@ const modules = [
     status: "LIVE"
   },
   {
-    id: "05",
+    id: "04",
     title: "Purchasing Power",
-    desc: "Model the silent tax of inflation. Quantify the erosion of your capital against 2026 CPI projections.",
+    desc: "Model the silent tax of inflation. Quantify the erosion of your capital against active CPI projections.",
     href: "/calculators/purchasing-power",
     icon: <Wind className="h-6 w-6" />,
     status: "LIVE"
@@ -92,7 +83,7 @@ export default function CalculatorHub() {
         </div>
 
         {/* MODULE GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl text-left">
           {modules.map((mod) => (
             <Link 
               key={mod.id} 
