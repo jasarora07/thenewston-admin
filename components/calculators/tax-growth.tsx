@@ -17,7 +17,7 @@ export default function TaxExemptWealthGap() {
     
     const r = expectedReturn / 100
     const t = taxRate / 100
-    const taxedRate = r * (1 - t) // Return adjustments following annual fiscal drag degradation
+    const taxedRate = r * (1 - t)
 
     for (let i = 0; i < horizonYears; i++) {
       taxExemptTotal = taxExemptTotal * (1 + r) + annualContribution
@@ -80,45 +80,29 @@ export default function TaxExemptWealthGap() {
   }
 
   return (
-    <div className="w-full text-white font-sans selection:bg-[#22c55e]/30 print:bg-white print:text-black print:p-0">
+    <div className="w-full text-white font-sans selection:bg-[#22c55e]/30 print:bg-white print:text-black print:p-8 print:block print:w-full">
       
-      {/* 📥 INJECTED CSS PRINT-MODE STYLESHEET FIREWALL OVERRIDE */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media print {
-          /* Force hide the layout files headers, tickers, and global navigation models */
-          html, body, header, footer, nav, aside, [class*="navbar"], [class*="header"], [class*="footer"], [class*="ticker"] {
-            display: none !important;
-            height: 0 !important;
-            opacity: 0 !important;
-          }
-          /* Force print parameters to process a clean background */
-          body {
-            background: #ffffff !important;
-            color: #000000 !important;
-          }
-        }
-      `}} />
-
-      {/* 📥 PDF AUDIT STATEMENT HEADER - Only pops into the print preview output */}
-      <div className="hidden print:block text-left mb-6 border-b-2 border-black pb-3">
-        <div className="text-xl font-black uppercase tracking-tight text-black">
+      {/* 📥 EXCLUSIVE PDF REPORT BRANDING HEADER (Visible only on print layouts) */}
+      <div className="hidden print:block text-left mb-8 border-b-2 border-black pb-4">
+        <div className="text-2xl font-black uppercase tracking-tight text-black">
           THE NEWSTON TERMINAL
         </div>
-        <div className="text-[9px] font-mono font-bold text-zinc-600 uppercase tracking-widest mt-1 flex justify-between">
+        <div className="text-[10px] font-mono font-bold text-zinc-600 uppercase tracking-widest mt-1 flex justify-between">
           <span>Module 02: Capital Efficiency Audit Profile</span>
           <span>Reference Date // {new Date().toLocaleDateString()}</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 print:flex print:flex-row print:gap-6 print:space-y-0">
+      {/* SYSTEM CONTROLS GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 print:block print:w-full print:space-y-8">
         
-        {/* LEFT COLUMN: PARAMETER ARRAYS CONTROLS */}
-        <div className="lg:col-span-1 bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-6 shadow-xl print:border-none print:p-0 print:bg-transparent print:w-[35%]">
-          <h3 className="text-[10px] font-black uppercase tracking-widest text-white flex items-center gap-2 italic border-b border-white/10 pb-2 print:text-black print:border-black print:not-italic print:text-[11px] print:font-black">
+        {/* LEFT COLUMN: BASELINE PARAMETERS */}
+        <div className="lg:col-span-1 bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-6 shadow-xl print:border-none print:p-0 print:bg-transparent print:w-full">
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-white flex items-center gap-2 italic border-b border-white/10 pb-2 print:text-black print:border-black print:not-italic print:text-xs print:font-black">
             Control Baseline Parameter Arrays
           </h3>
 
-          <div className="space-y-4">
+          <div className="space-y-4 print:grid print:grid-cols-2 print:gap-4 print:space-y-0">
             <div className="space-y-1 text-left">
               <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Initial Capital Base ($)</label>
               <input
@@ -127,7 +111,7 @@ export default function TaxExemptWealthGap() {
                 value={initialCapital}
                 onChange={(e) => setInitialCapital(Math.max(0, Number(e.target.value)))}
               />
-              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2 rounded mt-0.5">
+              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2.5 rounded border border-zinc-200 mt-1">
                 ${initialCapital.toLocaleString()}
               </div>
             </div>
@@ -140,7 +124,7 @@ export default function TaxExemptWealthGap() {
                 value={annualContribution}
                 onChange={(e) => setAnnualContribution(Math.max(0, Number(e.target.value)))}
               />
-              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2 rounded mt-0.5">
+              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2.5 rounded border border-zinc-200 mt-1">
                 ${annualContribution.toLocaleString()}
               </div>
             </div>
@@ -153,12 +137,12 @@ export default function TaxExemptWealthGap() {
                 value={expectedReturn}
                 onChange={(e) => setExpectedReturn(Math.max(0, Number(e.target.value)))}
               />
-              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2 rounded mt-0.5">
+              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2.5 rounded border border-zinc-200 mt-1">
                 {expectedReturn}%
               </div>
             </div>
 
-            <div className="space-y-1 text-left border-t border-white/5 pt-4 print:border-none print:pt-0">
+            <div className="space-y-1 text-left print:border-none print:pt-0">
               <label className="text-[9px] font-black text-[#22c55e] uppercase tracking-widest block print:text-black print:font-black">Marginal Tax Friction Rate (%)</label>
               <input
                 type="number"
@@ -166,12 +150,12 @@ export default function TaxExemptWealthGap() {
                 value={taxRate}
                 onChange={(e) => setTaxRate(Math.max(0, Number(e.target.value)))}
               />
-              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2 rounded mt-0.5">
+              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2.5 rounded border border-zinc-200 mt-1">
                 {taxRate}%
               </div>
             </div>
 
-            <div className="space-y-1 text-left">
+            <div className="space-y-1 text-left col-span-2 print:col-span-2">
               <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Investment Horizon (Years)</label>
               <input
                 type="number"
@@ -179,76 +163,56 @@ export default function TaxExemptWealthGap() {
                 value={horizonYears}
                 onChange={(e) => setHorizonYears(Math.max(1, Number(e.target.value)))}
               />
-              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2 rounded mt-0.5">
+              <div className="hidden print:block text-sm font-mono font-bold text-black bg-zinc-100 p-2.5 rounded border border-zinc-200 mt-1">
                 {horizonYears} Years
               </div>
             </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: SCREEN METRICS & MOUSE OVER HOVER HOOKS */}
-        <div className="lg:col-span-2 space-y-6 print:w-[65%] print:space-y-4">
+        {/* RIGHT COLUMN: ANALYTICS CARDS DISPLAY */}
+        <div className="lg:col-span-2 space-y-6 print:w-full print:space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 print:grid-cols-2 print:gap-4">
             
-            {/* HOVER METRIC 1 */}
+            {/* AUDIT CARD 1 */}
             <div className="relative group bg-zinc-900/30 border border-[#22c55e]/30 p-5 rounded-xl shadow-lg print:border print:border-black print:bg-transparent text-left">
               <div className="flex items-center justify-between">
                 <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-black print:text-[9px]">Absolute Wealth Gap</span>
                 <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
               </div>
-              <span className="text-2xl font-black text-[#22c55e] font-sans tracking-tight block mt-1 print:text-black print:text-xl">
+              <span className="text-2xl font-black text-[#22c55e] font-sans tracking-tight block mt-1 print:text-black print:text-2xl">
                 ${data.absoluteWealthGap.toLocaleString()}
               </span>
               <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-700 print:border-zinc-300">
                 {"Pure cash capital structural value intercepted entirely by annual tax drag parameters."}
               </p>
-              {/* INTERACTIVE HOVER MOUSE-OVER TIP */}
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity json-data-lock z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
                 {"Calculates the cumulative multi-decade performance metric variance between complete tax shielding and unshielded interest streams."}
               </div>
             </div>
 
-            {/* HOVER METRIC 2 */}
+            {/* AUDIT CARD 2 */}
             <div className="relative group bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border print:border-black print:bg-transparent text-left">
               <div className="flex items-center justify-between">
                 <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-black print:text-[9px]">Portfolio Erosion Ratio</span>
                 <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
               </div>
-              <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl">
+              <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-2xl">
                 {data.capitalErosionPercentage}% Deficit
               </span>
               <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-700 print:border-zinc-300">
-                {"Your ultimate estate generation potential dropped by this exact margin via asset friction."}
+                {"Your ultimate estate accumulation potential dropped by this exact margin via asset friction."}
               </p>
-              {/* INTERACTIVE HOVER MOUSE-OVER TIP */}
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity json-data-lock z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
                 {"The percentage loss coefficient representing potential generational wealth surrendered to ongoing annual tax leakage events."}
-              </div>
-            </div>
-
-            {/* HOVER METRIC 3 */}
-            <div className="relative group bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border print:border-black print:bg-transparent text-left">
-              <div className="flex items-center justify-between">
-                <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-black print:text-[9px]">Effective Tax Drag</span>
-                <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
-              </div>
-              <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl">
-                {taxRate}% / Yr
-              </span>
-              <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-700 print:border-zinc-300">
-                {"Your current annual fiscal penalty line. This rate compounds negatively against market upside."}
-              </p>
-              {/* INTERACTIVE HOVER MOUSE-OVER TIP */}
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity json-data-lock z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
-                {"The yearly asset deduction constant pulled out of aggregate production, breaking geometric wealth curves."}
               </div>
             </div>
           </div>
 
-          {/* LIFECYCLE MATRIX BREAKDOWN EXPANDED CARD */}
-          <div className="bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-4 print:border print:border-black print:rounded-none print:p-4 print:bg-transparent">
+          {/* LIFECYCLE LEDGER MATRIX DISPLAY */}
+          <div className="bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-4 print:border print:border-black print:rounded-none print:p-6 print:bg-transparent">
             <div className="border-b border-white/10 pb-2 print:border-black">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-white italic text-left print:text-black print:font-black print:not-italic print:text-[10px]">
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-white italic text-left print:text-black print:font-black print:not-italic print:text-xs">
                 📊 Lifecycle Analytics Matrix Breakdown
               </h3>
             </div>
@@ -259,12 +223,11 @@ export default function TaxExemptWealthGap() {
                   <span className="text-[8px] uppercase tracking-widest text-zinc-500 block print:text-zinc-600 print:font-bold">Baseline Taxable Matrix</span>
                   <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
                 </div>
-                <p className="text-zinc-300 font-bold text-lg mt-0.5 print:text-black print:text-sm">${data.taxableGrowthTotal.toLocaleString()}</p>
+                <p className="text-zinc-300 font-bold text-lg mt-0.5 print:text-black print:text-xl">${data.taxableGrowthTotal.toLocaleString()}</p>
                 <p className="text-[9px] text-zinc-400 font-medium tracking-tight mt-1 print:text-zinc-600 print:text-[10px]">
                   {"Final performance yield facing ongoing multi-decade retail tax liquidations."}
                 </p>
-                {/* TOOLTIP TRACKER */}
-                <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity json-data-lock z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
+                <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
                   {"Compound growth values attained when profits face annual asset deductions before compounding returns."}
                 </div>
               </div>
@@ -274,18 +237,17 @@ export default function TaxExemptWealthGap() {
                   <span className="text-[8px] uppercase tracking-widest text-[#22c55e] block print:text-black print:font-black">Tax-Exempt Account</span>
                   <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
                 </div>
-                <p className="text-[#22c55e] font-bold text-lg mt-0.5 print:text-black print:text-sm">${data.taxExemptGrowthTotal.toLocaleString()}</p>
+                <p className="text-[#22c55e] font-bold text-lg mt-0.5 print:text-black print:text-xl">${data.taxExemptGrowthTotal.toLocaleString()}</p>
                 <p className="text-[9px] text-zinc-400 font-medium tracking-tight mt-1 print:text-zinc-600 print:text-[10px]">
                   {"Maximum target growth achieved when asset compounding runs at 100% full legal efficiency."}
                 </p>
-                {/* TOOLTIP TRACKER */}
-                <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity json-data-lock z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
+                <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl print:hidden">
                   {"Capital track velocity generated when growth runs unobstructed by annual revenue deductions."}
                 </div>
               </div>
             </div>
 
-            {/* SCREEN ONLY DOWNLOAD ACTIONS LAYERS */}
+            {/* SCREEN-ONLY GENERATE ACTION */}
             <div className="pt-4 border-t border-white/5 flex justify-end print:hidden">
               <button
                 onClick={handleDownloadReport}
@@ -298,8 +260,8 @@ export default function TaxExemptWealthGap() {
         </div>
       </div>
 
-      {/* 📝 REGULATORY COMPLIANCE ATTESTATION */}
-      <div className="hidden print:block text-left mt-6 border-t border-black pt-3">
+      {/* 📝 REGULATORY COMPLIANCE ATTESTATION STATEMENT (Visible only inside PDFs) */}
+      <div className="hidden print:block text-left mt-12 border-t border-black pt-4">
         <p className="text-[8px] font-black uppercase tracking-widest text-black mb-1">
           Institutional Analysis Disclosures & Regulatory Disclaimer
         </p>
@@ -311,7 +273,7 @@ export default function TaxExemptWealthGap() {
         </p>
       </div>
 
-      {/* ❌ SCREEN-ONLY NAVIGATION ELEMENT CARD HUB (Nuked cleanly during print export layout matches) */}
+      {/* ❌ SCREEN-ONLY NAVIGATION ELEMENT CARD HUB */}
       <section className="col-span-1 lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left print:hidden mt-8">
         <a className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl" href="/calculators">
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white leading-none mb-3">Decision Models</h3>
