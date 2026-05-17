@@ -14,7 +14,7 @@ export default function MortgageAcceleratorPage() {
     return simulateMortgageAcceleration(balance, interestRate, yearsLeft, extraPayment)
   }, [balance, interestRate, yearsLeft, extraPayment])
 
-  // ⚡ DEBNOUNCED BACKGROUND DATABASE TRACKER (Maps values & syncs JSONB columns asynchronously)
+  // ⚡ DEBNOUNCED BACKGROUND DATABASE TRACKER (With explicit response validation checks)
   useEffect(() => {
     // Safety verification: Prevent tracking the default starting parameters on page load cold boots
     if (balance === 400000 && extraPayment === 250 && interestRate === 6.5) return
@@ -22,7 +22,7 @@ export default function MortgageAcceleratorPage() {
     // Set up a silent 1.5-second countdown timer in browser memory
     const dispatchTelemetry = setTimeout(async () => {
       try {
-        await fetch("/api/telemetry", {
+        const response = await fetch("/api/telemetry", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -41,9 +41,17 @@ export default function MortgageAcceleratorPage() {
             }
           })
         })
+
+        // CRITICAL UPDATE: Extract backend response details to diagnose schema or connection rules
+        if (!response.ok) {
+          const errorPayload = await response.json().catch(() => ({ error: "Unknown payload validation error" }))
+          console.error("❌ [TELEMETRY REGISTRY REJECTED BY SERVER]:", response.status, errorPayload)
+          return
+        }
+
         console.log("▲ [TELEMETRY METRIC SYNCED SUCCESSFULLY TO SUPABASE]")
       } catch (err) {
-        console.warn("Telemetry background upload skipped due to connection parameters.")
+        console.warn("Telemetry background upload skipped due to network routing parameters.")
       }
     }, 1500) // Fires background update exactly 1.5 seconds after typing stops
 
