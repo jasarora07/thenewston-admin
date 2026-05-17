@@ -64,8 +64,7 @@ export default function TaxExemptWealthGap() {
         })
 
         if (!response.ok) {
-          const errorPayload = await response.json().catch(() => ({ error: "Payload parsing bypassed" }))
-          console.error("❌ [TELEMETRY REGISTRY REJECTED BY SERVER]:", response.status, errorPayload)
+          console.error("❌ [TELEMETRY REGISTRY REJECTED BY SERVER]:", response.status)
           return
         }
 
@@ -85,108 +84,78 @@ export default function TaxExemptWealthGap() {
   }
 
   return (
-    <div id="print-isolate-target" className="w-full text-white font-sans print:bg-white print:text-black print:p-0">
-      
-      {/* ⚠️ GLOBAL OVERRIDE CSS: Nuke all outside layout noise on print */}
-      <style jsx global>{`
-        @media print {
-          /* Hide absolutely everything on the screen DOM */
-          body *, html *, header, footer, nav, aside, [class*="navbar"], [class*="header"], [class*="footer"] {
-            display: none !important;
-          }
-          /* Force only our targeting component wrapper and its children to reveal */
-          #print-isolate-target, #print-isolate-target * {
-            display: block !important;
-          }
-          /* Grid-flatten layout configurations for pure single page flow formats */
-          #print-isolate-target .print-flex-row {
-            display: flex !important;
-            flex-direction: row !important;
-            gap: 16px !important;
-          }
-          #print-isolate-target .print-half-width {
-            width: 50% !important;
-          }
-          #print-isolate-target .print-hidden-element {
-            display: none !important;
-          }
-          body {
-            background: white !important;
-            color: black !important;
-          }
-        }
-      `}</style>
+    <div className="w-full text-white font-sans print:bg-white print:text-black print:p-0 print:max-h-screen print:overflow-hidden">
       
       {/* 📥 EXCLUSIVE PDF REPORT BRANDING HEADER */}
       <div className="hidden print:block text-left mb-6 border-b-2 border-black pb-3">
         <div className="text-xl font-black uppercase tracking-tight text-black">
-          THE NEWSTON TERMINAL [cite: 9]
+          THE NEWSTON TERMINAL
         </div>
         <div className="text-[9px] font-mono font-bold text-zinc-600 uppercase tracking-widest mt-1 flex justify-between">
-          <span>Module 02: Capital Efficiency Audit Profile</span> [cite: 10]
-          <span>Reference Date // {new Date().toLocaleDateString()}</span> [cite: 19]
+          <span>Module 02: Capital Efficiency Audit Profile</span>
+          <span>Reference Date // {new Date().toLocaleDateString()}</span>
         </div>
       </div>
 
-      {/* CORE CONFIGURATION AREA */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 print-flex-row">
+      {/* CORE WRAPPER LAYOUT */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 print:flex print:flex-row print:gap-6 print:space-y-0">
         
         {/* INPUTS PANEL */}
-        <div className="lg:col-span-1 bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-6 shadow-xl print:border-none print:p-0 print:bg-transparent print:print-half-width">
+        <div className="lg:col-span-1 bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-6 shadow-xl print:border-none print:p-0 print:bg-transparent print:w-[35%]">
           <h3 className="text-[10px] font-black uppercase tracking-widest text-white flex items-center gap-2 italic border-b border-white/10 pb-2 print:text-black print:border-black print:not-italic print:text-[11px] print:font-black">
-            Control Baseline Parameter Arrays [cite: 11]
+            Control Baseline Parameter Arrays
           </h3>
 
           <div className="space-y-4">
             <div className="text-left">
-              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Initial Capital ($)</label> [cite: 12]
+              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Initial Capital ($)</label>
               <div className="text-sm font-mono font-bold text-white print:text-black print:text-sm print:bg-zinc-100 print:p-2 print:rounded mt-1">
-                ${initialCapital.toLocaleString()} [cite: 13]
+                ${initialCapital.toLocaleString()}
               </div>
             </div>
 
             <div className="text-left">
-              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Annual Savings ($)</label> [cite: 17]
+              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Annual Savings ($)</label>
               <div className="text-sm font-mono font-bold text-white print:text-black print:text-sm print:bg-zinc-100 print:p-2 print:rounded mt-1">
-                ${annualContribution.toLocaleString()} [cite: 18]
+                ${annualContribution.toLocaleString()}
               </div>
             </div>
 
             <div className="text-left">
-              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Gross Return (%)</label> [cite: 14]
+              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Gross Return (%)</label>
               <div className="text-sm font-mono font-bold text-white print:text-black print:text-sm print:bg-zinc-100 print:p-2 print:rounded mt-1">
-                {expectedReturn}% [cite: 15]
+                {expectedReturn}%
               </div>
             </div>
 
             <div className="text-left">
-              <label className="text-[9px] font-black text-[#22c55e] uppercase tracking-widest block print:text-black print:font-black">Tax Drag Rate (%)</label> [cite: 20]
+              <label className="text-[9px] font-black text-[#22c55e] uppercase tracking-widest block print:text-black print:font-black">Tax Drag Rate (%)</label>
               <div className="text-sm font-mono font-bold text-[#22c55e] print:text-black print:text-sm print:bg-zinc-100 print:p-2 print:rounded mt-1">
-                {taxRate}% [cite: 21]
+                {taxRate}%
               </div>
             </div>
 
             <div className="text-left">
-              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Horizon (Years)</label> [cite: 24]
+              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest print:text-black print:font-black">Horizon (Years)</label>
               <div className="text-sm font-mono font-bold text-white print:text-black print:text-sm print:bg-zinc-100 print:p-2 print:rounded mt-1">
-                {horizonYears} Years [cite: 25]
+                {horizonYears} Years
               </div>
             </div>
           </div>
         </div>
 
         {/* OUTPUT TARGETS PANEL */}
-        <div className="lg:col-span-2 space-y-6 print:print-half-width print:space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 print:space-y-4">
+        <div className="lg:col-span-2 space-y-6 print:w-[65%] print:space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 print:grid-cols-2 print:gap-4">
             
             {/* ABSOLUTE WEALTH GAP */}
             <div className="relative group bg-zinc-900/30 border border-[#22c55e]/30 p-5 rounded-xl shadow-lg print:border print:border-black print:bg-transparent text-left">
               <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-black print:text-[9px]">Absolute Wealth Gap</span>
               <span className="text-2xl font-black text-[#22c55e] font-sans tracking-tight block mt-1 print:text-black print:text-xl">
-                ${data.absoluteWealthGap.toLocaleString()} [cite: 31]
+                ${data.absoluteWealthGap.toLocaleString()}
               </span>
               <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-700 print:border-zinc-300">
-                {"Pure cash capital structural value intercepted entirely by annual tax drag parameters."} [cite: 33]
+                {"Pure cash capital structural value intercepted entirely by annual tax drag parameters."}
               </p>
             </div>
 
@@ -194,10 +163,10 @@ export default function TaxExemptWealthGap() {
             <div className="relative group bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border print:border-black print:bg-transparent text-left">
               <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-black print:text-[9px]">Portfolio Erosion Ratio</span>
               <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl">
-                {data.capitalErosionPercentage}% Deficit [cite: 32]
+                {data.capitalErosionPercentage}% Deficit
               </span>
               <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-700 print:border-zinc-300">
-                {"Your ultimate estate accumulation potential dropped by this exact margin via asset friction."} [cite: 34]
+                {"Your ultimate estate accumulation potential dropped by this exact margin via asset friction."}
               </p>
             </div>
           </div>
@@ -206,30 +175,30 @@ export default function TaxExemptWealthGap() {
           <div className="bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-4 print:border print:border-black print:rounded-none print:p-4 print:bg-transparent">
             <div className="border-b border-white/10 pb-2 print:border-black">
               <h3 className="text-[10px] font-black uppercase tracking-widest text-white italic text-left print:text-black print:font-black print:not-italic print:text-[10px]">
-                📊 Lifecycle Analytics Matrix Breakdown [cite: 37]
+                📊 Lifecycle Analytics Matrix Breakdown
               </h3>
             </div>
 
             <div className="grid grid-cols-2 gap-6 text-sm font-sans pt-1">
               <div className="text-left">
-                <span className="text-[8px] uppercase tracking-widest text-zinc-500 block print:text-zinc-600 print:font-bold">Baseline Taxable Matrix</span> [cite: 38]
-                <p className="text-zinc-300 font-bold text-lg mt-0.5 print:text-black print:text-sm">${data.taxableGrowthTotal.toLocaleString()}</p> [cite: 39]
+                <span className="text-[8px] uppercase tracking-widest text-zinc-500 block print:text-zinc-600 print:font-bold">Baseline Taxable Matrix</span>
+                <p className="text-zinc-300 font-bold text-lg mt-0.5 print:text-black print:text-sm">${data.taxableGrowthTotal.toLocaleString()}</p>
                 <p className="text-[9px] text-zinc-400 font-medium tracking-tight mt-1 print:text-zinc-600 print:text-[10px]">
-                  {"Final performance yield facing ongoing multi-decade retail tax liquidations."} [cite: 41]
+                  {"Final performance yield facing ongoing multi-decade retail tax liquidations."}
                 </p>
               </div>
 
               <div className="text-left">
-                <span className="text-[8px] uppercase tracking-widest text-[#22c55e] block print:text-black print:font-black">Tax-Exempt Alpha Matrix</span> [cite: 42]
-                <p className="text-[#22c55e] font-bold text-lg mt-0.5 print:text-black print:text-sm">${data.taxExemptGrowthTotal.toLocaleString()}</p> [cite: 43]
+                <span className="text-[8px] uppercase tracking-widest text-[#22c55e] block print:text-black print:font-black">Tax-Exempt Account</span>
+                <p className="text-[#22c55e] font-bold text-lg mt-0.5 print:text-black print:text-sm">${data.taxExemptGrowthTotal.toLocaleString()}</p>
                 <p className="text-[9px] text-zinc-400 font-medium tracking-tight mt-1 print:text-zinc-600 print:text-[10px]">
-                  {"Maximum target growth achieved when asset compounding runs at 100% full legal efficiency."} [cite: 45]
+                  {"Maximum target growth achieved when asset compounding runs at 100% full legal efficiency."}
                 </p>
               </div>
             </div>
 
             {/* SCREEN ONLY ACTION LAYERS */}
-            <div className="pt-4 border-t border-white/5 flex justify-end print-hidden-element">
+            <div className="pt-4 border-t border-white/5 flex justify-end print:hidden">
               <button
                 onClick={handleDownloadReport}
                 className="bg-white text-black font-black text-[9px] uppercase tracking-widest px-4 py-2.5 rounded-md hover:bg-[#22c55e] transition-all active:scale-[0.98] shadow-lg flex items-center gap-2"
@@ -244,21 +213,21 @@ export default function TaxExemptWealthGap() {
       {/* 📝 REGULATORY COMPLIANCE ATTESTATION */}
       <div className="hidden print:block text-left mt-6 border-t border-black pt-3">
         <p className="text-[8px] font-black uppercase tracking-widest text-black mb-1">
-          Institutional Analysis Disclosures & Regulatory Disclaimer [cite: 46]
+          Institutional Analysis Disclosures & Regulatory Disclaimer
         </p>
         <p className="text-[7px] leading-relaxed text-zinc-700 text-justify font-medium uppercase tracking-tight">
-          All simulation processing calculations are derived client-side via industry-standard compound capital appreciation mathematical expressions[cite: 47]. Performance numbers are provided for objective scenario illustrations and do not represent formal tax, CPA, or fiduciary financial counsel[cite: 48]. The terminal framework operates an anonymous tracking layout and completely avoids processing unique identity specifications[cite: 49].
+          All simulation processing calculations are derived client-side via industry-standard compound capital appreciation mathematical expressions. Performance numbers are provided for objective scenario illustrations and do not represent formal tax, CPA, or fiduciary financial counsel. The terminal framework operates an anonymous tracking layout and completely avoids processing unique identity specifications.
         </p>
         <p className="text-[7px] font-mono font-bold text-zinc-500 mt-1">
-          Extraction Sourced From: https://thenewston.com/calculators/tax-exempt-wealth-gap • SEC 2026 Distribution Verification. [cite: 50, 51]
+          Extraction Sourced From: https://thenewston.com/calculators/tax-exempt-wealth-gap • SEC 2026 Distribution Verification.
         </p>
       </div>
 
       {/* ❌ SCREEN-ONLY NAVIGATION ELEMENT CARD HUB */}
-      <section className="col-span-1 lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left print-hidden-element mt-8">
+      <section className="col-span-1 lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left print:hidden mt-8">
         <a className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl" href="/calculators">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white leading-none mb-3">Decision Models</h3> [cite: 62]
-          <p className="text-[9px] text-zinc-500 uppercase font-bold text-left">{"Return to the full suite of institutional intelligence engines."}</p> [cite: 63]
+          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white leading-none mb-3">Decision Models</h3>
+          <p className="text-[9px] text-zinc-500 uppercase font-bold text-left">{"Return to the full suite of institutional intelligence engines."}</p>
         </a>
         <div className="relative p-6 bg-zinc-900/10 border border-white/5 rounded-xl cursor-not-allowed group text-left">
           <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 leading-none mb-3">Consult Advisor</h3>
@@ -267,9 +236,4 @@ export default function TaxExemptWealthGap() {
         </div>
         <a className="group p-6 bg-[#22c55e]/5 border border-[#22c55e]/20 hover:border-[#22c55e] transition-all rounded-xl" href="/partnership">
           <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none italic mb-3">Become a Partner</h3>
-          <p className="text-[9px] text-[#22c55e] uppercase font-black text-left">{"Apply for firm-level integration into the Newston Terminal."}</p>
-        </a>
-      </section>
-    </div>
-  )
-}
+          <p className="text-[9px] text-[#22c55e] uppercase font-black text-left">{"Apply for firm-level integration into the Newston Terminal."}</p
