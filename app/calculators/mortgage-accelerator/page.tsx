@@ -147,7 +147,6 @@ export default function MortgageAcceleratorPage() {
               <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
                 Your required base payment. Extra payments don't change this, they just end the loan early.
               </p>
-              {/* FIXED: Removed raw unescaped mathematical characters breaking compilation loops */}
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl text-left">
                 Standard monthly installment derived via fixed amortization algorithms balancing rate, tenure, and capital.
               </div>
@@ -246,6 +245,4 @@ export default function MortgageAcceleratorPage() {
 
       {/* REGULATORY COMMENTARY BOX & INTEL DISCLAIMER */}
       <div className="max-w-6xl mx-auto mt-6 border-t border-white/5 pt-8 text-left print:border-black print:p-0 print:mt-12">
-        <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4 text-left print:border-none print:p-0">
-          <div className="space-y-3">
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#22c55e] print:text-black print
+        <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4 text-
