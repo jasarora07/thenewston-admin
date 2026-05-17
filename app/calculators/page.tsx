@@ -6,6 +6,7 @@ import {
   PieChart,
   Wind,
   Gauge,
+  Home,
   ArrowRight
 } from "lucide-react"
 import type { Metadata } from "next"
@@ -18,10 +19,8 @@ export const revalidate = 86400; // 24 Hours
 
 export const metadata: Metadata = {
   title: "Financial Calculator Hub | The Newston Intelligence Terminal",
-  description: "Access institutional-grade financial decision models. From our high-demand Mortgage Accelerator to Tax-Exempt Wealth Gap simulations and Strategic Capital Allocation engines.",
+  description: "Access institutional-grade financial decision models. Explore our Mortgage Accelerator, Equity Liquidity Engine, Tax Wealth Gap simulations, and Strategic Capital Allocation arrays.",
   alternates: {
-    /* FIXED: Using relative path to resolve the Bing Canonical Error and 
-       ensure unique identification for the Hub. */
     canonical: './',
   },
 }
@@ -32,11 +31,19 @@ const modules = [
     title: "Mortgage Accelerator",
     desc: "Quantify the compounding wealth gap saved by launching principal prepayment strategies. Shave years off amortized note life cycles.",
     href: "/calculators/mortgage-accelerator",
-    icon: <Gauge className="h-6 w-6" />, // Swapped to Gauge to visually sync with 'Accelerator' branding
+    icon: <Gauge className="h-6 w-6" />,
     status: "LIVE"
   },
   {
     id: "02",
+    title: "Equity Liquidity",
+    desc: "Model capital extraction strategies. Contrast variable line extraction parameters against standalone macro replacement models.",
+    href: "/calculators/home-equity-liquidity",
+    icon: <Home className="h-6 w-6" />,
+    status: "LIVE"
+  },
+  {
+    id: "03",
     title: "Tax Wealth Gap",
     desc: "Project long-term capital erosion caused by annual tax drag. Identify the structural alpha of tax-advantaged wealth corridors.",
     href: "/calculators/tax-exempt-wealth-gap",
@@ -44,7 +51,7 @@ const modules = [
     status: "LIVE"
   },
   {
-    id: "03",
+    id: "04",
     title: "Capital Allocation",
     desc: "Quantify the wealth divergence between taxable and tax-exempt growth. Model dividend leakage and capital gains drag.",
     href: "/calculators/capital-allocation",
@@ -52,7 +59,7 @@ const modules = [
     status: "LIVE"
   },
   {
-    id: "04",
+    id: "05",
     title: "Purchasing Power",
     desc: "Model the silent tax of inflation. Quantify the erosion of your capital against active CPI projections.",
     href: "/calculators/purchasing-power",
@@ -83,7 +90,7 @@ export default function CalculatorHub() {
         </div>
 
         {/* MODULE GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
           {modules.map((mod) => (
             <Link 
               key={mod.id} 
