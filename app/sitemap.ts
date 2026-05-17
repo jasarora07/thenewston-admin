@@ -34,7 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: staticReleaseDate 
     },
     { 
-      path: '/calculators/mortgage-refi-pivot', 
+      path: '/calculators/mortgage-accelerator', // ⚡ ACTIVATED & INTEGRATED
       priority: 0.8, 
       changeFrequency: 'monthly', 
       lastModified: staticReleaseDate 
