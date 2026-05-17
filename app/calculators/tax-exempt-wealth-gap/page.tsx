@@ -15,9 +15,21 @@ export const metadata: Metadata = {
 
 export default function TaxWealthGapPage() {
   return (
-    <main className="container mx-auto px-4 py-12 bg-black min-h-screen text-white text-left">
-      {/* 1. SECTION HEADER */}
-      <div className="max-w-4xl mx-auto mb-12 text-center">
+    <main className="container mx-auto px-4 py-12 bg-black min-h-screen text-white text-left print:bg-white print:text-black print:p-0">
+      
+      {/* 📥 EXCLUSIVE PRINT-ONLY SUMMARY BRANDING HEADER */}
+      <div className="hidden print:block text-left mb-6 border-b-2 border-black pb-3">
+        <div className="text-xl font-black uppercase tracking-tight text-black">
+          THE NEWSTON TERMINAL
+        </div>
+        <div className="text-[9px] font-mono font-bold text-zinc-600 uppercase tracking-widest mt-1 flex justify-between">
+          <span>Module 02: Capital Efficiency Audit Profile</span>
+          <span>Reference Date // {new Date().toLocaleDateString()}</span>
+        </div>
+      </div>
+
+      {/* 1. SECTION HEADER (Vanishes cleanly on paper) */}
+      <div className="max-w-4xl mx-auto mb-6 text-center print:hidden animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="flex justify-center mb-4">
           <div className="bg-[#22c55e]/10 border border-[#22c55e]/20 rounded-full px-4 py-1 flex items-center gap-2">
             <ShieldCheck className="h-3 w-3 text-[#22c55e]" />
@@ -32,22 +44,22 @@ export default function TaxWealthGapPage() {
         </p>
       </div>
 
-      {/* 2. ADVISORY PROTOCOL */}
-      <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded flex items-start gap-4">
-        <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
-        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight">
+      {/* 2. ADVISORY PROTOCOL ALERT - Centered safely below subtitle on desktop, hidden on paper */}
+      <div className="max-w-5xl mx-auto mb-12 bg-red-500/5 border border-red-500/20 p-4 rounded-xl flex items-center justify-center gap-3 print:hidden">
+        <AlertTriangle className="h-4 w-4 text-red-500 shrink-0" />
+        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest leading-tight text-center">
           <span className="text-red-500 font-black">Advisory Notice:</span> This terminal is an educational simulation engine. 
           Outputs are mathematical projections and <span className="text-white underline decoration-red-500/50 underline-offset-4 uppercase">not professional tax advice</span>.
         </p>
       </div>
 
-      {/* 3. THE CALCULATOR INTERNAL TARGET */}
-      <div className="max-w-6xl mx-auto mb-20">
+      {/* 3. THE INTERACTIVE WORKSPACE CALCULATOR ENGINE */}
+      <div className="max-w-6xl mx-auto mb-20 print:mb-6">
         <TaxExemptWealthGap />
       </div>
 
-      {/* 4. INTELLIGENCE BRIEFING */}
-      <section className="max-w-5xl mx-auto py-16 border-t border-white/5">
+      {/* 4. INTELLIGENCE BRIEFING ANALYSIS */}
+      <section className="max-w-5xl mx-auto py-16 border-t border-white/5 print:hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -72,8 +84,8 @@ export default function TaxWealthGapPage() {
         </div>
       </section>
 
-      {/* 5. NAVIGATION HUB */}
-      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5">
+      {/* 5. INTERACTIVE FOOTER HUB (Completely ignored during print rendering) */}
+      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 print:hidden">
         <Link href="/calculators" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <LayoutGrid className="h-4 w-4 text-[#22c55e]" />
@@ -82,7 +94,6 @@ export default function TaxWealthGapPage() {
           <p className="text-[9px] text-zinc-500 uppercase font-bold leading-relaxed">Return to the institutional suite of financial intelligence modules.</p>
         </Link>
         
-        {/* RE-MAPPED TO CORRECT RUNNING ACCELERATOR TERMINAL */}
         <Link href="/calculators/mortgage-accelerator" className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <Landmark className="h-4 w-4 text-[#22c55e]" />
@@ -100,12 +111,12 @@ export default function TaxWealthGapPage() {
         </Link>
       </section>
 
-      {/* 6. INSTITUTIONAL DISCLOSURE */}
-      <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8">
-        <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4">
-          <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1" />
-          <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider">
-            <span className="text-zinc-300">Protocol Disclosure:</span> All projections are mathematical simulations based on current 2026 fiscal guidelines. The Newston Terminal does not provide tax advice. Consult with a CPA regarding specific liabilities.
+      {/* 6. FIXED ENTERPRISE INSTITUTIONAL DISCLOSURE MATRICES */}
+      <section className="max-w-5xl mx-auto mt-4 border-t border-white/5 pt-12 pb-8 print:border-black print:mt-6 print:pt-4">
+        <div className="bg-zinc-900/30 border border-white/10 p-8 rounded-xl backdrop-blur-sm flex items-start gap-4 print:bg-transparent print:border-none print:p-0">
+          <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-1 print:hidden" />
+          <p className="text-[11px] text-zinc-500 font-bold uppercase leading-relaxed tracking-wider print:text-black print:text-[8px] print:font-medium">
+            <span className="text-zinc-300 print:text-black print:font-black">Institutional Disclosure:</span> All projections are mathematical simulations based on current 2026 fiscal guidelines. The Newston Terminal does not provide tax advice. Consult with a CPA regarding specific liabilities.
           </p>
         </div>
       </section>
