@@ -5,13 +5,11 @@ import { simulateMortgageAcceleration } from "@/lib/math/mortgage-engine"
 import CalculatorSchema from "@/components/seo/schema-markup"
 
 export default function MortgageAcceleratorPage() {
-  // HIGH-PERFORMANCE LIVE INPUT STATES
   const [balance, setBalance] = useState<number>(400000)
   const [interestRate, setInterestRate] = useState<number>(6.5)
   const [yearsLeft, setYearsLeft] = useState<number>(30)
   const [extraPayment, setExtraPayment] = useState<number>(250)
 
-  // MEMOIZED CALCULATION MATRIX
   const data = useMemo(() => {
     return simulateMortgageAcceleration(balance, interestRate, yearsLeft, extraPayment)
   }, [balance, interestRate, yearsLeft, extraPayment])
@@ -24,7 +22,6 @@ export default function MortgageAcceleratorPage() {
 
   return (
     <main className="container mx-auto px-4 py-12 bg-black min-h-screen font-sans text-white print:bg-white print:text-black print:p-0">
-      {/* GLOBAL SCHEMA ENHANCEMENT */}
       <CalculatorSchema
         name="Mortgage Accelerated Payoff Engine"
         description="Calculate amortization interest degradation profiles. Optimize principal prepayment snowballs against active fiscal projections."
@@ -35,9 +32,8 @@ export default function MortgageAcceleratorPage() {
       <div className="max-w-4xl mx-auto mb-12 text-center print:text-left print:mb-8">
         <div className="flex justify-center mb-4 print:hidden">
           <div className="bg-[#22c55e]/10 border border-[#22c55e]/20 rounded-full px-4 py-1 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check h-3 w-3 text-[#22c55e]"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#22c55e]">
-              Module 06: Debt Acceleration
+              Module 01: Debt Acceleration
             </span>
           </div>
         </div>
@@ -53,26 +49,15 @@ export default function MortgageAcceleratorPage() {
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        {/* ==========================================
-            LEFT COLUMN: CONTROLS + TAXATION INTERFACES
-           ========================================== */}
+        {/* LEFT COLUMN: CONTROLS */}
         <div className="lg:col-span-1 bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-6 shadow-xl print:border-none print:p-0 print:bg-transparent">
           <h3 className="text-[10px] font-black uppercase tracking-widest text-white flex items-center gap-2 italic border-b border-white/10 pb-2 print:text-black print:border-black print:not-italic">
-            <span className="print:hidden">⚙️</span> Control Baseline Parameter Arrays
+            Control Baseline Parameter Arrays
           </h3>
 
           <div className="space-y-4">
-            {/* Input 1 */}
             <div className="space-y-1 text-left">
-              <div className="flex items-center gap-2">
-                <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Current Debt Balance ($)</label>
-                <div className="relative group print:hidden">
-                  <span className="text-zinc-600 cursor-help text-[10px] font-bold">[?]</span>
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-2 bg-zinc-900 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-tight">
-                    The outstanding principal remaining on your mortgage statement right now.
-                  </div>
-                </div>
-              </div>
+              <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Current Debt Balance ($)</label>
               <input
                 type="number"
                 className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] text-sm print:bg-white print:border-zinc-300 print:text-black"
@@ -81,17 +66,8 @@ export default function MortgageAcceleratorPage() {
               />
             </div>
 
-            {/* Input 2 */}
             <div className="space-y-1 text-left">
-              <div className="flex items-center gap-2">
-                <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Annual Interest Rate (%)</label>
-                <div className="relative group print:hidden">
-                  <span className="text-zinc-600 cursor-help text-[10px] font-bold">[?]</span>
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-2 bg-zinc-900 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-tight">
-                    Your active fixed note rate. Institutional ranges track current market configurations.
-                  </div>
-                </div>
-              </div>
+              <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Annual Interest Rate (%)</label>
               <input
                 type="number" step="0.01"
                 className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] text-sm print:bg-white print:border-zinc-300 print:text-black"
@@ -100,17 +76,8 @@ export default function MortgageAcceleratorPage() {
               />
             </div>
 
-            {/* Input 3 */}
             <div className="space-y-1 text-left">
-              <div className="flex items-center gap-2">
-                <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Remaining Tenure (Years Left)</label>
-                <div className="relative group print:hidden">
-                  <span className="text-zinc-600 cursor-help text-[10px] font-bold">[?]</span>
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-2 bg-zinc-900 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-tight">
-                    Years left until maturity. Enter partial decimal frames if necessary.
-                  </div>
-                </div>
-              </div>
+              <label className="text-[9px] font-black text-white uppercase tracking-widest print:text-black">Remaining Tenure (Years Left)</label>
               <input
                 type="number"
                 className="w-full bg-black border border-white/10 rounded-lg p-3 text-white font-mono outline-none focus:border-[#22c55e] text-sm print:bg-white print:border-zinc-300 print:text-black"
@@ -119,17 +86,8 @@ export default function MortgageAcceleratorPage() {
               />
             </div>
 
-            {/* Input 4 */}
             <div className="space-y-1 text-left border-t border-white/5 pt-4 print:border-zinc-200">
-              <div className="flex items-center gap-2">
-                <label className="text-[9px] font-black text-[#22c55e] uppercase tracking-widest block print:text-black">Extra Monthly Principal ($)</label>
-                <div className="relative group print:hidden">
-                  <span className="text-zinc-600 cursor-help text-[10px] font-bold">[?]</span>
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-2 bg-zinc-900 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-tight">
-                    The extra cash allocation targeted straight to raw principal reductions every single month.
-                  </div>
-                </div>
-              </div>
+              <label className="text-[9px] font-black text-[#22c55e] uppercase tracking-widest block print:text-black">Extra Monthly Principal ($)</label>
               <input
                 type="number"
                 className="w-full bg-[#22c55e]/5 border border-[#22c55e]/20 rounded-lg p-3 text-[#22c55e] text-lg font-black italic font-sans outline-none focus:border-[#22c55e] print:bg-white print:border-zinc-400 print:text-black print:not-italic"
@@ -140,82 +98,134 @@ export default function MortgageAcceleratorPage() {
           </div>
         </div>
 
-        {/* ==========================================
-            RIGHT COLUMN: REAL-TIME OUTPUT TARGETS PANEL
-           ========================================== */}
+        {/* RIGHT COLUMN: REAL-TIME OUTPUT TARGETS PANEL */}
         <div className="lg:col-span-2 space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-zinc-900/30 border border-[#22c55e]/30 p-5 rounded-xl shadow-lg print:border-2 print:border-black print:bg-transparent">
-              <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Total Interest Saved</span>
+            {/* CARD 1: INTEREST SAVED */}
+            <div className="relative group bg-zinc-900/30 border border-[#22c55e]/30 p-5 rounded-xl shadow-lg print:border-2 print:border-black print:bg-transparent text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Total Interest Saved</span>
+                <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
+              </div>
               <span className="text-2xl font-black text-[#22c55e] font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
                 ${data.totalSavings.toLocaleString()}
               </span>
+              {/* LAYMAN COMMENTARY */}
+              <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
+                This is pure cash kept out of the bank's pockets and locked directly into your home equity.
+              </p>
+              {/* HOVER TOOLTIP */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
+                Calculates the cumulative lifetime interest expense avoided by running short-interval principal injections.
+              </div>
             </div>
 
-            <div className="bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border-2 print:border-black print:bg-transparent">
-              <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Time Shaved Off</span>
+            {/* CARD 2: TIME SAVED */}
+            <div className="relative group bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border-2 print:border-black print:bg-transparent text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Time Shaved Off</span>
+                <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
+              </div>
               <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
                 {data.yearsSaved} Years
               </span>
+              {/* LAYMAN COMMENTARY */}
+              <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
+                Your debt obligation hits zero years early, giving you full financial freedom sooner.
+              </p>
+              {/* HOVER TOOLTIP */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
+                The absolute runtime variance between your contract amortization maturity date and the accelerated projection window.
+              </div>
             </div>
 
-            <div className="bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border-2 print:border-black print:bg-transparent">
-              <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Standard Monthly EMI</span>
-              <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
-                ${data.standardMonthlyEmi.toLocaleString()}
-              </span>
+            {/* CARD 3: EMI */}
+            <div className="relative group bg-zinc-900/30 border border-white/5 p-5 rounded-xl print:border-2 print:border-black print:bg-transparent text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest block print:text-black print:font-bold">Standard Monthly EMI</span>
+                <span className="text-2xl font-black text-white font-sans tracking-tight block mt-1 print:text-black print:text-xl print:font-bold">
+                  ${data.standardMonthlyEmi.toLocaleString()}
+                </span>
+              </div>
+              {/* LAYMAN COMMENTARY */}
+              <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug mt-2 border-t border-white/5 pt-2 print:text-zinc-800 print:border-zinc-200">
+                Your required base payment. Extra payments don't change this, they just end the loan early.
+              </p>
+              {/* HOVER TOOLTIP */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
+                Standard monthly installment derived using standard compounding amortization metrics: $M = P \frac{i(1+i)^n}{(1+i)^n - 1}$.
+              </div>
             </div>
           </div>
 
           {/* AMORTIZATION LIFECYCLE GRID CARD */}
-          <div className="bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-4 print:border-t print:border-b print:border-black print:rounded-none print:p-4 print:bg-transparent">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2 print:border-black">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-white italic print:text-black print:font-bold print:not-italic">
+          <div className="bg-zinc-900/50 border border-white/5 p-6 rounded-2xl space-y-6 print:border-t print:border-b print:border-black print:rounded-none print:p-4 print:bg-transparent">
+            <div className="border-b border-white/10 pb-2 print:border-black">
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-white italic text-left print:text-black print:font-bold print:not-italic">
                 📊 Lifecycle Analytics Matrix Breakdown
               </h3>
-              <button
-                onClick={handleDownloadReport}
-                className="bg-white text-black font-black text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-md hover:bg-[#22c55e] transition-all print:hidden active:scale-[0.98]"
-              >
-                📥 Download Full Report
-              </button>
             </div>
 
             <div className="grid grid-cols-2 gap-6 text-sm font-sans pt-2">
-              <div className="space-y-1 border-r border-white/5 print:border-zinc-300">
-                <span className="text-[8px] uppercase tracking-widest text-zinc-500 block print:text-black print:font-bold">Baseline Schedule Matrix</span>
+              {/* BASELINE SCHEDULE CARD */}
+              <div className="relative group space-y-1 border-r border-white/5 pr-4 text-left print:border-zinc-300">
+                <div className="flex items-center justify-between">
+                  <span className="text-[8px] uppercase tracking-widest text-zinc-500 block print:text-black print:font-bold">Baseline Schedule Matrix</span>
+                  <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
+                </div>
                 <p className="text-zinc-300 font-bold text-lg print:text-black">${data.totalInterestStandard.toLocaleString()}</p>
                 <p className="text-[9px] font-bold font-mono text-zinc-500 uppercase tracking-wider">Term: {data.standardPayoffMonths} Payments</p>
+                <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug pt-1 print:text-zinc-700">
+                  What you will pay in total interest if you make only standard monthly payments over the loan's life.
+                </p>
+                {/* HOVER TOOLTIP */}
+                <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
+                  Total integrated aggregate of interest outlays accrued via non-accelerated timeline tracks.
+                </div>
               </div>
-              <div className="space-y-1">
-                <span className="text-[8px] uppercase tracking-widest text-[#22c55e] block print:text-black print:font-bold">Accelerated Schedule Matrix</span>
+
+              {/* ACCELERATED SCHEDULE CARD */}
+              <div className="relative group space-y-1 text-left">
+                <div className="flex items-center justify-between">
+                  <span className="text-[8px] uppercase tracking-widest text-[#22c55e] block print:text-black print:font-bold">Accelerated Schedule Matrix</span>
+                  <span className="text-zinc-600 cursor-help text-[10px] font-bold print:hidden">[?]</span>
+                </div>
                 <p className="text-[#22c55e] font-bold text-lg print:text-black">${data.totalInterestAccelerated.toLocaleString()}</p>
                 <p className="text-[9px] font-bold font-mono text-zinc-500 uppercase tracking-wider">Term: {data.acceleratedPayoffMonths} Payments</p>
+                <p className="text-[9px] text-zinc-400 font-medium tracking-tight leading-snug pt-1 print:text-zinc-700">
+                  Your new total interest liability when adding the extra payment allocation vector.
+                </p>
+                {/* HOVER TOOLTIP */}
+                <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-zinc-950 border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none text-[9px] font-bold uppercase text-zinc-400 tracking-tight leading-normal shadow-2xl">
+                  Total integrated aggregate of interest outlays accrued when applying client-side prepayment vectors.
+                </div>
               </div>
+            </div>
+
+            {/* BUTTON LOCATED AT BOTTOM OF VALUES BLOCK */}
+            <div className="pt-4 border-t border-white/5 flex justify-end print:hidden">
+              <button
+                onClick={handleDownloadReport}
+                className="bg-white text-black font-black text-[9px] uppercase tracking-widest px-4 py-2.5 rounded-md hover:bg-[#22c55e] hover:text-black transition-all active:scale-[0.98] shadow-lg flex items-center gap-2"
+              >
+                <span>📥</span> Download Full Verified Report
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ==========================================
-          LOWER SECTIONS: INFORMATIVE EXPLANATION CARDS
-         ========================================== */}
+      {/* LOWER INFORMATIVE EXPLANATION CARDS */}
       <section className="max-w-5xl mx-auto py-12 border-t border-white/5 print:hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-help h-4 w-4 text-[#22c55e]"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
-              <h3 className="text-sm font-black uppercase tracking-widest italic text-white">The Principal Snowball</h3>
-            </div>
+          <div className="space-y-2">
+            <h3 className="text-sm font-black uppercase tracking-widest italic text-white">The Principal Snowball</h3>
             <p className="text-[11px] text-zinc-400 font-bold leading-relaxed uppercase text-justify tracking-tight">
               Standard monthly allocations prioritize interest extraction schedules on early lifecycle timelines. Adding extra capital blocks bypasses intermediate interest accruals completely, slashing debt margins directly from your structural framework balances.
             </p>
           </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wind h-4 w-4 text-[#22c55e]"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path><path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path><path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path></svg>
-              <h3 className="text-sm font-black uppercase tracking-widest italic text-white">Amortization Lifecycles</h3>
-            </div>
+          <div className="space-y-2">
+            <h3 className="text-sm font-black uppercase tracking-widest italic text-white">Amortization Lifecycles</h3>
             <p className="text-[11px] text-zinc-400 font-bold leading-relaxed uppercase text-justify tracking-tight">
               By reducing raw principal balances continuously, the internal interest component inside your standard monthly EMI collapses early. This compounds exponentially, converting previous bank profit margins into instant personal asset equity matrices.
             </p>
@@ -223,30 +233,19 @@ export default function MortgageAcceleratorPage() {
         </div>
       </section>
 
-      {/* ==========================================
-          THREE FOOTER NAVIGATION / ADVERTISING CARDS
-         ========================================== */}
+      {/* THREE FOOTER NAVIGATION / ADVERTISING CARDS */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 py-12 border-t border-white/5 text-left print:hidden">
         <a className="group p-6 bg-zinc-900/50 border border-white/5 hover:border-[#22c55e]/50 transition-all rounded-xl" href="/calculators">
-          <div className="flex items-center gap-3 mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid h-4 w-4 text-[#22c55e]"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white leading-none">Decision Models</h3>
-          </div>
+          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white leading-none mb-3">Decision Models</h3>
           <p className="text-[9px] text-zinc-500 uppercase font-bold text-left">Return to the full suite of institutional intelligence engines.</p>
         </a>
         <div className="relative p-6 bg-zinc-900/10 border border-white/5 rounded-xl cursor-not-allowed group text-left">
-          <div className="flex items-center gap-3 mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock h-3.5 w-3.5 text-zinc-500"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 leading-none">Consult Advisor</h3>
-          </div>
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 leading-none mb-3">Consult Advisor</h3>
           <p className="text-[9px] text-zinc-600 uppercase font-bold mb-4">Direct integration with verified CPAs and Fiduciaries.</p>
           <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-[8px] font-black text-[#22c55e] uppercase tracking-[0.2em] animate-pulse">Feature Pending // 2026</div>
         </div>
         <a className="group p-6 bg-[#22c55e]/5 border border-[#22c55e]/20 hover:border-[#22c55e] transition-all rounded-xl" href="/partnership">
-          <div className="flex items-center gap-3 mb-3 text-left">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check h-4 w-4 text-[#22c55e]"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none italic">Become a Partner</h3>
-          </div>
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-white leading-none italic mb-3">Become a Partner</h3>
           <p className="text-[9px] text-[#22c55e] uppercase font-black text-left">Apply for firm-level integration into the Newston Terminal.</p>
         </a>
       </section>
